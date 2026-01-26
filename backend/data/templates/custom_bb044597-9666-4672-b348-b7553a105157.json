@@ -1,0 +1,82 @@
+{
+  "id": "bb044597-9666-4672-b348-b7553a105157",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "beforeTestLabel": "测\n试前",
+    "companyName": "",
+    "judgmentResultLabel": "判定结果",
+    "judgmentStandardLabel": "判定标准",
+    "placeholders": {
+      "appearance": "外观检查结果",
+      "judgmentResult": "请输入判定\n\n\n\n结果...",
+      "reportNumber": "请输入报告编号",
+      "saveDept": "部\n门",
+      "saveYears": "年限\n\n",
+      "testProject": "请输入\n\n\n\n测试项目",
+      "tester": "测试员姓\n名"
+    },
+    "recordCode": "",
+    "reportTitle": "",
+    "reviewerLabel": "审\n核：",
+    "saveDeptLabel": "备注：保存\n部门：",
+    "saveYearsLabel": "保存年限：",
+    "testConditionsHeader": "测试条件",
+    "testImagesHeader": "测试图\n\n\n片",
+    "testResultsHeader": "测试结果信息",
+    "testStandardLabel": "测试\n\n\n\n标准",
+    "testerLabel": "测试\n员："
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "createdAt": "2026-01-26T15:35:07.002184",
+  "updatedAt": "2026-01-26T15:42:32.208728"
+}

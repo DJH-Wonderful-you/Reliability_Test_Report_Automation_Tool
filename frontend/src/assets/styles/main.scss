@@ -1,0 +1,329 @@
+/* Main SCSS file for the application */
+
+// Variables
+$primary-color: #409eff;
+$success-color: #67c23a;
+$warning-color: #e6a23c;
+$danger-color: #f56c6c;
+$info-color: #909399;
+
+$text-primary: #303133;
+$text-regular: #606266;
+$text-secondary: #909399;
+$text-placeholder: #c0c4cc;
+
+$border-color: #dcdfe6;
+$border-color-light: #e4e7ed;
+$border-color-lighter: #ebeef5;
+
+$bg-color: #f5f7fa;
+$bg-color-page: #f2f3f5;
+
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: $text-primary;
+  background-color: $bg-color-page;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// A4 page styles
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  margin: 0 auto 20px;
+  padding: 15mm 15mm 20mm 15mm;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #ddd, transparent);
+  }
+}
+
+// Page break indicator
+.page-break {
+  position: relative;
+  height: 30px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(
+      to right,
+      $border-color,
+      $border-color 5px,
+      transparent 5px,
+      transparent 10px
+    );
+  }
+  
+  .page-break-label {
+    padding: 0 15px;
+    color: $text-secondary;
+    font-size: 12px;
+    background: $bg-color;
+    white-space: nowrap;
+  }
+}
+
+// Editable field styles
+.editable-field {
+  min-height: 1.5em;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: text;
+  transition: all 0.2s;
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+    border-color: rgba($primary-color, 0.3);
+  }
+  
+  &:focus {
+    outline: none;
+    background-color: white;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+  }
+  
+  &.selected {
+    background-color: rgba($primary-color, 0.1);
+    border-color: $primary-color;
+  }
+  
+  &.placeholder {
+    color: $text-placeholder;
+    font-style: italic;
+  }
+}
+
+// Fixed text styles
+.fixed-text {
+  color: $text-primary;
+  user-select: none;
+}
+
+// Format toolbar
+.format-toolbar {
+  position: sticky;
+  top: 104px; // Below nav
+  z-index: 50;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 15px;
+    border-right: 1px solid $border-color-light;
+    
+    &:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+  }
+  
+  .toolbar-label {
+    color: $text-secondary;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+// Image upload box
+.image-upload-box {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px dashed $border-color;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #fafafa;
+  overflow: hidden;
+  position: relative;
+  
+  &:hover {
+    border-color: $primary-color;
+    background-color: rgba($primary-color, 0.02);
+  }
+  
+  &.has-image {
+    border-style: solid;
+    
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  .upload-placeholder {
+    text-align: center;
+    color: $text-secondary;
+    
+    .el-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
+// Dynamic row controls
+.row-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+  padding: 10px;
+  background: $bg-color;
+  border-radius: 4px;
+  
+  .row-count-input {
+    width: 80px;
+  }
+}
+
+// Table styles for report
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th, td {
+    border: 1px solid $border-color;
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  
+  th {
+    background-color: #f5f7fa;
+    font-weight: 600;
+    color: $text-primary;
+  }
+  
+  td {
+    min-height: 32px;
+  }
+  
+  .editable-cell {
+    padding: 0;
+    
+    .editable-field {
+      width: 100%;
+      min-height: 32px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 0;
+    }
+  }
+}
+
+// Section header
+.section-header {
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 0 8px;
+  border-bottom: 2px solid $primary-color;
+  margin-bottom: 15px;
+  color: $text-primary;
+}
+
+// Utility classes
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.gap-20 {
+  gap: 20px;
+}
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-color;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  
+  &:hover {
+    background: #a8a8a8;
+  }
+}

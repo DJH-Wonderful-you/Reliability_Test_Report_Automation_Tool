@@ -1,0 +1,93 @@
+{
+  "id": "5f8a968d-b900-444b-940e-43352c5d4a61",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "beforeTestLabel": "测试\n\n\n前",
+    "companyName": "深圳市欣威智\n能有限公司",
+    "customerLabel": "客户",
+    "equipmentModelLabel": "设备\n型号",
+    "functionHeader": "实验后功\n能检查",
+    "judgmentResultLabel": "判定结果",
+    "judgmentStandardLabel": "判定标准",
+    "placeholders": {
+      "appearance": "外观检查结果",
+      "customer": "规划局规划请输入花见水电费水电费户名称g",
+      "function": "功能检查结果",
+      "judgmentStandard": "请输入判\n\n\n\n定标准...",
+      "other": "其它性能",
+      "productName": "请输入产品名称",
+      "projectName": "请输入啊大大阿达项目名称",
+      "reportNumber": "请输入\n梵蒂冈恢复规\n划发过火报告编号",
+      "saveDept": "部\n门",
+      "testEquipment": "请输入测法国恢复规划试设备",
+      "testProject": "法国恢复规划规划局规划局韩国请输入测试法国恢复规划规范化发过合法高挥发高挥发个项目法国很反感                                                    法国恢复规划gf",
+      "testStandard": "请输入测试\n\n\n标准...",
+      "tester": "测试员\n姓名"
+    },
+    "productNameLabel": "产品\n名称",
+    "projectNameLabel": "项目大师",
+    "recordCode": "记录代码：F-SUN1-X\n-15.11.1.1/A0",
+    "reportNumberLabel": "报告编号：",
+    "reportTitle": "可靠性实验\n报告",
+    "sampleInfoHeader": "样\n\n\n\n\n品信息",
+    "saveDeptLabel": "备注：保存\n部门：",
+    "testConditionsHeader": "测试\n条件",
+    "testImagesHeader": "测\n试图片",
+    "testProjectLabel": "测试\n项\n\n目",
+    "testStandardLabel": "测试标准",
+    "testerLabel": "测试员："
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "createdAt": "2026-01-26T14:14:52.911713",
+  "updatedAt": "2026-01-26T15:13:24.135502"
+}

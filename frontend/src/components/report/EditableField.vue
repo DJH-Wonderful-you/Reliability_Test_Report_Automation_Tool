@@ -91,7 +91,7 @@ const placeholderStyle = computed(() => ({
   fontWeight: 'normal',
   fontStyle: 'italic',
   textDecoration: 'none',
-  textAlign: props.textAlign  // Use the same alignment as the field
+  textAlign: 'left'
 }))
 
 // Style for actual content (uses user-modified styles)

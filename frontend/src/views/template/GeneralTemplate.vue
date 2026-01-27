@@ -226,17 +226,17 @@
         <div class="signature-item">
           <span class="label editable-text" :style="signatureLabelStyle" contenteditable="true" @blur="updateFixedText('testerLabel', $event)">{{ templateData.testerLabel || '测试员：' }}</span>
           <img v-if="templateStore.signatures.tester.dataUrl" :src="templateStore.signatures.tester.dataUrl" class="signature-img" :style="signatureStyle('tester')" />
-          <span v-else class="placeholder-text editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('tester', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('tester', '测试员姓名')"></span>
+          <span v-else class="placeholder-text editable-text" :style="signaturePlaceholderStyle" contenteditable="true" @blur="updatePlaceholder('tester', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('tester', '测试员姓名')"></span>
         </div>
         <div class="signature-item">
           <span class="label editable-text" :style="signatureLabelStyle" contenteditable="true" @blur="updateFixedText('reviewerLabel', $event)">{{ templateData.reviewerLabel || '审核：' }}</span>
           <img v-if="templateStore.signatures.reviewer.dataUrl" :src="templateStore.signatures.reviewer.dataUrl" class="signature-img" :style="signatureStyle('reviewer')" />
-          <span v-else class="placeholder-text editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('reviewer', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('reviewer', '审核人姓名')"></span>
+          <span v-else class="placeholder-text editable-text" :style="signaturePlaceholderStyle" contenteditable="true" @blur="updatePlaceholder('reviewer', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('reviewer', '审核人姓名')"></span>
         </div>
         <div class="signature-item">
           <span class="label editable-text" :style="signatureLabelStyle" contenteditable="true" @blur="updateFixedText('approverLabel', $event)">{{ templateData.approverLabel || '核准：' }}</span>
           <img v-if="templateStore.signatures.approver.dataUrl" :src="templateStore.signatures.approver.dataUrl" class="signature-img" :style="signatureStyle('approver')" />
-          <span v-else class="placeholder-text editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('approver', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('approver', '核准人姓名')"></span>
+          <span v-else class="placeholder-text editable-text" :style="signaturePlaceholderStyle" contenteditable="true" @blur="updatePlaceholder('approver', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('approver', '核准人姓名')"></span>
         </div>
       </div>
       <div class="footer-note-row">
@@ -345,6 +345,14 @@ const signatureLabelStyle = computed(() => ({
   color: templateStore.fixedTextStyles.color,
   fontFamily: '"Microsoft YaHei", sans-serif',
   fontSize: '12px'
+}))
+
+// Signature placeholder style: 12px for tester/reviewer/approver names
+const signaturePlaceholderStyle = computed(() => ({
+  color: templateStore.editableTextStyles.color,
+  fontFamily: '"Microsoft YaHei", sans-serif',
+  fontSize: '12px',
+  fontStyle: 'italic'
 }))
 
 // Footer note label style: 9px

@@ -846,6 +846,7 @@ onUnmounted(() => {
   
   :deep(.editable-field) {
     min-width: 120px;
+    min-height: 1.5em;
   }
 }
 
@@ -1061,6 +1062,12 @@ onUnmounted(() => {
       .signature-img {
         object-fit: contain;
       }
+      
+      :deep(.editable-field) {
+        min-width: 80px;
+        min-height: 1.5em;
+        flex-shrink: 0;
+      }
     }
   }
   
@@ -1078,6 +1085,10 @@ onUnmounted(() => {
         display: flex;
         align-items: center;
         gap: 4px;
+        
+        :deep(.editable-field) {
+          min-height: 1.5em;
+        }
         
         &.center {
           justify-content: center;

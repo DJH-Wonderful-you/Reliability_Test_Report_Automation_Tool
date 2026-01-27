@@ -104,16 +104,30 @@ watch(() => reportStore.selectedFields, (newSelection) => {
         isBold.value = savedFormat.fontWeight === 'bold'
         isItalic.value = savedFormat.fontStyle === 'italic'
         isUnderline.value = savedFormat.textDecoration === 'underline'
-        textAlign.value = savedFormat.textAlign || 'left'
+        textAlign.value = savedFormat.textAlign || 'center'
       } else {
-        // Fallback to default values (not from DOM to avoid placeholder styles)
-        fontFamily.value = 'Microsoft YaHei'
-        fontSize.value = 11
-        fontColor.value = '#000000'
-        isBold.value = false
-        isItalic.value = false
-        isUnderline.value = false
-        textAlign.value = 'left'
+        // Try to read from DOM element's computed style
+        const fieldElement = document.querySelector(`[data-field-id="${firstFieldId}"]`)
+        if (fieldElement) {
+          const computedStyle = window.getComputedStyle(fieldElement)
+          fontFamily.value = computedStyle.fontFamily?.split(',')[0]?.replace(/['"]/g, '').trim() || 'Microsoft YaHei'
+          fontSize.value = parseInt(computedStyle.fontSize) || 11
+          // Don't read color from placeholder (gray)
+          fontColor.value = '#000000'
+          isBold.value = computedStyle.fontWeight === 'bold' || parseInt(computedStyle.fontWeight) >= 700
+          isItalic.value = computedStyle.fontStyle === 'italic'
+          isUnderline.value = computedStyle.textDecoration?.includes('underline') || false
+          textAlign.value = computedStyle.textAlign || 'center'
+        } else {
+          // Fallback to default values
+          fontFamily.value = 'Microsoft YaHei'
+          fontSize.value = 11
+          fontColor.value = '#000000'
+          isBold.value = false
+          isItalic.value = false
+          isUnderline.value = false
+          textAlign.value = 'center'
+        }
       }
     })
   }

@@ -1,0 +1,74 @@
+{
+  "id": "348756fb-8e6a-4ce7-b2b8-7182623d60f2",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "placeholders": {
+      "reportNumber": "请输入水电费水电费\n\n报告编号",
+      "saveDept": "部门",
+      "testProject": "请输入测试项目",
+      "tester": "测试员姓名",
+      "reviewer": "审核人姓名",
+      "approver": "核准人姓名"
+    },
+    "recordCode": "",
+    "reportTitle": "",
+    "testProjectLabel": "测试项目",
+    "testerLabel": "测试员：",
+    "reviewerLabel": "审核：",
+    "securityLevelLabel": "保密等级："
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "createdAt": "2026-01-27T15:19:45.471053",
+  "updatedAt": "2026-01-27T16:43:47.273383"
+}

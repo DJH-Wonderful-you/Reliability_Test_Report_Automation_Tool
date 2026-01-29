@@ -315,7 +315,8 @@ const startSelection = (e) => {
   // Check if clicking on a selectable text element (both fixed and editable)
   // Include editable areas: .cell-input, .placeholder-text (editable placeholders with gray text)
   // Include .image-header for test image section headers (测试前、测试中、测试后)
-  const clickedElement = e.target.closest('.fixed-text-item, .label, .section-header, .company-name, .report-title, .record-code, .label-cell, th, .placeholder-text, .cell-input, .image-header, .footer-note-item > .editable-text')
+  // Also include any element with data-field-id attribute
+  const clickedElement = e.target.closest('[data-field-id], .fixed-text-item, .label, .section-header, .company-name, .report-title, .record-code, .label-cell, th, .placeholder-text, .cell-input, .image-header, .footer-note-item > .editable-text')
   
   if (clickedElement) {
     // Handle Ctrl+click for multi-selection
@@ -391,9 +392,10 @@ const endSelection = () => {
     // Find all selectable text elements within selection box
     // Include both fixed text elements and editable areas (.cell-input, .placeholder-text)
     // Include .image-header for test image section headers (测试前、测试中、测试后)
+    // Also include any element with data-field-id attribute
     const containerRect = containerRef.value.getBoundingClientRect()
     const selectableElements = containerRef.value.querySelectorAll(
-      '.label, .section-header, .company-name, .report-title, .record-code, .label-cell, th, .placeholder-text, .cell-input, .image-header, .footer-note-item > .editable-text'
+      '[data-field-id], .label, .section-header, .company-name, .report-title, .record-code, .label-cell, th, .placeholder-text, .cell-input, .image-header, .footer-note-item > .editable-text'
     )
     
     selectableElements.forEach(el => {
@@ -425,9 +427,30 @@ const clearSelection = () => {
   selectedElements.value = []
 }
 
+// Auto-save functionality (silent save, no UI feedback)
+const performAutoSave = async () => {
+  if (!templateStore.isDirty) return
+  
+  try {
+    await templateStore.saveTemplate(true) // silent mode
+  } catch (error) {
+    console.error('Auto-save failed:', error)
+  }
+}
+
+const scheduleAutoSave = () => {
+  if (autoSaveTimer) {
+    clearTimeout(autoSaveTimer)
+  }
+  autoSaveTimer = setTimeout(performAutoSave, 500) // Auto-save after 0.5 second of inactivity
+}
+
 // Apply format to selected elements
 const applyFormatToSelected = (format) => {
+  if (selectedElements.value.length === 0) return
+  
   selectedElements.value.forEach(el => {
+    // Apply style to DOM element
     el.style.fontFamily = format.fontFamily
     el.style.fontSize = `${format.fontSize}px`
     el.style.color = format.color
@@ -435,7 +458,17 @@ const applyFormatToSelected = (format) => {
     el.style.fontStyle = format.fontStyle
     el.style.textDecoration = format.textDecoration
     el.style.textAlign = format.textAlign
+    
+    // Get field ID from data attribute
+    const fieldId = el.dataset.fieldId
+    if (fieldId) {
+      // Save format to store for persistence
+      templateStore.updateFieldFormat(fieldId, format)
+    }
   })
+  
+  // Directly trigger auto-save since isDirty might already be true
+  scheduleAutoSave()
 }
 
 const handleLogoUpload = (uploadFile) => {
@@ -518,24 +551,6 @@ const confirmResetTemplate = () => {
   }).catch(() => {
     // User cancelled
   })
-}
-
-// Auto-save functionality (silent save, no UI feedback)
-const performAutoSave = async () => {
-  if (!templateStore.isDirty) return
-  
-  try {
-    await templateStore.saveTemplate(true) // silent mode
-  } catch (error) {
-    console.error('Auto-save failed:', error)
-  }
-}
-
-const scheduleAutoSave = () => {
-  if (autoSaveTimer) {
-    clearTimeout(autoSaveTimer)
-  }
-  autoSaveTimer = setTimeout(performAutoSave, 500) // Auto-save after 0.5 second of inactivity
 }
 
 // Watch for changes to trigger auto-save

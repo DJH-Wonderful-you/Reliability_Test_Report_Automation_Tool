@@ -156,6 +156,7 @@ def create_custom_template():
         'templateContentData': data.get('templateContentData', {}),
         'securityLevel': data.get('securityLevel', '内部公开'),
         'tableColumnWidths': data.get('tableColumnWidths', {}),
+        'fieldFormats': data.get('fieldFormats', {}),
         'createdAt': now,
         'updatedAt': now
     }
@@ -187,7 +188,7 @@ def update_custom_template(template_id):
             template = json.load(f)
         
         # Update fields
-        for key in ['name', 'settings', 'logo', 'signatures', 'departmentSeal', 'templateContentData', 'securityLevel', 'tableColumnWidths']:
+        for key in ['name', 'settings', 'logo', 'signatures', 'departmentSeal', 'templateContentData', 'securityLevel', 'tableColumnWidths', 'fieldFormats']:
             if key in data:
                 template[key] = data[key]
         
@@ -333,6 +334,10 @@ def import_template():
             'logo': template_data.get('logo'),
             'signatures': template_data.get('signatures', {}),
             'departmentSeal': template_data.get('departmentSeal'),
+            'templateContentData': template_data.get('templateContentData', {}),
+            'securityLevel': template_data.get('securityLevel', '内部公开'),
+            'tableColumnWidths': template_data.get('tableColumnWidths', {}),
+            'fieldFormats': template_data.get('fieldFormats', {}),
             'createdAt': now,
             'updatedAt': now,
             'importedFrom': template_data.get('id')

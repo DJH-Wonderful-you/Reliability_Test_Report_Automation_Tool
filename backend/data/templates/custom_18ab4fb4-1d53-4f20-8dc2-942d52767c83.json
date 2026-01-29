@@ -1,5 +1,5 @@
 {
-  "id": "bc770a9a-08cc-4a84-9241-e6af0ff311b6",
+  "id": "18ab4fb4-1d53-4f20-8dc2-942d52767c83",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -46,29 +46,15 @@
     "size": 120
   },
   "templateContentData": {
-    "beforeTestLabel": "测试前",
     "companyName": "深圳市欣威智能有限公司",
-    "judgmentStandardLabel": "判定标准",
+    "customerLabel": "客户",
     "placeholders": {
-      "customer": "请输入客户名称",
-      "projectName": "请输入项目名称",
-      "reportNumber": "请输入报告编号",
-      "reviewer": "审核人姓名",
-      "saveDept": "部门",
-      "testConclusion": "请输入测试结论",
-      "testProject": "请输入测试项目",
-      "testStandard": "请输入测试标准...",
-      "tester": "测试员姓名"
+      "testProject": "请输入测试项目"
     },
     "recordCode": "记录代码：F-SUN1-XV-15.11.1.1/A0",
     "reportNumberLabel": "报告编号：",
     "reportTitle": "可靠性实验报告",
-    "saveDeptLabel": "备注：保存\n部门：",
-    "testConditionsHeader": "测试条件",
-    "testProjectLabel": "测试\n项目",
-    "testStandardLabel": "测试标准",
-    "testerLabel": "测试员：",
-    "testEquipmentLabel": "测试\n设备"
+    "testProjectLabel": "测试项目\n"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
@@ -77,6 +63,35 @@
     "resultTable": [],
     "sampleTable": []
   },
-  "createdAt": "2026-01-27T17:50:51.223255",
-  "updatedAt": "2026-01-29T09:15:57.777970"
+  "createdAt": "2026-01-29T10:52:04.122339",
+  "updatedAt": "2026-01-29T11:25:00.711451",
+  "fieldFormats": {
+    "reportNumberLabel": {
+      "color": "#000000",
+      "fontFamily": "SimSun",
+      "fontSize": 14,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "start",
+      "textDecoration": "none"
+    },
+    "testProject": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11,
+      "fontStyle": "italic",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
+    "testProjectLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 10,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "center",
+      "textDecoration": "none"
+    }
+  }
 }

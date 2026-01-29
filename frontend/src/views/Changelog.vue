@@ -44,12 +44,40 @@ const router = useRouter()
 
 const versions = ref([
   {
-    id: 'v1.0.0',
-    version: 'V1.0.0',
+    id: 'v0.3',
+    version: 'V0.3',
+    title: '样式持久化修复',
+    date: '2026年1月29日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      '修复模板编辑界面中文本样式修改无法自动保存的问题',
+      '新增单独文本框样式持久化功能',
+      '修复页面导航后样式状态丢失的问题'
+    ]
+  },
+  {
+    id: 'v0.2',
+    version: 'V0.2',
+    title: '功能优化与缺陷修复',
+    date: '2026年1月23日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      '新增文本框对齐功能',
+      '调整框选触发方式为 Shift + 拖拽',
+      '修复图片移动错位、超出范围等问题',
+      '优化模板编辑器侧边栏布局',
+      '修复多个文本编辑相关问题'
+    ]
+  },
+  {
+    id: 'v0.1',
+    version: 'V0.1',
     title: '初始版本发布',
     date: '2026年1月21日',
-    type: 'success',
-    tag: '正式版',
+    type: 'warning',
+    tag: '内部测试版',
     highlights: [
       '支持通用模板报告编辑',
       '可编辑字段和固定内容区分',

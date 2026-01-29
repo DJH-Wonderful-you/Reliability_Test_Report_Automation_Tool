@@ -1,0 +1,75 @@
+{
+  "id": "9d0a21fa-8924-45bb-84ac-40f5d19cefe6",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "深圳市欣威智能有限公司",
+    "placeholders": {},
+    "recordCode": "",
+    "reportTitle": "",
+    "testProjectLabel": "测试项目"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "fieldFormats": {
+    "testProjectLabel": {
+      "color": "#000000",
+      "fontFamily": "SimSun",
+      "fontSize": 11,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "right",
+      "textDecoration": "none"
+    }
+  },
+  "createdAt": "2026-01-29T11:45:00.120228",
+  "updatedAt": "2026-01-29T11:49:20.021722"
+}

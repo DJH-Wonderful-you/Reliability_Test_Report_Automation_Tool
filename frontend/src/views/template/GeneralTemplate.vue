@@ -13,15 +13,15 @@
         >
           <img :src="templateStore.logo.dataUrl" alt="Logo" draggable="false" />
         </div>
-        <div class="company-name editable-text" :style="companyNameStyle" contenteditable="true" @blur="updateFixedText('companyName', $event)">{{ templateData.companyName || '深圳市欣威智能有限公司' }}</div>
-        <div class="report-title editable-text" :style="reportTitleStyle" contenteditable="true" @blur="updateFixedText('reportTitle', $event)">{{ templateData.reportTitle || '可靠性实验报告' }}</div>
-        <div class="record-code editable-text" :style="{ ...fixedTextStyle, fontSize: '9px' }" contenteditable="true" @blur="updateFixedText('recordCode', $event)">{{ templateData.recordCode || '记录代码：F-SUN1-XV-15.11.1.1/A0' }}</div>
+        <div class="company-name editable-text" :style="getFieldStyle('companyName', companyNameStyle)" contenteditable="true" data-field-id="companyName" @blur="updateFixedText('companyName', $event)">{{ templateData.companyName || '深圳市欣威智能有限公司' }}</div>
+        <div class="report-title editable-text" :style="getFieldStyle('reportTitle', reportTitleStyle)" contenteditable="true" data-field-id="reportTitle" @blur="updateFixedText('reportTitle', $event)">{{ templateData.reportTitle || '可靠性实验报告' }}</div>
+        <div class="record-code editable-text" :style="getFieldStyle('recordCode', { ...fixedTextStyle, fontSize: '9px' })" contenteditable="true" data-field-id="recordCode" @blur="updateFixedText('recordCode', $event)">{{ templateData.recordCode || '记录代码：F-SUN1-XV-15.11.1.1/A0' }}</div>
       </div>
       
       <!-- Report Number -->
       <div class="report-info-row">
-        <span class="label editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('reportNumberLabel', $event)" @keydown="handleKeydown($event, false)">{{ templateData.reportNumberLabel || '报告编号：' }}</span>
-        <span class="placeholder-text editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('reportNumber', $event)" @keydown="handleKeydown($event, true)">{{ templateData.placeholders?.reportNumber || '请输入报告编号' }}</span>
+        <span class="label editable-text" :style="getFieldStyle('reportNumberLabel', fixedTextStyle)" contenteditable="true" data-field-id="reportNumberLabel" @blur="updateFixedText('reportNumberLabel', $event)" @keydown="handleKeydown($event, false)">{{ templateData.reportNumberLabel || '报告编号：' }}</span>
+        <span class="placeholder-text editable-text" :style="getFieldStyle('reportNumber', editableTextStyle)" contenteditable="true" data-field-id="reportNumber" @blur="updatePlaceholder('reportNumber', $event)" @keydown="handleKeydown($event, true)">{{ templateData.placeholders?.reportNumber || '请输入报告编号' }}</span>
       </div>
       
       <!-- Test Project and Conclusion -->
@@ -35,17 +35,17 @@
       >
         <tbody>
           <tr>
-            <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testProjectLabel', $event)">{{ templateData.testProjectLabel || '测试项目' }}</td>
-            <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('testProject', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testProject', '请输入测试项目')"></span></td>
-            <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testConclusionLabel', $event)">{{ templateData.testConclusionLabel || '测试结论' }}</td>
-            <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('testConclusion', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testConclusion', '请输入测试结论')"></span></td>
+            <td class="label-cell editable-text" :style="getFieldStyle('testProjectLabel', fixedTextStyle)" contenteditable="true" data-field-id="testProjectLabel" @blur="updateFixedText('testProjectLabel', $event)">{{ templateData.testProjectLabel || '测试项目' }}</td>
+            <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('testProject', editableTextStyle)" contenteditable="true" data-field-id="testProject" @blur="updatePlaceholder('testProject', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testProject', '请输入测试项目')"></span></td>
+            <td class="label-cell editable-text" :style="getFieldStyle('testConclusionLabel', fixedTextStyle)" contenteditable="true" data-field-id="testConclusionLabel" @blur="updateFixedText('testConclusionLabel', $event)">{{ templateData.testConclusionLabel || '测试结论' }}</td>
+            <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('testConclusion', editableTextStyle)" contenteditable="true" data-field-id="testConclusion" @blur="updatePlaceholder('testConclusion', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testConclusion', '请输入测试结论')"></span></td>
           </tr>
         </tbody>
       </ResizableTable>
       
       <!-- Sample Information Section -->
       <div class="section">
-        <div class="section-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('sampleInfoHeader', $event)">{{ templateData.sampleInfoHeader || '样品信息' }}</div>
+        <div class="section-header editable-text" :style="getFieldStyle('sampleInfoHeader', fixedTextStyle)" contenteditable="true" data-field-id="sampleInfoHeader" @blur="updateFixedText('sampleInfoHeader', $event)">{{ templateData.sampleInfoHeader || '样品信息' }}</div>
         <ResizableTable
           ref="sampleTableRef"
           table-id="sampleTable"
@@ -56,32 +56,32 @@
         >
           <tbody>
             <tr>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('customerLabel', $event)">{{ templateData.customerLabel || '客户' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('customer', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('customer', '请输入客户名称')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('departmentLabel', $event)">{{ templateData.departmentLabel || '委托部门' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('department', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('department', '请输入委托部门')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('sampleCountLabel', $event)">{{ templateData.sampleCountLabel || '样品数量' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('sampleCount', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('sampleCount', '数量')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('customerLabel', fixedTextStyle)" contenteditable="true" data-field-id="customerLabel" @blur="updateFixedText('customerLabel', $event)">{{ templateData.customerLabel || '客户' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('customer', editableTextStyle)" contenteditable="true" data-field-id="customer" @blur="updatePlaceholder('customer', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('customer', '请输入客户名称')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('departmentLabel', fixedTextStyle)" contenteditable="true" data-field-id="departmentLabel" @blur="updateFixedText('departmentLabel', $event)">{{ templateData.departmentLabel || '委托部门' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('department', editableTextStyle)" contenteditable="true" data-field-id="department" @blur="updatePlaceholder('department', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('department', '请输入委托部门')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('sampleCountLabel', fixedTextStyle)" contenteditable="true" data-field-id="sampleCountLabel" @blur="updateFixedText('sampleCountLabel', $event)">{{ templateData.sampleCountLabel || '样品数量' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('sampleCount', editableTextStyle)" contenteditable="true" data-field-id="sampleCount" @blur="updatePlaceholder('sampleCount', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('sampleCount', '数量')"></span></td>
             </tr>
             <tr>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('projectNameLabel', $event)">{{ templateData.projectNameLabel || '项目名称' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('projectName', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('projectName', '请输入项目名称')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('requesterLabel', $event)">{{ templateData.requesterLabel || '委托人员' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('requester', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('requester', '请输入委托人员')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('startTimeLabel', $event)">{{ templateData.startTimeLabel || '开始时间' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('startTime', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('startTime', '开始时间')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('projectNameLabel', fixedTextStyle)" contenteditable="true" data-field-id="projectNameLabel" @blur="updateFixedText('projectNameLabel', $event)">{{ templateData.projectNameLabel || '项目名称' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('projectName', editableTextStyle)" contenteditable="true" data-field-id="projectName" @blur="updatePlaceholder('projectName', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('projectName', '请输入项目名称')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('requesterLabel', fixedTextStyle)" contenteditable="true" data-field-id="requesterLabel" @blur="updateFixedText('requesterLabel', $event)">{{ templateData.requesterLabel || '委托人员' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('requester', editableTextStyle)" contenteditable="true" data-field-id="requester" @blur="updatePlaceholder('requester', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('requester', '请输入委托人员')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('startTimeLabel', fixedTextStyle)" contenteditable="true" data-field-id="startTimeLabel" @blur="updateFixedText('startTimeLabel', $event)">{{ templateData.startTimeLabel || '开始时间' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('startTime', editableTextStyle)" contenteditable="true" data-field-id="startTime" @blur="updatePlaceholder('startTime', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('startTime', '开始时间')"></span></td>
             </tr>
             <tr>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('productNameLabel', $event)">{{ templateData.productNameLabel || '产品名称' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('productName', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('productName', '请输入产品名称')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('sampleStageLabel', $event)">{{ templateData.sampleStageLabel || '样品阶段' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('sampleStage', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('sampleStage', '请输入样品阶段')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('endTimeLabel', $event)">{{ templateData.endTimeLabel || '完成时间' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('endTime', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('endTime', '完成时间')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('productNameLabel', fixedTextStyle)" contenteditable="true" data-field-id="productNameLabel" @blur="updateFixedText('productNameLabel', $event)">{{ templateData.productNameLabel || '产品名称' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('productName', editableTextStyle)" contenteditable="true" data-field-id="productName" @blur="updatePlaceholder('productName', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('productName', '请输入产品名称')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('sampleStageLabel', fixedTextStyle)" contenteditable="true" data-field-id="sampleStageLabel" @blur="updateFixedText('sampleStageLabel', $event)">{{ templateData.sampleStageLabel || '样品阶段' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('sampleStage', editableTextStyle)" contenteditable="true" data-field-id="sampleStage" @blur="updatePlaceholder('sampleStage', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('sampleStage', '请输入样品阶段')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('endTimeLabel', fixedTextStyle)" contenteditable="true" data-field-id="endTimeLabel" @blur="updateFixedText('endTimeLabel', $event)">{{ templateData.endTimeLabel || '完成时间' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('endTime', editableTextStyle)" contenteditable="true" data-field-id="endTime" @blur="updatePlaceholder('endTime', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('endTime', '完成时间')"></span></td>
             </tr>
             <tr>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testPurposeLabel', $event)">{{ templateData.testPurposeLabel || '测试目的' }}</td>
-              <td class="editable-cell" colspan="5"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('testPurpose', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testPurpose', '请输入测试目的')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('testPurposeLabel', fixedTextStyle)" contenteditable="true" data-field-id="testPurposeLabel" @blur="updateFixedText('testPurposeLabel', $event)">{{ templateData.testPurposeLabel || '测试目的' }}</td>
+              <td class="editable-cell" colspan="5"><span class="cell-input editable-text" :style="getFieldStyle('testPurpose', editableTextStyle)" contenteditable="true" data-field-id="testPurpose" @blur="updatePlaceholder('testPurpose', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testPurpose', '请输入测试目的')"></span></td>
             </tr>
           </tbody>
         </ResizableTable>
@@ -89,7 +89,7 @@
       
       <!-- Equipment Information Section -->
       <div class="section">
-        <div class="section-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('equipmentInfoHeader', $event)">{{ templateData.equipmentInfoHeader || '设备信息' }}</div>
+        <div class="section-header editable-text" :style="getFieldStyle('equipmentInfoHeader', fixedTextStyle)" contenteditable="true" data-field-id="equipmentInfoHeader" @blur="updateFixedText('equipmentInfoHeader', $event)">{{ templateData.equipmentInfoHeader || '设备信息' }}</div>
         <ResizableTable
           ref="equipmentTableRef"
           table-id="equipmentTable"
@@ -100,12 +100,12 @@
         >
           <tbody>
             <tr>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testEquipmentLabel', $event)">{{ templateData.testEquipmentLabel || '测试设备' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('testEquipment', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testEquipment', '请输入测试设备')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('equipmentModelLabel', $event)">{{ templateData.equipmentModelLabel || '设备型号' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('equipmentModel', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('equipmentModel', '请输入设备型号')"></span></td>
-              <td class="label-cell editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('calibrationDateLabel', $event)">{{ templateData.calibrationDateLabel || '校准日期' }}</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('calibrationDate', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('calibrationDate', '校准日期')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('testEquipmentLabel', fixedTextStyle)" contenteditable="true" data-field-id="testEquipmentLabel" @blur="updateFixedText('testEquipmentLabel', $event)">{{ templateData.testEquipmentLabel || '测试设备' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('testEquipment', editableTextStyle)" contenteditable="true" data-field-id="testEquipment" @blur="updatePlaceholder('testEquipment', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testEquipment', '请输入测试设备')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('equipmentModelLabel', fixedTextStyle)" contenteditable="true" data-field-id="equipmentModelLabel" @blur="updateFixedText('equipmentModelLabel', $event)">{{ templateData.equipmentModelLabel || '设备型号' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('equipmentModel', editableTextStyle)" contenteditable="true" data-field-id="equipmentModel" @blur="updatePlaceholder('equipmentModel', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('equipmentModel', '请输入设备型号')"></span></td>
+              <td class="label-cell editable-text" :style="getFieldStyle('calibrationDateLabel', fixedTextStyle)" contenteditable="true" data-field-id="calibrationDateLabel" @blur="updateFixedText('calibrationDateLabel', $event)">{{ templateData.calibrationDateLabel || '校准日期' }}</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('calibrationDate', editableTextStyle)" contenteditable="true" data-field-id="calibrationDate" @blur="updatePlaceholder('calibrationDate', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('calibrationDate', '校准日期')"></span></td>
             </tr>
           </tbody>
         </ResizableTable>
@@ -113,22 +113,22 @@
       
       <!-- Test Conditions Section -->
       <div class="section">
-        <div class="section-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testConditionsHeader', $event)">{{ templateData.testConditionsHeader || '测试条件' }}</div>
+        <div class="section-header editable-text" :style="getFieldStyle('testConditionsHeader', fixedTextStyle)" contenteditable="true" data-field-id="testConditionsHeader" @blur="updateFixedText('testConditionsHeader', $event)">{{ templateData.testConditionsHeader || '测试条件' }}</div>
         
         <div class="subsection">
           <div class="subsection-row centered-label">
-            <span class="label editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testStandardLabel', $event)" @keydown="handleKeydown($event, true)">{{ templateData.testStandardLabel || '测试标准' }}</span>
+            <span class="label editable-text" :style="getFieldStyle('testStandardLabel', fixedTextStyle)" contenteditable="true" data-field-id="testStandardLabel" @blur="updateFixedText('testStandardLabel', $event)" @keydown="handleKeydown($event, true)">{{ templateData.testStandardLabel || '测试标准' }}</span>
             <div class="subsection-content">
-              <span class="placeholder-text editable-text multiline" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('testStandard', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testStandard', '请输入测试标准...')"></span>
+              <span class="placeholder-text editable-text multiline" :style="getFieldStyle('testStandard', editableTextStyle)" contenteditable="true" data-field-id="testStandard" @blur="updatePlaceholder('testStandard', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('testStandard', '请输入测试标准...')"></span>
             </div>
           </div>
         </div>
         
         <div class="subsection">
           <div class="subsection-row centered-label">
-            <span class="label editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('judgmentStandardLabel', $event)" @keydown="handleKeydown($event, true)">{{ templateData.judgmentStandardLabel || '判定标准' }}</span>
+            <span class="label editable-text" :style="getFieldStyle('judgmentStandardLabel', fixedTextStyle)" contenteditable="true" data-field-id="judgmentStandardLabel" @blur="updateFixedText('judgmentStandardLabel', $event)" @keydown="handleKeydown($event, true)">{{ templateData.judgmentStandardLabel || '判定标准' }}</span>
             <div class="subsection-content">
-              <span class="placeholder-text editable-text multiline" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('judgmentStandard', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('judgmentStandard', '请输入判定标准...')"></span>
+              <span class="placeholder-text editable-text multiline" :style="getFieldStyle('judgmentStandard', editableTextStyle)" contenteditable="true" data-field-id="judgmentStandard" @blur="updatePlaceholder('judgmentStandard', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('judgmentStandard', '请输入判定标准...')"></span>
             </div>
           </div>
         </div>
@@ -136,7 +136,7 @@
       
       <!-- Test Results Section -->
       <div class="section">
-        <div class="section-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testResultsHeader', $event)">{{ templateData.testResultsHeader || '测试结果信息' }}</div>
+        <div class="section-header editable-text" :style="getFieldStyle('testResultsHeader', fixedTextStyle)" contenteditable="true" data-field-id="testResultsHeader" @blur="updateFixedText('testResultsHeader', $event)">{{ templateData.testResultsHeader || '测试结果信息' }}</div>
         <ResizableTable
           ref="resultTableRef"
           table-id="resultTable"
@@ -148,31 +148,31 @@
         >
           <thead>
             <tr>
-              <th class="editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('resultIdHeader', $event)">{{ templateData.resultIdHeader || '编号' }}</th>
-              <th class="editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('appearanceHeader', $event)">{{ templateData.appearanceHeader || '实验后外观检查' }}</th>
-              <th class="editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('functionHeader', $event)">{{ templateData.functionHeader || '实验后功能检查' }}</th>
-              <th class="editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('otherHeader', $event)">{{ templateData.otherHeader || '其它性能检查' }}</th>
-              <th class="editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('conclusionHeader', $event)">{{ templateData.conclusionHeader || '测试结论' }}</th>
-              <th class="editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('noteHeader', $event)">{{ templateData.noteHeader || '备注' }}</th>
+              <th class="editable-text" :style="getFieldStyle('resultIdHeader', fixedTextStyle)" contenteditable="true" data-field-id="resultIdHeader" @blur="updateFixedText('resultIdHeader', $event)">{{ templateData.resultIdHeader || '编号' }}</th>
+              <th class="editable-text" :style="getFieldStyle('appearanceHeader', fixedTextStyle)" contenteditable="true" data-field-id="appearanceHeader" @blur="updateFixedText('appearanceHeader', $event)">{{ templateData.appearanceHeader || '实验后外观检查' }}</th>
+              <th class="editable-text" :style="getFieldStyle('functionHeader', fixedTextStyle)" contenteditable="true" data-field-id="functionHeader" @blur="updateFixedText('functionHeader', $event)">{{ templateData.functionHeader || '实验后功能检查' }}</th>
+              <th class="editable-text" :style="getFieldStyle('otherHeader', fixedTextStyle)" contenteditable="true" data-field-id="otherHeader" @blur="updateFixedText('otherHeader', $event)">{{ templateData.otherHeader || '其它性能检查' }}</th>
+              <th class="editable-text" :style="getFieldStyle('conclusionHeader', fixedTextStyle)" contenteditable="true" data-field-id="conclusionHeader" @blur="updateFixedText('conclusionHeader', $event)">{{ templateData.conclusionHeader || '测试结论' }}</th>
+              <th class="editable-text" :style="getFieldStyle('noteHeader', fixedTextStyle)" contenteditable="true" data-field-id="noteHeader" @blur="updateFixedText('noteHeader', $event)">{{ templateData.noteHeader || '备注' }}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-center" :style="fixedTextStyle">1</td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('appearance', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('appearance', '外观检查结果')"></span></td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('function', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('function', '功能检查结果')"></span></td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('other', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('other', '其它性能')"></span></td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('conclusion', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('conclusion', '结论')"></span></td>
-              <td class="editable-cell"><span class="cell-input editable-text" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('note', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('note', '备注')"></span></td>
+              <td class="text-center" :style="getFieldStyle('resultId1', fixedTextStyle)">1</td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('appearance', editableTextStyle)" contenteditable="true" data-field-id="appearance" @blur="updatePlaceholder('appearance', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('appearance', '外观检查结果')"></span></td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('function', editableTextStyle)" contenteditable="true" data-field-id="function" @blur="updatePlaceholder('function', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('function', '功能检查结果')"></span></td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('other', editableTextStyle)" contenteditable="true" data-field-id="other" @blur="updatePlaceholder('other', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('other', '其它性能')"></span></td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('conclusion', editableTextStyle)" contenteditable="true" data-field-id="conclusion" @blur="updatePlaceholder('conclusion', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('conclusion', '结论')"></span></td>
+              <td class="editable-cell"><span class="cell-input editable-text" :style="getFieldStyle('note', editableTextStyle)" contenteditable="true" data-field-id="note" @blur="updatePlaceholder('note', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('note', '备注')"></span></td>
             </tr>
           </tbody>
         </ResizableTable>
         
         <div class="judgment-section">
           <div class="judgment-row centered-label">
-            <span class="label editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('judgmentResultLabel', $event)" @keydown="handleKeydown($event, true)">{{ templateData.judgmentResultLabel || '判定结果' }}</span>
+            <span class="label editable-text" :style="getFieldStyle('judgmentResultLabel', fixedTextStyle)" contenteditable="true" data-field-id="judgmentResultLabel" @blur="updateFixedText('judgmentResultLabel', $event)" @keydown="handleKeydown($event, true)">{{ templateData.judgmentResultLabel || '判定结果' }}</span>
             <div class="judgment-content">
-              <span class="placeholder-text editable-text multiline" :style="editableTextStyle" contenteditable="true" @blur="updatePlaceholder('judgmentResult', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('judgmentResult', '请输入判定结果...')"></span>
+              <span class="placeholder-text editable-text multiline" :style="getFieldStyle('judgmentResult', editableTextStyle)" contenteditable="true" data-field-id="judgmentResult" @blur="updatePlaceholder('judgmentResult', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('judgmentResult', '请输入判定结果...')"></span>
             </div>
           </div>
         </div>
@@ -180,29 +180,29 @@
       
       <!-- Test Images Section -->
       <div class="section">
-        <div class="section-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('testImagesHeader', $event)">{{ templateData.testImagesHeader || '测试图片' }}</div>
+        <div class="section-header editable-text" :style="getFieldStyle('testImagesHeader', fixedTextStyle)" contenteditable="true" data-field-id="testImagesHeader" @blur="updateFixedText('testImagesHeader', $event)">{{ templateData.testImagesHeader || '测试图片' }}</div>
         
         <!-- Image column headers -->
         <div class="image-headers">
-          <div class="image-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('beforeTestLabel', $event)">{{ templateData.beforeTestLabel || '测试前' }}</div>
-          <div class="image-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('duringTestLabel', $event)">{{ templateData.duringTestLabel || '测试中' }}</div>
-          <div class="image-header editable-text" :style="fixedTextStyle" contenteditable="true" @blur="updateFixedText('afterTestLabel', $event)">{{ templateData.afterTestLabel || '测试后' }}</div>
+          <div class="image-header editable-text" :style="getFieldStyle('beforeTestLabel', fixedTextStyle)" contenteditable="true" data-field-id="beforeTestLabel" @blur="updateFixedText('beforeTestLabel', $event)">{{ templateData.beforeTestLabel || '测试前' }}</div>
+          <div class="image-header editable-text" :style="getFieldStyle('duringTestLabel', fixedTextStyle)" contenteditable="true" data-field-id="duringTestLabel" @blur="updateFixedText('duringTestLabel', $event)">{{ templateData.duringTestLabel || '测试中' }}</div>
+          <div class="image-header editable-text" :style="getFieldStyle('afterTestLabel', fixedTextStyle)" contenteditable="true" data-field-id="afterTestLabel" @blur="updateFixedText('afterTestLabel', $event)">{{ templateData.afterTestLabel || '测试后' }}</div>
         </div>
         
         <!-- Sample image row -->
         <div class="image-row">
           <div class="image-cell">
-            <div class="image-placeholder" :style="editableTextStyle">
+            <div class="image-placeholder" :style="getFieldStyle('imagePlaceholder1', editableTextStyle)">
               <span>图片占位</span>
             </div>
           </div>
           <div class="image-cell">
-            <div class="image-placeholder" :style="editableTextStyle">
+            <div class="image-placeholder" :style="getFieldStyle('imagePlaceholder2', editableTextStyle)">
               <span>图片占位</span>
             </div>
           </div>
           <div class="image-cell">
-            <div class="image-placeholder" :style="editableTextStyle">
+            <div class="image-placeholder" :style="getFieldStyle('imagePlaceholder3', editableTextStyle)">
               <span>图片占位</span>
             </div>
           </div>
@@ -224,33 +224,33 @@
     <div class="page-footer">
       <div class="signature-row">
         <div class="signature-item">
-          <span class="label editable-text" :style="signatureLabelStyle" contenteditable="true" @blur="updateFixedText('testerLabel', $event)">{{ templateData.testerLabel || '测试员：' }}</span>
+          <span class="label editable-text" :style="getFieldStyle('testerLabel', signatureLabelStyle)" contenteditable="true" data-field-id="testerLabel" @blur="updateFixedText('testerLabel', $event)">{{ templateData.testerLabel || '测试员：' }}</span>
           <img v-if="templateStore.signatures.tester.dataUrl" :src="templateStore.signatures.tester.dataUrl" class="signature-img" :style="signatureStyle('tester')" />
-          <span v-else class="placeholder-text editable-text" :style="signaturePlaceholderStyle" contenteditable="true" @blur="updatePlaceholder('tester', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('tester', '测试员姓名')"></span>
+          <span v-else class="placeholder-text editable-text" :style="getFieldStyle('tester', signaturePlaceholderStyle)" contenteditable="true" data-field-id="tester" @blur="updatePlaceholder('tester', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('tester', '测试员姓名')"></span>
         </div>
         <div class="signature-item">
-          <span class="label editable-text" :style="signatureLabelStyle" contenteditable="true" @blur="updateFixedText('reviewerLabel', $event)">{{ templateData.reviewerLabel || '审核：' }}</span>
+          <span class="label editable-text" :style="getFieldStyle('reviewerLabel', signatureLabelStyle)" contenteditable="true" data-field-id="reviewerLabel" @blur="updateFixedText('reviewerLabel', $event)">{{ templateData.reviewerLabel || '审核：' }}</span>
           <img v-if="templateStore.signatures.reviewer.dataUrl" :src="templateStore.signatures.reviewer.dataUrl" class="signature-img" :style="signatureStyle('reviewer')" />
-          <span v-else class="placeholder-text editable-text" :style="signaturePlaceholderStyle" contenteditable="true" @blur="updatePlaceholder('reviewer', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('reviewer', '审核人姓名')"></span>
+          <span v-else class="placeholder-text editable-text" :style="getFieldStyle('reviewer', signaturePlaceholderStyle)" contenteditable="true" data-field-id="reviewer" @blur="updatePlaceholder('reviewer', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('reviewer', '审核人姓名')"></span>
         </div>
         <div class="signature-item">
-          <span class="label editable-text" :style="signatureLabelStyle" contenteditable="true" @blur="updateFixedText('approverLabel', $event)">{{ templateData.approverLabel || '核准：' }}</span>
+          <span class="label editable-text" :style="getFieldStyle('approverLabel', signatureLabelStyle)" contenteditable="true" data-field-id="approverLabel" @blur="updateFixedText('approverLabel', $event)">{{ templateData.approverLabel || '核准：' }}</span>
           <img v-if="templateStore.signatures.approver.dataUrl" :src="templateStore.signatures.approver.dataUrl" class="signature-img" :style="signatureStyle('approver')" />
-          <span v-else class="placeholder-text editable-text" :style="signaturePlaceholderStyle" contenteditable="true" @blur="updatePlaceholder('approver', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('approver', '核准人姓名')"></span>
+          <span v-else class="placeholder-text editable-text" :style="getFieldStyle('approver', signaturePlaceholderStyle)" contenteditable="true" data-field-id="approver" @blur="updatePlaceholder('approver', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('approver', '核准人姓名')"></span>
         </div>
       </div>
       <div class="footer-note-row">
         <div class="footer-note-content">
           <div class="footer-note-item">
-            <span class="editable-text" :style="footerNoteLabelStyle" contenteditable="true" @blur="updateFixedText('saveDeptLabel', $event)">{{ templateData.saveDeptLabel || '备注：保存部门：' }}</span>
-            <span class="placeholder-text editable-text" :style="{ color: editableTextStyle.color, fontStyle: 'italic', fontSize: '9px' }" contenteditable="true" @blur="updatePlaceholder('saveDept', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('saveDept', '部门')"></span>
+            <span class="editable-text" :style="getFieldStyle('saveDeptLabel', footerNoteLabelStyle)" contenteditable="true" data-field-id="saveDeptLabel" @blur="updateFixedText('saveDeptLabel', $event)">{{ templateData.saveDeptLabel || '备注：保存部门：' }}</span>
+            <span class="placeholder-text editable-text" :style="getFieldStyle('saveDept', { color: editableTextStyle.color, fontStyle: 'italic', fontSize: '9px' })" contenteditable="true" data-field-id="saveDept" @blur="updatePlaceholder('saveDept', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('saveDept', '部门')"></span>
           </div>
           <div class="footer-note-item center">
-            <span class="editable-text" :style="footerNoteLabelStyle" contenteditable="true" @blur="updateFixedText('saveYearsLabel', $event)">{{ templateData.saveYearsLabel || '保存年限：' }}</span>
-            <span class="placeholder-text editable-text" :style="{ color: editableTextStyle.color, fontStyle: 'italic', fontSize: '9px' }" contenteditable="true" @blur="updatePlaceholder('saveYears', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('saveYears', '年限')"></span>
+            <span class="editable-text" :style="getFieldStyle('saveYearsLabel', footerNoteLabelStyle)" contenteditable="true" data-field-id="saveYearsLabel" @blur="updateFixedText('saveYearsLabel', $event)">{{ templateData.saveYearsLabel || '保存年限：' }}</span>
+            <span class="placeholder-text editable-text" :style="getFieldStyle('saveYears', { color: editableTextStyle.color, fontStyle: 'italic', fontSize: '9px' })" contenteditable="true" data-field-id="saveYears" @blur="updatePlaceholder('saveYears', $event)" @keydown="handleKeydown($event, true)" v-html="getPlaceholderHtml('saveYears', '年限')"></span>
           </div>
           <div class="footer-note-item security-level-section">
-            <span class="editable-text" :style="footerNoteLabelStyle" contenteditable="true" @blur="updateFixedText('securityLevelLabel', $event)">{{ templateData.securityLevelLabel || '保密等级：' }}</span>
+            <span class="editable-text" :style="getFieldStyle('securityLevelLabel', footerNoteLabelStyle)" contenteditable="true" data-field-id="securityLevelLabel" @blur="updateFixedText('securityLevelLabel', $event)">{{ templateData.securityLevelLabel || '保密等级：' }}</span>
             <el-radio-group v-model="securityLevel" size="small" @change="updateSecurityLevel">
               <el-radio label="绝密">绝密</el-radio>
               <el-radio label="机密">机密</el-radio>
@@ -266,7 +266,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, reactive, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, reactive, watch, nextTick } from 'vue'
 import { useTemplateStore } from '@/stores/template'
 import ResizableTable from '@/components/report/ResizableTable.vue'
 
@@ -324,6 +324,37 @@ const fixedTextStyle = computed(() => ({
   fontFamily: templateStore.fixedTextStyles.fontFamily,
   fontSize: `${templateStore.fixedTextStyles.fontSize}px`
 }))
+
+// Apply saved format to DOM element
+const applyFieldFormat = (fieldId, element) => {
+  const savedFormat = templateStore.getFieldFormat(fieldId)
+  if (savedFormat && element) {
+    if (savedFormat.fontFamily) element.style.fontFamily = savedFormat.fontFamily
+    if (savedFormat.fontSize) element.style.fontSize = `${savedFormat.fontSize}px`
+    if (savedFormat.color) element.style.color = savedFormat.color
+    if (savedFormat.fontWeight) element.style.fontWeight = savedFormat.fontWeight
+    if (savedFormat.fontStyle) element.style.fontStyle = savedFormat.fontStyle
+    if (savedFormat.textDecoration) element.style.textDecoration = savedFormat.textDecoration
+    if (savedFormat.textAlign) element.style.textAlign = savedFormat.textAlign
+  }
+}
+
+// Get merged style for a field (base style + saved field format)
+const getFieldStyle = (fieldId, baseStyle) => {
+  const savedFormat = templateStore.getFieldFormat(fieldId)
+  if (!savedFormat) return baseStyle
+  
+  return {
+    ...baseStyle,
+    ...(savedFormat.fontFamily && { fontFamily: savedFormat.fontFamily }),
+    ...(savedFormat.fontSize && { fontSize: `${savedFormat.fontSize}px` }),
+    ...(savedFormat.color && { color: savedFormat.color }),
+    ...(savedFormat.fontWeight && { fontWeight: savedFormat.fontWeight }),
+    ...(savedFormat.fontStyle && { fontStyle: savedFormat.fontStyle }),
+    ...(savedFormat.textDecoration && { textDecoration: savedFormat.textDecoration }),
+    ...(savedFormat.textAlign && { textAlign: savedFormat.textAlign })
+  }
+}
 
 // Company name style: SimSun 20px bold
 const companyNameStyle = computed(() => ({
@@ -630,7 +661,51 @@ onMounted(async () => {
   if (templateStore.securityLevel) {
     securityLevel.value = templateStore.securityLevel
   }
+  
+  // Restore saved field formats to DOM elements
+  nextTick(() => {
+    restoreFieldFormats()
+  })
 })
+
+// Restore saved field formats to DOM elements
+const restoreFieldFormats = () => {
+  if (!pageRef.value) return
+  
+  // Find all elements with data-field-id
+  const elements = pageRef.value.querySelectorAll('[data-field-id]')
+  elements.forEach(el => {
+    const fieldId = el.dataset.fieldId
+    if (fieldId) {
+      applyFieldFormat(fieldId, el)
+    }
+  })
+}
+
+// Watch for fieldFormats changes to restore styles after template load
+watch(
+  () => templateStore.fieldFormats,
+  (newFormats) => {
+    if (newFormats && Object.keys(newFormats).length > 0) {
+      nextTick(() => {
+        restoreFieldFormats()
+      })
+    }
+  },
+  { deep: true, immediate: true }
+)
+
+// Also watch for template ID changes (when switching back to this page)
+watch(
+  () => templateStore.currentTemplateId,
+  (newId) => {
+    if (newId) {
+      nextTick(() => {
+        restoreFieldFormats()
+      })
+    }
+  }
+)
 
 onUnmounted(() => {
   // Clean up event listeners

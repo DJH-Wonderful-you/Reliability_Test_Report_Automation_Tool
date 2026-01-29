@@ -64,6 +64,9 @@ export const useTemplateStore = defineStore('template', () => {
     resultTable: [] // Test result table widths
   })
 
+  // Individual field formats for each text element
+  const fieldFormats = ref({})
+
   // Actions
   const loadDefaultTemplate = async (type) => {
     isLoading.value = true
@@ -101,6 +104,7 @@ export const useTemplateStore = defineStore('template', () => {
         if (data.templateContentData) templateContentData.value = data.templateContentData
         if (data.securityLevel) securityLevel.value = data.securityLevel
         if (data.tableColumnWidths) tableColumnWidths.value = data.tableColumnWidths
+        if (data.fieldFormats) fieldFormats.value = data.fieldFormats
       } else {
         throw new Error('Failed to load template')
       }
@@ -241,6 +245,15 @@ export const useTemplateStore = defineStore('template', () => {
     }
   }
 
+  const updateFieldFormat = (fieldId, format) => {
+    fieldFormats.value[fieldId] = { ...fieldFormats.value[fieldId], ...format }
+    isDirty.value = true
+  }
+
+  const getFieldFormat = (fieldId) => {
+    return fieldFormats.value[fieldId] || null
+  }
+
   const saveTemplate = async (silent = false) => {
     const templatePayload = {
       name: templateName.value || '自定义模板',
@@ -254,7 +267,8 @@ export const useTemplateStore = defineStore('template', () => {
       departmentSeal: departmentSeal.value,
       templateContentData: templateContentData.value,
       securityLevel: securityLevel.value,
-      tableColumnWidths: tableColumnWidths.value
+      tableColumnWidths: tableColumnWidths.value,
+      fieldFormats: fieldFormats.value
     }
 
     try {
@@ -375,6 +389,7 @@ export const useTemplateStore = defineStore('template', () => {
       equipmentTable: [],
       resultTable: []
     }
+    fieldFormats.value = {}
     isDirty.value = false
   }
 
@@ -394,6 +409,7 @@ export const useTemplateStore = defineStore('template', () => {
     templateContentData,
     securityLevel,
     tableColumnWidths,
+    fieldFormats,
     
     // Actions
     loadDefaultTemplate,
@@ -412,6 +428,8 @@ export const useTemplateStore = defineStore('template', () => {
     updatePlaceholder,
     updateSecurityLevel,
     updateTableColumnWidths,
+    updateFieldFormat,
+    getFieldFormat,
     saveTemplate,
     exportTemplate,
     importTemplate,

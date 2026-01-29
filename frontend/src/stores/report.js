@@ -126,6 +126,19 @@ export const useReportStore = defineStore('report', () => {
     }
   }
 
+  // Apply template field formats (from template editor)
+  const applyTemplateFieldFormats = (templateFieldFormats) => {
+    if (templateFieldFormats && Object.keys(templateFieldFormats).length > 0) {
+      // Merge template formats with existing formats (template formats as defaults)
+      // Only apply if no user-defined format exists for that field
+      Object.keys(templateFieldFormats).forEach(fieldId => {
+        if (!fieldFormats.value[fieldId]) {
+          fieldFormats.value[fieldId] = { ...templateFieldFormats[fieldId] }
+        }
+      })
+    }
+  }
+
   const updateField = (fieldId, value) => {
     content.value[fieldId] = value
     isDirty.value = true
@@ -393,6 +406,7 @@ export const useReportStore = defineStore('report', () => {
     loadTemplate,
     loadTemplateSettings,
     applyTemplateSettings,
+    applyTemplateFieldFormats,
     updateField,
     updateFieldFormat,
     getFieldFormat,

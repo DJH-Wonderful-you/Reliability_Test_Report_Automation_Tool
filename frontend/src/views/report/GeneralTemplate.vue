@@ -17,14 +17,14 @@
             >
               <img :src="reportStore.templateSettings.logo.dataUrl" alt="Logo" />
             </div>
-            <div class="company-name" v-html="getLabelHtml('companyName', '深圳市欣威智能有限公司')"></div>
-            <div class="report-title" v-html="getLabelHtml('reportTitle', '可靠性实验报告')"></div>
-            <div class="record-code" v-html="getLabelHtml('recordCode', '记录代码：F-SUN1-XV-15.11.1.1/A0')"></div>
+            <div class="company-name" :style="getFieldStyle('companyName')" v-html="getLabelHtml('companyName', '深圳市欣威智能有限公司')"></div>
+            <div class="report-title" :style="getFieldStyle('reportTitle')" v-html="getLabelHtml('reportTitle', '可靠性实验报告')"></div>
+            <div class="record-code" :style="getFieldStyle('recordCode')" v-html="getLabelHtml('recordCode', '记录代码：F-SUN1-XV-15.11.1.1/A0')"></div>
           </div>
         
         <!-- Report Number -->
         <div class="report-info-row">
-          <span class="label" v-html="getLabelHtml('reportNumberLabel', '报告编号：')"></span>
+          <span class="label" :style="getFieldStyle('reportNumberLabel')" v-html="getLabelHtml('reportNumberLabel', '报告编号：')"></span>
           <EditableField 
             field-id="reportNumber"
             :placeholder="getPlaceholder('reportNumber', '请输入报告编号')"
@@ -43,7 +43,7 @@
             <col :style="getColumnWidthStyle('infoTable', 3)">
           </colgroup>
           <tr>
-            <td class="label-cell" v-html="getLabelHtml('testProjectLabel', '测试项目')"></td>
+            <td class="label-cell" :style="getFieldStyle('testProjectLabel')" v-html="getLabelHtml('testProjectLabel', '测试项目')"></td>
             <td class="editable-cell">
               <EditableField 
                 field-id="testProject"
@@ -52,7 +52,7 @@
                 @update="updateField('testProject', $event)"
               />
             </td>
-            <td class="label-cell" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
+            <td class="label-cell" :style="getFieldStyle('testConclusionLabel')" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
             <td class="editable-cell">
               <EditableField 
                 field-id="testConclusion"
@@ -66,7 +66,7 @@
         
         <!-- Sample Information Section -->
         <div class="section">
-          <div class="section-header" v-html="getLabelHtml('sampleInfoHeader', '样品信息')"></div>
+          <div class="section-header" :style="getFieldStyle('sampleInfoHeader')" v-html="getLabelHtml('sampleInfoHeader', '样品信息')"></div>
           <table class="info-table">
             <colgroup>
               <col :style="getColumnWidthStyle('sampleTable', 0)">
@@ -77,49 +77,49 @@
               <col :style="getColumnWidthStyle('sampleTable', 5)">
             </colgroup>
             <tr>
-              <td class="label-cell" v-html="getLabelHtml('customerLabel', '客户')"></td>
+              <td class="label-cell" :style="getFieldStyle('customerLabel')" v-html="getLabelHtml('customerLabel', '客户')"></td>
               <td class="editable-cell">
                 <EditableField field-id="customer" :placeholder="getPlaceholder('customer', '请输入客户名称')" :value="content.customer" @update="updateField('customer', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('departmentLabel', '委托部门')"></td>
+              <td class="label-cell" :style="getFieldStyle('departmentLabel')" v-html="getLabelHtml('departmentLabel', '委托部门')"></td>
               <td class="editable-cell">
                 <EditableField field-id="department" :placeholder="getPlaceholder('department', '请输入委托部门')" :value="content.department" @update="updateField('department', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('sampleCountLabel', '样品数量')"></td>
+              <td class="label-cell" :style="getFieldStyle('sampleCountLabel')" v-html="getLabelHtml('sampleCountLabel', '样品数量')"></td>
               <td class="editable-cell">
                 <EditableField field-id="sampleCount" :placeholder="getPlaceholder('sampleCount', '数量')" :value="content.sampleCount" @update="updateField('sampleCount', $event)" />
               </td>
             </tr>
             <tr>
-              <td class="label-cell" v-html="getLabelHtml('projectNameLabel', '项目名称')"></td>
+              <td class="label-cell" :style="getFieldStyle('projectNameLabel')" v-html="getLabelHtml('projectNameLabel', '项目名称')"></td>
               <td class="editable-cell">
                 <EditableField field-id="projectName" :placeholder="getPlaceholder('projectName', '请输入项目名称')" :value="content.projectName" @update="updateField('projectName', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('requesterLabel', '委托人员')"></td>
+              <td class="label-cell" :style="getFieldStyle('requesterLabel')" v-html="getLabelHtml('requesterLabel', '委托人员')"></td>
               <td class="editable-cell">
                 <EditableField field-id="requester" :placeholder="getPlaceholder('requester', '请输入委托人员')" :value="content.requester" @update="updateField('requester', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('startTimeLabel', '开始时间')"></td>
+              <td class="label-cell" :style="getFieldStyle('startTimeLabel')" v-html="getLabelHtml('startTimeLabel', '开始时间')"></td>
               <td class="editable-cell">
                 <EditableField field-id="startTime" :placeholder="getPlaceholder('startTime', '开始时间')" :value="content.startTime" @update="updateField('startTime', $event)" />
               </td>
             </tr>
             <tr>
-              <td class="label-cell" v-html="getLabelHtml('productNameLabel', '产品名称')"></td>
+              <td class="label-cell" :style="getFieldStyle('productNameLabel')" v-html="getLabelHtml('productNameLabel', '产品名称')"></td>
               <td class="editable-cell">
                 <EditableField field-id="productName" :placeholder="getPlaceholder('productName', '请输入产品名称')" :value="content.productName" @update="updateField('productName', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('sampleStageLabel', '样品阶段')"></td>
+              <td class="label-cell" :style="getFieldStyle('sampleStageLabel')" v-html="getLabelHtml('sampleStageLabel', '样品阶段')"></td>
               <td class="editable-cell">
                 <EditableField field-id="sampleStage" :placeholder="getPlaceholder('sampleStage', '请输入样品阶段')" :value="content.sampleStage" @update="updateField('sampleStage', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('endTimeLabel', '完成时间')"></td>
+              <td class="label-cell" :style="getFieldStyle('endTimeLabel')" v-html="getLabelHtml('endTimeLabel', '完成时间')"></td>
               <td class="editable-cell">
                 <EditableField field-id="endTime" :placeholder="getPlaceholder('endTime', '完成时间')" :value="content.endTime" @update="updateField('endTime', $event)" />
               </td>
             </tr>
             <tr>
-              <td class="label-cell" v-html="getLabelHtml('testPurposeLabel', '测试目的')"></td>
+              <td class="label-cell" :style="getFieldStyle('testPurposeLabel')" v-html="getLabelHtml('testPurposeLabel', '测试目的')"></td>
               <td class="editable-cell" colspan="5">
                 <EditableField field-id="testPurpose" :placeholder="getPlaceholder('testPurpose', '请输入测试目的')" :value="content.testPurpose" @update="updateField('testPurpose', $event)" />
               </td>
@@ -129,7 +129,7 @@
         
         <!-- Equipment Information Section -->
         <div class="section">
-          <div class="section-header" v-html="getLabelHtml('equipmentInfoHeader', '设备信息')"></div>
+          <div class="section-header" :style="getFieldStyle('equipmentInfoHeader')" v-html="getLabelHtml('equipmentInfoHeader', '设备信息')"></div>
           <table class="info-table">
             <colgroup>
               <col :style="getColumnWidthStyle('equipmentTable', 0)">
@@ -140,15 +140,15 @@
               <col :style="getColumnWidthStyle('equipmentTable', 5)">
             </colgroup>
             <tr>
-              <td class="label-cell" v-html="getLabelHtml('testEquipmentLabel', '测试设备')"></td>
+              <td class="label-cell" :style="getFieldStyle('testEquipmentLabel')" v-html="getLabelHtml('testEquipmentLabel', '测试设备')"></td>
               <td class="editable-cell">
                 <EditableField field-id="testEquipment" :placeholder="getPlaceholder('testEquipment', '请输入测试设备')" :value="content.testEquipment" @update="updateField('testEquipment', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('equipmentModelLabel', '设备型号')"></td>
+              <td class="label-cell" :style="getFieldStyle('equipmentModelLabel')" v-html="getLabelHtml('equipmentModelLabel', '设备型号')"></td>
               <td class="editable-cell">
                 <EditableField field-id="equipmentModel" :placeholder="getPlaceholder('equipmentModel', '请输入设备型号')" :value="content.equipmentModel" @update="updateField('equipmentModel', $event)" />
               </td>
-              <td class="label-cell" v-html="getLabelHtml('calibrationDateLabel', '校准日期')"></td>
+              <td class="label-cell" :style="getFieldStyle('calibrationDateLabel')" v-html="getLabelHtml('calibrationDateLabel', '校准日期')"></td>
               <td class="editable-cell">
                 <EditableField field-id="calibrationDate" :placeholder="getPlaceholder('calibrationDate', '校准日期')" :value="content.calibrationDate" @update="updateField('calibrationDate', $event)" />
               </td>
@@ -158,11 +158,11 @@
         
         <!-- Test Conditions Section -->
         <div class="section">
-          <div class="section-header" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
+          <div class="section-header" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
           
           <div class="subsection">
             <div class="subsection-row centered-label">
-              <span class="label" v-html="getLabelHtml('testStandardLabel', '测试标准')"></span>
+              <span class="label" :style="getFieldStyle('testStandardLabel')" v-html="getLabelHtml('testStandardLabel', '测试标准')"></span>
               <div class="subsection-content">
                 <EditableField 
                   field-id="testStandard"
@@ -178,7 +178,7 @@
           
           <div class="subsection">
             <div class="subsection-row centered-label">
-              <span class="label" v-html="getLabelHtml('judgmentStandardLabel', '判定标准')"></span>
+              <span class="label" :style="getFieldStyle('judgmentStandardLabel')" v-html="getLabelHtml('judgmentStandardLabel', '判定标准')"></span>
               <div class="subsection-content">
                 <EditableField 
                   field-id="judgmentStandard"
@@ -195,7 +195,7 @@
         
         <!-- Test Results Section -->
         <div class="section">
-          <div class="section-header" v-html="getLabelHtml('testResultsHeader', '测试结果信息')"></div>
+          <div class="section-header" :style="getFieldStyle('testResultsHeader')" v-html="getLabelHtml('testResultsHeader', '测试结果信息')"></div>
           
           <!-- Row Controls -->
           <div class="row-controls">
@@ -224,12 +224,12 @@
             </colgroup>
             <thead>
               <tr>
-                <th v-html="getLabelHtml('resultIdHeader', '编号')"></th>
-                <th v-html="getLabelHtml('appearanceHeader', '实验后外观检查')"></th>
-                <th v-html="getLabelHtml('functionHeader', '实验后功能检查')"></th>
-                <th v-html="getLabelHtml('otherHeader', '其它性能检查')"></th>
-                <th v-html="getLabelHtml('conclusionHeader', '测试结论')"></th>
-                <th v-html="getLabelHtml('noteHeader', '备注')"></th>
+                <th :style="getFieldStyle('resultIdHeader')" v-html="getLabelHtml('resultIdHeader', '编号')"></th>
+                <th :style="getFieldStyle('appearanceHeader')" v-html="getLabelHtml('appearanceHeader', '实验后外观检查')"></th>
+                <th :style="getFieldStyle('functionHeader')" v-html="getLabelHtml('functionHeader', '实验后功能检查')"></th>
+                <th :style="getFieldStyle('otherHeader')" v-html="getLabelHtml('otherHeader', '其它性能检查')"></th>
+                <th :style="getFieldStyle('conclusionHeader')" v-html="getLabelHtml('conclusionHeader', '测试结论')"></th>
+                <th :style="getFieldStyle('noteHeader')" v-html="getLabelHtml('noteHeader', '备注')"></th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -293,7 +293,7 @@
           <!-- Judgment Result -->
           <div class="judgment-section">
             <div class="judgment-row centered-label">
-              <span class="label" v-html="getLabelHtml('judgmentResultLabel', '判定结果')"></span>
+              <span class="label" :style="getFieldStyle('judgmentResultLabel')" v-html="getLabelHtml('judgmentResultLabel', '判定结果')"></span>
               <div class="judgment-content">
                 <EditableField 
                   field-id="judgmentResult"
@@ -310,7 +310,7 @@
         
         <!-- Test Images Section -->
         <div class="section" ref="imagesSectionRef">
-          <div class="section-header" v-html="getLabelHtml('testImagesHeader', '测试图片')"></div>
+          <div class="section-header" :style="getFieldStyle('testImagesHeader')" v-html="getLabelHtml('testImagesHeader', '测试图片')"></div>
           
           <!-- Row Controls -->
           <div class="row-controls">
@@ -329,9 +329,9 @@
           
           <!-- Image Headers -->
           <div class="image-headers">
-            <div class="image-header" v-html="getLabelHtml('beforeTestLabel', '测试前')"></div>
-            <div class="image-header" v-html="getLabelHtml('duringTestLabel', '测试中')"></div>
-            <div class="image-header" v-html="getLabelHtml('afterTestLabel', '测试后')"></div>
+            <div class="image-header" :style="getFieldStyle('beforeTestLabel')" v-html="getLabelHtml('beforeTestLabel', '测试前')"></div>
+            <div class="image-header" :style="getFieldStyle('duringTestLabel')" v-html="getLabelHtml('duringTestLabel', '测试中')"></div>
+            <div class="image-header" :style="getFieldStyle('afterTestLabel')" v-html="getLabelHtml('afterTestLabel', '测试后')"></div>
           </div>
           
           <!-- Image Rows -->
@@ -382,33 +382,33 @@
         <div class="page-footer">
           <div class="signature-row">
             <div class="signature-item">
-              <span class="label" v-html="getLabelHtml('testerLabel', '测试员：')"></span>
+              <span class="label" :style="getSignatureLabelStyle('testerLabel')" v-html="getLabelHtml('testerLabel', '测试员：')"></span>
               <img v-if="reportStore.templateSettings.signatures?.tester?.dataUrl" :src="reportStore.templateSettings.signatures.tester.dataUrl" class="signature-img" :style="{ maxHeight: (reportStore.templateSettings.signatures.tester.size || 30) + 'px' }" />
-              <EditableField v-else field-id="tester" :placeholder="getPlaceholder('tester', '测试员姓名')" :value="content.tester" @update="updateField('tester', $event)" />
+              <EditableField v-else field-id="tester" :placeholder="getPlaceholder('tester', '测试员姓名')" :value="content.tester" @update="updateField('tester', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
             </div>
             <div class="signature-item">
-              <span class="label" v-html="getLabelHtml('reviewerLabel', '审核：')"></span>
+              <span class="label" :style="getSignatureLabelStyle('reviewerLabel')" v-html="getLabelHtml('reviewerLabel', '审核：')"></span>
               <img v-if="reportStore.templateSettings.signatures?.reviewer?.dataUrl" :src="reportStore.templateSettings.signatures.reviewer.dataUrl" class="signature-img" :style="{ maxHeight: (reportStore.templateSettings.signatures.reviewer.size || 30) + 'px' }" />
-              <EditableField v-else field-id="reviewer" :placeholder="getPlaceholder('reviewer', '审核人姓名')" :value="content.reviewer" @update="updateField('reviewer', $event)" />
+              <EditableField v-else field-id="reviewer" :placeholder="getPlaceholder('reviewer', '审核人姓名')" :value="content.reviewer" @update="updateField('reviewer', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
             </div>
             <div class="signature-item">
-              <span class="label" v-html="getLabelHtml('approverLabel', '核准：')"></span>
+              <span class="label" :style="getSignatureLabelStyle('approverLabel')" v-html="getLabelHtml('approverLabel', '核准：')"></span>
               <img v-if="reportStore.templateSettings.signatures?.approver?.dataUrl" :src="reportStore.templateSettings.signatures.approver.dataUrl" class="signature-img" :style="{ maxHeight: (reportStore.templateSettings.signatures.approver.size || 30) + 'px' }" />
-              <EditableField v-else field-id="approver" :placeholder="getPlaceholder('approver', '核准人姓名')" :value="content.approver" @update="updateField('approver', $event)" />
+              <EditableField v-else field-id="approver" :placeholder="getPlaceholder('approver', '核准人姓名')" :value="content.approver" @update="updateField('approver', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
             </div>
           </div>
           <div class="footer-note">
             <div class="footer-note-content">
               <div class="footer-note-item">
-                <span v-html="getLabelHtml('saveDeptLabel', '备注：保存部门：')"></span>
-                <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="updateField('saveDept', $event)" style="width: 80px;" />
+                <span :style="getFooterNoteLabelStyle('saveDeptLabel')" v-html="getLabelHtml('saveDeptLabel', '备注：保存部门：')"></span>
+                <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="updateField('saveDept', $event)" style="width: 80px;" :font-size="9" color="#999" />
               </div>
               <div class="footer-note-item center">
-                <span v-html="getLabelHtml('saveYearsLabel', '保存年限：')"></span>
-                <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="updateField('saveYears', $event)" style="width: 60px;" />
+                <span :style="getFooterNoteLabelStyle('saveYearsLabel')" v-html="getLabelHtml('saveYearsLabel', '保存年限：')"></span>
+                <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="updateField('saveYears', $event)" style="width: 60px;" :font-size="9" color="#999" />
               </div>
               <div class="footer-note-item security-level-section">
-                <span v-html="getLabelHtml('securityLevelLabel', '保密等级：')"></span>
+                <span :style="getFooterNoteLabelStyle('securityLevelLabel')" v-html="getLabelHtml('securityLevelLabel', '保密等级：')"></span>
                 <el-radio-group v-model="securityLevel" size="small">
                   <el-radio label="绝密">绝密</el-radio>
                   <el-radio label="机密">机密</el-radio>
@@ -478,6 +478,68 @@ const sealStyle = computed(() => {
 
 // Template content data for labels and placeholders
 const templateContentData = computed(() => reportStore.templateSettings.templateContentData || {})
+
+// Get style for a field from fieldFormats
+const getFieldStyle = (fieldId) => {
+  const format = reportStore.getFieldFormat(fieldId)
+  if (!format) return {}
+  
+  return {
+    ...(format.fontFamily && { fontFamily: format.fontFamily }),
+    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
+    ...(format.color && { color: format.color }),
+    ...(format.fontWeight && { fontWeight: format.fontWeight }),
+    ...(format.fontStyle && { fontStyle: format.fontStyle }),
+    ...(format.textDecoration && { textDecoration: format.textDecoration }),
+    ...(format.textAlign && { textAlign: format.textAlign })
+  }
+}
+
+// Get style for signature labels (testerLabel, reviewerLabel, approverLabel)
+// Default: black, 12px, Microsoft YaHei - matching template editor
+const getSignatureLabelStyle = (fieldId) => {
+  const defaultStyle = {
+    color: '#000000',
+    fontFamily: '"Microsoft YaHei", sans-serif',
+    fontSize: '12px'
+  }
+  const format = reportStore.getFieldFormat(fieldId)
+  if (!format) return defaultStyle
+  
+  return {
+    ...defaultStyle,
+    ...(format.fontFamily && { fontFamily: format.fontFamily }),
+    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
+    ...(format.color && { color: format.color }),
+    ...(format.fontWeight && { fontWeight: format.fontWeight }),
+    ...(format.fontStyle && { fontStyle: format.fontStyle }),
+    ...(format.textDecoration && { textDecoration: format.textDecoration }),
+    ...(format.textAlign && { textAlign: format.textAlign })
+  }
+}
+
+// Get style for footer note labels (saveDeptLabel, saveYearsLabel, securityLevelLabel)
+// Default: black, 9px - matching template editor
+const getFooterNoteLabelStyle = (fieldId) => {
+  const defaultStyle = {
+    color: '#000000',
+    fontFamily: '"Microsoft YaHei", sans-serif',
+    fontSize: '9px'
+  }
+  const format = reportStore.getFieldFormat(fieldId)
+  if (!format) return defaultStyle
+  
+  return {
+    ...defaultStyle,
+    ...(format.fontFamily && { fontFamily: format.fontFamily }),
+    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
+    ...(format.color && { color: format.color }),
+    ...(format.fontWeight && { fontWeight: format.fontWeight }),
+    ...(format.fontStyle && { fontStyle: format.fontStyle }),
+    ...(format.textDecoration && { textDecoration: format.textDecoration }),
+    ...(format.textAlign && { textAlign: format.textAlign })
+  }
+}
 
 // Helper to get template label with fallback
 const getLabel = (key, defaultValue) => {
@@ -653,6 +715,12 @@ const loadTemplateSettings = async () => {
           fixedTextStyles: data.settings?.fixedTextStyles || null,
           editableTextStyles: data.settings?.editableTextStyles || null
         })
+        
+        // Apply template field formats (styles from template editor)
+        if (data.fieldFormats) {
+          reportStore.applyTemplateFieldFormats(data.fieldFormats)
+        }
+        
         // Set default security level from template
         if (data.securityLevel) {
           securityLevel.value = data.securityLevel
@@ -1046,7 +1114,7 @@ onUnmounted(() => {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-    font-size: 11px;
+    font-size: 12px;
     
     .signature-item {
       display: flex;
@@ -1073,7 +1141,6 @@ onUnmounted(() => {
   
   .footer-note {
     font-size: 9px;
-    color: #666;
     
     .footer-note-content {
       display: flex;
@@ -1096,6 +1163,20 @@ onUnmounted(() => {
         
         &.security-level-section {
           justify-content: flex-end;
+          
+          :deep(.el-radio-group) {
+            display: flex;
+            gap: 8px;
+            
+            .el-radio {
+              margin-right: 0;
+              
+              .el-radio__label {
+                font-size: 9px;
+                padding-left: 4px;
+              }
+            }
+          }
         }
       }
     }

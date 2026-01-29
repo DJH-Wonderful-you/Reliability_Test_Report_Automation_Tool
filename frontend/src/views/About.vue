@@ -3,7 +3,7 @@
     <div class="about-container">
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
-        <h1>可靠性测试报告自动化工具</h1>
+        <h1>可靠性测试报告编辑工具</h1>
         <p class="version">版本 V0.3（内部测试版）</p>
       </div>
       

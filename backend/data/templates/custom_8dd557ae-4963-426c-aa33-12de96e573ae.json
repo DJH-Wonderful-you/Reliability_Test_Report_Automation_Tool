@@ -1,5 +1,5 @@
 {
-  "id": "2bd7a3a7-8d7e-4900-8b69-47592de261fa",
+  "id": "8dd557ae-4963-426c-aa33-12de96e573ae",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -46,16 +46,20 @@
     "size": 120
   },
   "templateContentData": {
+    "appearanceHeader": "实验后外观检查",
+    "beforeTestLabel": "测试前",
     "companyName": "",
     "placeholders": {
-      "testProject": "请输入测试项目",
-      "tester": "测试员姓名"
+      "appearance": "外观检查结果",
+      "testProject": "请输入测试项目"
     },
+    "productNameLabel": "产品名称",
+    "projectNameLabel": "项目名称",
     "recordCode": "",
     "reportTitle": "",
+    "resultIdHeader": "编号",
     "testConclusionLabel": "测试结论",
-    "testProjectLabel": "测试\n项目",
-    "testerLabel": "测试员："
+    "testProjectLabel": "测试项目"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
@@ -65,16 +69,43 @@
     "sampleTable": []
   },
   "fieldFormats": {
+    "appearanceHeader": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 14,
+      "fontStyle": "normal",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
+    "beforeTestLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11,
+      "fontStyle": "normal",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
+    "resultIdHeader": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 12,
+      "fontStyle": "normal",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
     "testProjectLabel": {
       "color": "#000000",
-      "fontFamily": "SimSun",
-      "fontSize": 14,
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11,
       "fontStyle": "normal",
       "fontWeight": "bold",
       "textAlign": "center",
       "textDecoration": "none"
     }
   },
-  "createdAt": "2026-01-29T14:04:01.273967",
-  "updatedAt": "2026-01-29T16:44:10.724709"
+  "createdAt": "2026-01-29T19:18:51.439309",
+  "updatedAt": "2026-01-29T19:43:32.717216"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "2bd7a3a7-8d7e-4900-8b69-47592de261fa",
+  "id": "29fc7192-b588-46f7-a835-ba9486b02950",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
+    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    },
-    "size": 100
+    }
   },
   "signatures": {
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,50 +31,45 @@
       "dataUrl": null,
       "size": 15
     },
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "opacity": 0.3,
+    "size": 120,
     "position": {
       "x": 400,
       "y": 650
     },
-    "size": 120
+    "opacity": 0.3
   },
   "templateContentData": {
     "companyName": "",
-    "placeholders": {
-      "testProject": "请输入测试项目",
-      "tester": "测试员姓名"
-    },
-    "recordCode": "",
     "reportTitle": "",
-    "testConclusionLabel": "测试结论",
-    "testProjectLabel": "测试\n项目",
-    "testerLabel": "测试员："
+    "recordCode": "",
+    "placeholders": {},
+    "testProjectLabel": "测试项目"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "equipmentTable": [],
     "infoTable": [],
-    "resultTable": [],
-    "sampleTable": []
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
   },
   "fieldFormats": {
     "testProjectLabel": {
-      "color": "#000000",
-      "fontFamily": "SimSun",
+      "fontFamily": "Microsoft YaHei",
       "fontSize": 14,
+      "color": "#000000",
+      "fontWeight": "normal",
       "fontStyle": "normal",
-      "fontWeight": "bold",
-      "textAlign": "center",
-      "textDecoration": "none"
+      "textDecoration": "none",
+      "textAlign": "center"
     }
   },
-  "createdAt": "2026-01-29T14:04:01.273967",
-  "updatedAt": "2026-01-29T16:44:10.724709"
+  "createdAt": "2026-01-29T17:50:31.094060",
+  "updatedAt": "2026-01-29T17:50:47.530416"
 }

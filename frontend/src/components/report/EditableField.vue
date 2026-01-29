@@ -272,6 +272,17 @@ onMounted(() => {
   }
 })
 
+// Watch for fieldFormats changes (e.g., when template is loaded after mount)
+watch(
+  () => reportStore.getFieldFormat(props.fieldId),
+  (newFormat) => {
+    if (newFormat && !isFocused.value) {
+      Object.assign(localFormat.value, newFormat)
+    }
+  },
+  { deep: true }
+)
+
 onUnmounted(() => {
   window.removeEventListener('format-change', handleFormatChange)
 })

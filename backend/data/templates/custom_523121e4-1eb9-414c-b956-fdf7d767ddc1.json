@@ -1,5 +1,5 @@
 {
-  "id": "2bd7a3a7-8d7e-4900-8b69-47592de261fa",
+  "id": "523121e4-1eb9-414c-b956-fdf7d767ddc1",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -47,15 +47,10 @@
   },
   "templateContentData": {
     "companyName": "",
-    "placeholders": {
-      "testProject": "请输入测试项目",
-      "tester": "测试员姓名"
-    },
+    "placeholders": {},
     "recordCode": "",
     "reportTitle": "",
-    "testConclusionLabel": "测试结论",
-    "testProjectLabel": "测试\n项目",
-    "testerLabel": "测试员："
+    "testProjectLabel": "测试项目"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
@@ -67,14 +62,14 @@
   "fieldFormats": {
     "testProjectLabel": {
       "color": "#000000",
-      "fontFamily": "SimSun",
+      "fontFamily": "Microsoft YaHei",
       "fontSize": 14,
       "fontStyle": "normal",
-      "fontWeight": "bold",
+      "fontWeight": "normal",
       "textAlign": "center",
       "textDecoration": "none"
     }
   },
-  "createdAt": "2026-01-29T14:04:01.273967",
-  "updatedAt": "2026-01-29T16:44:10.724709"
+  "createdAt": "2026-01-29T17:48:39.027485",
+  "updatedAt": "2026-01-29T17:50:21.048121"
 }

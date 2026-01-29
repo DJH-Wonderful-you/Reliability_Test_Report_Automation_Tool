@@ -3,7 +3,7 @@
     <div class="nav-container">
       <div class="logo">
         <el-icon :size="24"><Document /></el-icon>
-        <span class="logo-text">可靠性测试报告自动化工具</span>
+        <span class="logo-text">可靠性测试报告编辑工具</span>
       </div>
       
       <nav class="main-tabs">

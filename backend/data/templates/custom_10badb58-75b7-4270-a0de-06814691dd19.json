@@ -1,5 +1,5 @@
 {
-  "id": "a26ad180-4eb6-4000-8434-fd325750e621",
+  "id": "10badb58-75b7-4270-a0de-06814691dd19",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -47,7 +47,9 @@
   },
   "templateContentData": {
     "companyName": "",
-    "placeholders": {},
+    "placeholders": {
+      "testProject": "请输入测试项目"
+    },
     "recordCode": "",
     "reportTitle": "",
     "testProjectLabel": "测试项目"
@@ -60,6 +62,15 @@
     "sampleTable": []
   },
   "fieldFormats": {
+    "testProject": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 14,
+      "fontStyle": "italic",
+      "fontWeight": "normal",
+      "textAlign": "left",
+      "textDecoration": "none"
+    },
     "testProjectLabel": {
       "color": "#000000",
       "fontFamily": "Microsoft YaHei",
@@ -67,9 +78,9 @@
       "fontStyle": "normal",
       "fontWeight": "bold",
       "textAlign": "center",
-      "textDecoration": "none"
+      "textDecoration": "underline"
     }
   },
-  "createdAt": "2026-01-29T19:45:41.143917",
-  "updatedAt": "2026-02-02T15:45:46.099497"
+  "createdAt": "2026-02-02T17:14:18.369794",
+  "updatedAt": "2026-02-02T17:21:52.231385"
 }

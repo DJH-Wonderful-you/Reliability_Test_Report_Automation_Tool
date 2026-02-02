@@ -1,5 +1,5 @@
 {
-  "id": "a26ad180-4eb6-4000-8434-fd325750e621",
+  "id": "0091daa9-73cd-4575-b1e9-0f5175fa416f",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
+    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    },
-    "size": 100
+    }
   },
   "signatures": {
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,45 +31,56 @@
       "dataUrl": null,
       "size": 15
     },
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "opacity": 0.3,
+    "size": 120,
     "position": {
       "x": 400,
       "y": 650
     },
-    "size": 120
+    "opacity": 0.3
   },
   "templateContentData": {
     "companyName": "",
-    "placeholders": {},
-    "recordCode": "",
     "reportTitle": "",
-    "testProjectLabel": "测试项目"
+    "recordCode": "",
+    "placeholders": {
+      "testProject": "请输入测试项目",
+      "testStandard": "请输入测试标准..."
+    }
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "equipmentTable": [],
     "infoTable": [],
-    "resultTable": [],
-    "sampleTable": []
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
   },
   "fieldFormats": {
-    "testProjectLabel": {
-      "color": "#000000",
-      "fontFamily": "Microsoft YaHei",
+    "testProject": {
+      "fontFamily": "KaiTi",
       "fontSize": 14,
-      "fontStyle": "normal",
+      "color": "#f60808",
       "fontWeight": "bold",
-      "textAlign": "center",
-      "textDecoration": "none"
+      "fontStyle": "italic",
+      "textDecoration": "none",
+      "textAlign": "center"
+    },
+    "testStandard": {
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "color": "#999999",
+      "fontWeight": "bold",
+      "fontStyle": "italic",
+      "textDecoration": "none",
+      "textAlign": "start"
     }
   },
-  "createdAt": "2026-01-29T19:45:41.143917",
-  "updatedAt": "2026-02-02T15:45:46.099497"
+  "createdAt": "2026-02-02T19:53:48.094272",
+  "updatedAt": "2026-02-02T19:54:54.811609"
 }

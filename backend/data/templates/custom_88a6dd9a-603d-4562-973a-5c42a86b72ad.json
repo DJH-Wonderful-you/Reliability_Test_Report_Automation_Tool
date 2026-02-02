@@ -1,5 +1,5 @@
 {
-  "id": "a26ad180-4eb6-4000-8434-fd325750e621",
+  "id": "88a6dd9a-603d-4562-973a-5c42a86b72ad",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -65,11 +65,11 @@
       "fontFamily": "Microsoft YaHei",
       "fontSize": 14,
       "fontStyle": "normal",
-      "fontWeight": "bold",
+      "fontWeight": "normal",
       "textAlign": "center",
       "textDecoration": "none"
     }
   },
-  "createdAt": "2026-01-29T19:45:41.143917",
-  "updatedAt": "2026-02-02T15:45:46.099497"
+  "createdAt": "2026-02-02T16:16:37.120102",
+  "updatedAt": "2026-02-02T16:17:24.559786"
 }

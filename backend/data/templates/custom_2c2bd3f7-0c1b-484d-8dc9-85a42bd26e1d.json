@@ -1,5 +1,5 @@
 {
-  "id": "a26ad180-4eb6-4000-8434-fd325750e621",
+  "id": "2c2bd3f7-0c1b-484d-8dc9-85a42bd26e1d",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -50,7 +50,7 @@
     "placeholders": {},
     "recordCode": "",
     "reportTitle": "",
-    "testProjectLabel": "测试项目"
+    "testProjectLabel": "测试\n项目"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
@@ -65,11 +65,11 @@
       "fontFamily": "Microsoft YaHei",
       "fontSize": 14,
       "fontStyle": "normal",
-      "fontWeight": "bold",
+      "fontWeight": "normal",
       "textAlign": "center",
       "textDecoration": "none"
     }
   },
-  "createdAt": "2026-01-29T19:45:41.143917",
-  "updatedAt": "2026-02-02T15:45:46.099497"
+  "createdAt": "2026-02-02T15:48:01.187018",
+  "updatedAt": "2026-02-02T15:48:54.602624"
 }

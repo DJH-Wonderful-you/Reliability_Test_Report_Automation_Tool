@@ -254,7 +254,7 @@ export const useTemplateStore = defineStore('template', () => {
     return fieldFormats.value[fieldId] || null
   }
 
-  const saveTemplate = async (silent = false) => {
+  const saveTemplate = async (silent = false, forReportApply = false) => {
     const templatePayload = {
       name: templateName.value || '自定义模板',
       baseType: templateType.value,
@@ -286,7 +286,10 @@ export const useTemplateStore = defineStore('template', () => {
       if (response.ok) {
         const result = await response.json()
         currentTemplateId.value = result.id
-        isDirty.value = false
+        // 只有当不是为了应用到报告时才清除脏标记
+        if (!forReportApply) {
+          isDirty.value = false
+        }
         if (!silent) {
           ElMessage.success('模板保存成功')
         }
@@ -297,6 +300,11 @@ export const useTemplateStore = defineStore('template', () => {
         ElMessage.error('模板保存失败')
       }
     }
+  }
+
+  // 专门用于应用到报告编辑的保存方法
+  const saveForReportApply = async () => {
+    return await saveTemplate(true, true) // silent=true, forReportApply=true
   }
 
   const exportTemplate = async () => {
@@ -390,7 +398,10 @@ export const useTemplateStore = defineStore('template', () => {
       resultTable: []
     }
     fieldFormats.value = {}
-    isDirty.value = false
+    isDirty.value = true // 设置为脏状态，表示需要保存
+    
+    // 立即保存重置后的默认模板到后端
+    await saveTemplate(true) // silent mode
   }
 
   return {
@@ -431,6 +442,7 @@ export const useTemplateStore = defineStore('template', () => {
     updateFieldFormat,
     getFieldFormat,
     saveTemplate,
+    saveForReportApply,
     exportTemplate,
     importTemplate,
     resetToDefault

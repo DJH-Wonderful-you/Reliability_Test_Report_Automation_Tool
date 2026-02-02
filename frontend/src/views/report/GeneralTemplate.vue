@@ -693,42 +693,12 @@ const deleteImageRow = (index) => {
   reportStore.deleteTestImageRow(index)
 }
 
-// Load template settings from backend
+// Load template settings from backend (only load applied template, not latest)
 const loadTemplateSettings = async () => {
-  try {
-    const response = await fetch('/api/template/latest/general')
-    if (response.ok) {
-      const data = await response.json()
-      if (data) {
-        reportStore.applyTemplateSettings({
-          logo: data.logo,
-          signatures: data.signatures,
-          departmentSeal: data.departmentSeal,
-          securityLevel: data.securityLevel,
-          tableColumnWidths: data.tableColumnWidths,
-          templateContentData: data.templateContentData || {
-            companyName: '',
-            reportTitle: '',
-            recordCode: '',
-            placeholders: {}
-          },
-          fixedTextStyles: data.settings?.fixedTextStyles || null,
-          editableTextStyles: data.settings?.editableTextStyles || null
-        })
-        
-        // Apply template field formats (styles from template editor)
-        if (data.fieldFormats) {
-          reportStore.applyTemplateFieldFormats(data.fieldFormats)
-        }
-        
-        // Set default security level from template
-        if (data.securityLevel) {
-          securityLevel.value = data.securityLevel
-        }
-      }
-    }
-  } catch (error) {
-    console.error('Failed to load template settings:', error)
+  await reportStore.loadAppliedTemplateSettings()
+  // Update local security level from template
+  if (reportStore.templateSettings.securityLevel) {
+    securityLevel.value = reportStore.templateSettings.securityLevel
   }
 }
 

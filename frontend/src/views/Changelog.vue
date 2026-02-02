@@ -44,6 +44,20 @@ const router = useRouter()
 
 const versions = ref([
   {
+    id: 'v0.4',
+    version: 'V0.4',
+    title: '模板应用机制重构',
+    date: '2026年2月2日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      '重构模板与报告编辑隔离机制，修改需点击"应用"才生效',
+      '修复可编辑字段样式同步问题，支持全部样式属性',
+      '修复"新建报告"后模板状态重置问题',
+      '优化报告编辑工具栏，确保样式与占位文本隔离'
+    ]
+  },
+  {
     id: 'v0.3',
     version: 'V0.3',
     title: '样式持久化修复',

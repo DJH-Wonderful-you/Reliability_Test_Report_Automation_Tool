@@ -127,16 +127,17 @@ export const useReportStore = defineStore('report', () => {
   }
 
   // Apply template field formats (from template editor)
+  // This will completely replace existing formats with template formats
   const applyTemplateFieldFormats = (templateFieldFormats) => {
+    // Create a new object with template formats (or empty if template has no formats)
+    const newFormats = {}
     if (templateFieldFormats && Object.keys(templateFieldFormats).length > 0) {
-      // Merge template formats with existing formats (template formats as defaults)
-      // Only apply if no user-defined format exists for that field
       Object.keys(templateFieldFormats).forEach(fieldId => {
-        if (!fieldFormats.value[fieldId]) {
-          fieldFormats.value[fieldId] = { ...templateFieldFormats[fieldId] }
-        }
+        newFormats[fieldId] = { ...templateFieldFormats[fieldId] }
       })
     }
+    // Replace the entire object to trigger reactivity (even if empty, to reset to defaults)
+    fieldFormats.value = newFormats
   }
 
   const updateField = (fieldId, value) => {
@@ -374,7 +375,44 @@ export const useReportStore = defineStore('report', () => {
       console.error('Failed to delete autosave:', error)
     }
     
+    // Reload the applied template settings to reset to the last applied template
+    await loadAppliedTemplateSettings()
+    
     ElMessage.success('已创建新报告')
+  }
+
+  // Load the applied template settings (used by newReport and initial load)
+  const loadAppliedTemplateSettings = async () => {
+    try {
+      const response = await fetch(`/api/template/applied/${templateType.value}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data) {
+          // Apply template settings
+          applyTemplateSettings({
+            logo: data.logo,
+            signatures: data.signatures,
+            departmentSeal: data.departmentSeal,
+            securityLevel: data.securityLevel,
+            tableColumnWidths: data.tableColumnWidths,
+            templateContentData: data.templateContentData || {
+              companyName: '',
+              reportTitle: '',
+              recordCode: '',
+              placeholders: {}
+            },
+            fixedTextStyles: data.settings?.fixedTextStyles || null,
+            editableTextStyles: data.settings?.editableTextStyles || null
+          })
+          
+          // Apply template field formats (styles from template editor)
+          // Always replace fieldFormats, even if empty (to reset to defaults)
+          applyTemplateFieldFormats(data.fieldFormats || {})
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load applied template settings:', error)
+    }
   }
 
   const exportPdf = async () => {
@@ -405,6 +443,7 @@ export const useReportStore = defineStore('report', () => {
     // Actions
     loadTemplate,
     loadTemplateSettings,
+    loadAppliedTemplateSettings,
     applyTemplateSettings,
     applyTemplateFieldFormats,
     updateField,

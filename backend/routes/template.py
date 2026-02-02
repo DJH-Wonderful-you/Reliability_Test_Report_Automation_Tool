@@ -137,6 +137,56 @@ def get_latest_template(base_type):
     return jsonify(templates[0])
 
 
+@template_bp.route('/applied/<base_type>', methods=['GET'])
+def get_applied_template(base_type):
+    """Get the template that has been applied to the report editor for a base type."""
+    templates_dir = current_app.config['TEMPLATES_DIR']
+    applied_file = os.path.join(templates_dir, f'applied_{base_type}.json')
+    
+    # If applied template file exists, return it
+    if os.path.exists(applied_file):
+        try:
+            with open(applied_file, 'r', encoding='utf-8') as f:
+                template = json.load(f)
+            return jsonify(template)
+        except Exception as e:
+            current_app.logger.error(f"Error reading applied template: {e}")
+    
+    # Fallback: return None (no template has been applied yet)
+    return jsonify(None)
+
+
+@template_bp.route('/apply/<template_id>', methods=['POST'])
+def apply_template_to_report(template_id):
+    """Mark a template as applied to the report editor (copy to applied file)."""
+    templates_dir = current_app.config['TEMPLATES_DIR']
+    source_filepath = os.path.join(templates_dir, f'custom_{template_id}.json')
+    
+    if not os.path.exists(source_filepath):
+        return jsonify({'error': 'Template not found'}), 404
+    
+    try:
+        # Read the source template
+        with open(source_filepath, 'r', encoding='utf-8') as f:
+            template = json.load(f)
+        
+        base_type = template.get('baseType', 'general')
+        applied_file = os.path.join(templates_dir, f'applied_{base_type}.json')
+        
+        # Copy to applied file
+        template['appliedAt'] = datetime.now().isoformat()
+        with open(applied_file, 'w', encoding='utf-8') as f:
+            json.dump(template, f, ensure_ascii=False, indent=2)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Template applied successfully',
+            'appliedAt': template['appliedAt']
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @template_bp.route('/custom', methods=['POST'])
 def create_custom_template():
     """Create a new custom template."""

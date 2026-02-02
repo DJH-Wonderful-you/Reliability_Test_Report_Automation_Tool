@@ -528,8 +528,23 @@ const importTemplate = (uploadFile) => {
 // Apply template to report editing
 const applyToReport = async () => {
   try {
-    await templateStore.saveTemplate(true) // silent mode, we show our own message
-    ElMessage.success('模板已成功应用于报告编辑')
+    // First save the current template
+    await templateStore.saveTemplate(true) // silent save
+    
+    // Then mark it as applied to report
+    if (templateStore.currentTemplateId) {
+      const response = await fetch(`/api/template/apply/${templateStore.currentTemplateId}`, {
+        method: 'POST'
+      })
+      
+      if (response.ok) {
+        ElMessage.success('模板已成功应用于报告编辑')
+      } else {
+        throw new Error('Failed to apply template')
+      }
+    } else {
+      ElMessage.warning('请先保存模板后再应用')
+    }
   } catch (error) {
     ElMessage.error('应用失败：' + error.message)
   }

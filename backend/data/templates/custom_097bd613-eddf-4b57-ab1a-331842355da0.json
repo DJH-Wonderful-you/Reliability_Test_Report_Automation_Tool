@@ -1,5 +1,5 @@
 {
-  "id": "a26ad180-4eb6-4000-8434-fd325750e621",
+  "id": "097bd613-eddf-4b57-ab1a-331842355da0",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -62,7 +62,7 @@
   "fieldFormats": {
     "testProjectLabel": {
       "color": "#000000",
-      "fontFamily": "Microsoft YaHei",
+      "fontFamily": "SimSun",
       "fontSize": 14,
       "fontStyle": "normal",
       "fontWeight": "bold",
@@ -70,6 +70,6 @@
       "textDecoration": "none"
     }
   },
-  "createdAt": "2026-01-29T19:45:41.143917",
-  "updatedAt": "2026-02-02T15:45:46.099497"
+  "createdAt": "2026-02-02T16:44:11.156330",
+  "updatedAt": "2026-02-02T16:45:04.718166"
 }

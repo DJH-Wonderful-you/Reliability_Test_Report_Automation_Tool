@@ -56,11 +56,11 @@ const showSubTabs = computed(() => {
 })
 
 const showExportButton = computed(() => {
-  return activeMainTab.value === 'report'
+  return false  // Disabled - moved to sidebar
 })
 
 const showNewButton = computed(() => {
-  return activeMainTab.value === 'report'
+  return false  // Disabled - moved to sidebar
 })
 
 // Sync tabs with route

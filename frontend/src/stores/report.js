@@ -422,6 +422,112 @@ export const useReportStore = defineStore('report', () => {
     window.dispatchEvent(new CustomEvent('export-pdf'))
   }
 
+  // Save draft functionality
+  const saveDraft = async (title) => {
+    try {
+      const response = await fetch('/api/report/drafts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          templateType: templateType.value,
+          content: {
+            fields: content.value,
+            fieldFormats: fieldFormats.value,
+            testResultRows: testResultRows.value,
+            testImageRows: testImageRows.value
+          }
+        })
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        ElMessage.success(`草稿 "${title}" 保存成功`)
+        return result
+      } else {
+        throw new Error('保存失败')
+      }
+    } catch (error) {
+      console.error('Save draft failed:', error)
+      ElMessage.error('保存草稿失败：' + error.message)
+      throw error
+    }
+  }
+
+  // Load draft functionality
+  const loadDraft = async (draftId) => {
+    try {
+      const response = await fetch(`/api/report/drafts/${draftId}`)
+      if (response.ok) {
+        const draft = await response.json()
+        
+        // Load draft content
+        if (draft.content) {
+          content.value = draft.content.fields || {}
+          fieldFormats.value = draft.content.fieldFormats || {}
+          if (draft.content.testResultRows) {
+            testResultRows.value = draft.content.testResultRows
+          }
+          if (draft.content.testImageRows) {
+            testImageRows.value = draft.content.testImageRows
+          }
+        }
+        
+        // Update draft metadata
+        currentDraftId.value = draft.id
+        reportTitle.value = draft.title || ''
+        templateType.value = draft.templateType || 'general'
+        
+        isDirty.value = false
+        ElMessage.success(`草稿 "${draft.title}" 加载成功`)
+        return draft
+      } else {
+        throw new Error('草稿不存在')
+      }
+    } catch (error) {
+      console.error('Load draft failed:', error)
+      ElMessage.error('加载草稿失败：' + error.message)
+      throw error
+    }
+  }
+
+  // List all drafts
+  const listDrafts = async () => {
+    try {
+      const response = await fetch('/api/report/drafts')
+      if (response.ok) {
+        const result = await response.json()
+        return result.drafts || []
+      } else {
+        throw new Error('获取草稿列表失败')
+      }
+    } catch (error) {
+      console.error('List drafts failed:', error)
+      ElMessage.error('获取草稿列表失败：' + error.message)
+      return []
+    }
+  }
+
+  // Delete draft functionality
+  const deleteDraft = async (draftId, draftTitle) => {
+    try {
+      const response = await fetch(`/api/report/drafts/${draftId}`, {
+        method: 'DELETE'
+      })
+      
+      if (response.ok) {
+        ElMessage.success(`草稿 "${draftTitle}" 删除成功`)
+        return true
+      } else {
+        throw new Error('删除失败')
+      }
+    } catch (error) {
+      console.error('Delete draft failed:', error)
+      ElMessage.error('删除草稿失败：' + error.message)
+      throw error
+    }
+  }
+
   return {
     // State
     currentDraftId,
@@ -460,6 +566,10 @@ export const useReportStore = defineStore('report', () => {
     autoSave,
     loadAutoSave,
     newReport,
-    exportPdf
+    exportPdf,
+    saveDraft,
+    loadDraft,
+    listDrafts,
+    deleteDraft
   }
 })

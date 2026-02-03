@@ -44,6 +44,20 @@ const router = useRouter()
 
 const versions = ref([
   {
+    id: 'v0.5',
+    version: 'V0.5',
+    title: '报告编辑界面重构',
+    date: '2026年2月2日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      '重构报告编辑界面布局，新增左侧功能侧边栏',
+      '将导出PDF和新建报告功能移至侧边栏',
+      '新增草稿管理功能：保存草稿、打开草稿、删除草稿',
+      '移除顶部导航栏中的重复操作控件'
+    ]
+  },
+  {
     id: 'v0.4',
     version: 'V0.4',
     title: '模板应用机制重构',

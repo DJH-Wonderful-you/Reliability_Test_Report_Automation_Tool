@@ -19,50 +19,52 @@
           <template v-for="region in page.regions" :key="region.type + '-' + region.startIndex">
             <!-- Report Info Section (only on first page, not continuation) -->
             <template v-if="region.type === 'reportInfo' && !region.isContinuation">
-              <div class="report-info-row">
-                <span class="label" :style="getFieldStyle('reportNumberLabel')" v-html="getLabelHtml('reportNumberLabel', '报告编号：')"></span>
-                <EditableField 
-                  field-id="reportNumber"
-                  :placeholder="getPlaceholder('reportNumber', '请输入报告编号')"
-                  :value="content.reportNumber"
-                  @update="updateField('reportNumber', $event)"
-                  text-align="left"
-                />
+              <div data-section="reportInfo">
+                <div class="report-info-row">
+                  <span class="label" :style="getFieldStyle('reportNumberLabel')" v-html="getLabelHtml('reportNumberLabel', '报告编号：')"></span>
+                  <EditableField 
+                    field-id="reportNumber"
+                    :placeholder="getPlaceholder('reportNumber', '请输入报告编号')"
+                    :value="content.reportNumber"
+                    @update="updateField('reportNumber', $event)"
+                    text-align="left"
+                  />
+                </div>
+                
+                <table class="info-table">
+                  <colgroup>
+                    <col :style="getColumnWidthStyle('infoTable', 0)">
+                    <col :style="getColumnWidthStyle('infoTable', 1)">
+                    <col :style="getColumnWidthStyle('infoTable', 2)">
+                    <col :style="getColumnWidthStyle('infoTable', 3)">
+                  </colgroup>
+                  <tr>
+                    <td class="label-cell" :style="getFieldStyle('testProjectLabel')" v-html="getLabelHtml('testProjectLabel', '测试项目')"></td>
+                    <td class="editable-cell">
+                      <EditableField 
+                        field-id="testProject"
+                        :placeholder="getPlaceholder('testProject', '请输入测试项目')"
+                        :value="content.testProject"
+                        @update="updateField('testProject', $event)"
+                      />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('testConclusionLabel')" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
+                    <td class="editable-cell">
+                      <EditableField 
+                        field-id="testConclusion"
+                        :placeholder="getPlaceholder('testConclusion', '请输入测试结论')"
+                        :value="content.testConclusion"
+                        @update="updateField('testConclusion', $event)"
+                      />
+                    </td>
+                  </tr>
+                </table>
               </div>
-              
-              <table class="info-table">
-                <colgroup>
-                  <col :style="getColumnWidthStyle('infoTable', 0)">
-                  <col :style="getColumnWidthStyle('infoTable', 1)">
-                  <col :style="getColumnWidthStyle('infoTable', 2)">
-                  <col :style="getColumnWidthStyle('infoTable', 3)">
-                </colgroup>
-                <tr>
-                  <td class="label-cell" :style="getFieldStyle('testProjectLabel')" v-html="getLabelHtml('testProjectLabel', '测试项目')"></td>
-                  <td class="editable-cell">
-                    <EditableField 
-                      field-id="testProject"
-                      :placeholder="getPlaceholder('testProject', '请输入测试项目')"
-                      :value="content.testProject"
-                      @update="updateField('testProject', $event)"
-                    />
-                  </td>
-                  <td class="label-cell" :style="getFieldStyle('testConclusionLabel')" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
-                  <td class="editable-cell">
-                    <EditableField 
-                      field-id="testConclusion"
-                      :placeholder="getPlaceholder('testConclusion', '请输入测试结论')"
-                      :value="content.testConclusion"
-                      @update="updateField('testConclusion', $event)"
-                    />
-                  </td>
-                </tr>
-              </table>
             </template>
             
             <!-- Sample Information Section -->
             <template v-if="region.type === 'sampleInfo'">
-              <div class="section">
+              <div class="section" data-section="sampleInfo">
                 <div class="section-header" :style="getFieldStyle('sampleInfoHeader')" v-html="getLabelHtml('sampleInfoHeader', '样品信息')"></div>
                 <table class="info-table">
                   <colgroup>
@@ -127,7 +129,7 @@
             
             <!-- Equipment Information Section -->
             <template v-if="region.type === 'equipmentInfo'">
-              <div class="section">
+              <div class="section" data-section="equipmentInfo">
                 <div class="section-header" :style="getFieldStyle('equipmentInfoHeader')" v-html="getLabelHtml('equipmentInfoHeader', '设备信息')"></div>
                 <table class="info-table">
                   <colgroup>
@@ -156,40 +158,44 @@
               </div>
             </template>
             
-            <!-- Test Conditions Section -->
-            <template v-if="region.type === 'testConditions'">
-              <div class="section">
-                <div class="section-header" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
-                
-                <div class="subsection">
-                  <div class="subsection-row centered-label">
-                    <span class="label" :style="getFieldStyle('testStandardLabel')" v-html="getLabelHtml('testStandardLabel', '测试标准')"></span>
-                    <div class="subsection-content">
-                      <EditableField 
-                        field-id="testStandard"
-                        :placeholder="getPlaceholder('testStandard', '请输入测试标准...')"
-                        :value="content.testStandard"
-                        @update="updateField('testStandard', $event)"
-                        :multiline="true"
-                        text-align="left"
-                      />
-                    </div>
+            <!-- Test Conditions Header -->
+            <template v-if="region.type === 'testConditionsHeader'">
+              <div class="section-header" data-section="testConditionsHeader" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
+            </template>
+            
+            <!-- Test Standard Section -->
+            <template v-if="region.type === 'testStandard'">
+              <div class="subsection" data-section="testStandard">
+                <div class="subsection-row centered-label">
+                  <span class="label" :style="getFieldStyle('testStandardLabel')" v-html="getLabelHtml('testStandardLabel', '测试标准')"></span>
+                  <div class="subsection-content">
+                    <EditableField 
+                      field-id="testStandard"
+                      :placeholder="getPlaceholder('testStandard', '请输入测试标准...')"
+                      :value="content.testStandard"
+                      @update="updateField('testStandard', $event)"
+                      :multiline="true"
+                      text-align="left"
+                    />
                   </div>
                 </div>
-                
-                <div class="subsection">
-                  <div class="subsection-row centered-label">
-                    <span class="label" :style="getFieldStyle('judgmentStandardLabel')" v-html="getLabelHtml('judgmentStandardLabel', '判定标准')"></span>
-                    <div class="subsection-content">
-                      <EditableField 
-                        field-id="judgmentStandard"
-                        :placeholder="getPlaceholder('judgmentStandard', '请输入判定标准...')"
-                        :value="content.judgmentStandard"
-                        @update="updateField('judgmentStandard', $event)"
-                        :multiline="true"
-                        text-align="left"
-                      />
-                    </div>
+              </div>
+            </template>
+            
+            <!-- Judgment Standard Section -->
+            <template v-if="region.type === 'judgmentStandard'">
+              <div class="subsection" data-section="judgmentStandard">
+                <div class="subsection-row centered-label">
+                  <span class="label" :style="getFieldStyle('judgmentStandardLabel')" v-html="getLabelHtml('judgmentStandardLabel', '判定标准')"></span>
+                  <div class="subsection-content">
+                    <EditableField 
+                      field-id="judgmentStandard"
+                      :placeholder="getPlaceholder('judgmentStandard', '请输入判定标准...')"
+                      :value="content.judgmentStandard"
+                      @update="updateField('judgmentStandard', $event)"
+                      :multiline="true"
+                      text-align="left"
+                    />
                   </div>
                 </div>
               </div>
@@ -300,7 +306,7 @@
             
             <!-- Judgment Result Section -->
             <template v-if="region.type === 'judgmentResult'">
-              <div class="judgment-section">
+              <div class="judgment-section" data-section="judgmentResult">
                 <div class="judgment-row centered-label">
                   <span class="label" :style="getFieldStyle('judgmentResultLabel')" v-html="getLabelHtml('judgmentResultLabel', '判定结果')"></span>
                   <div class="judgment-content">
@@ -419,42 +425,109 @@ const batchImageAddCount = ref(1)
 const securityLevel = ref('内部公开')
 const isExportMode = ref(false)
 
+// Refs for DOM measurement
+const measureContainerRef = ref(null)
+const measuredHeights = ref({
+  reportInfo: 80,
+  sampleInfo: 175,
+  equipmentInfo: 75,
+  testConditionsHeader: 30,
+  testStandard: 70,
+  judgmentStandard: 70,
+  judgmentResult: 65
+})
+
 // Computed content
 const content = computed(() => reportStore.content)
 
 // Template content data
 const templateContentData = computed(() => reportStore.templateSettings.templateContentData || {})
 
-// Calculate heights for each section
-const REPORT_INFO_HEIGHT = 80
-const SAMPLE_INFO_HEIGHT = 180
-const EQUIPMENT_INFO_HEIGHT = 80
-const TEST_CONDITIONS_HEIGHT = 180
-const SECTION_HEADER_HEIGHT = 30
-const TABLE_HEADER_HEIGHT = 35
-const ROW_HEIGHT = 40
-const IMAGE_ROW_HEIGHT = 180
-const JUDGMENT_HEIGHT = 80
+// Height constants for splittable sections
+const SECTION_HEADER_HEIGHT = 28
+const TABLE_HEADER_HEIGHT = 32
+const ROW_HEIGHT = 38
+const IMAGE_ROW_HEIGHT = 260 // Actual row height with margin (square image uploaders ~240px + 15px margin + buffer)
 
-// Create paginated content regions
+// Measure actual DOM heights after content changes
+const measureSectionHeights = async () => {
+  await nextTick()
+  
+  if (!templateRef.value) return
+  
+  // Find all sections across all pages
+  const allPages = templateRef.value.querySelectorAll('.a4-page')
+  if (!allPages.length) return
+  
+  const newHeights = { ...measuredHeights.value }
+  
+  // Collect all measurable sections from all pages
+  const sectionTypes = [
+    'reportInfo', 'sampleInfo', 'equipmentInfo', 
+    'testConditionsHeader', 'testStandard', 'judgmentStandard', 'judgmentResult'
+  ]
+  
+  for (const sectionType of sectionTypes) {
+    // Find the first occurrence of this section (not continuation)
+    for (const page of allPages) {
+      const element = page.querySelector(`[data-section="${sectionType}"]`)
+      if (element) {
+        const rect = element.getBoundingClientRect()
+        // Add small buffer
+        newHeights[sectionType] = Math.ceil(rect.height) + 8
+        break
+      }
+    }
+  }
+  
+  measuredHeights.value = newHeights
+}
+
+// Watch content changes and remeasure with debounce
+let measureTimeout = null
+watch(
+  () => [
+    content.value.testStandard,
+    content.value.judgmentStandard, 
+    content.value.judgmentResult,
+    content.value.testPurpose,
+    reportStore.testResultRows.length, 
+    reportStore.testImageRows.length
+  ],
+  () => {
+    if (!loading.value) {
+      // Debounce measurements
+      if (measureTimeout) clearTimeout(measureTimeout)
+      measureTimeout = setTimeout(() => {
+        measureSectionHeights()
+      }, 50)
+    }
+  },
+  { deep: true }
+)
+
+// Create paginated content regions with measured heights
 const contentRegions = computed(() => {
   const regions = []
+  const heights = measuredHeights.value
   
   // Report Info section
-  regions.push(createRegion(RegionType.REPORT_INFO, REPORT_INFO_HEIGHT))
+  regions.push(createRegion(RegionType.REPORT_INFO, heights.reportInfo))
   
   // Sample Info section
-  regions.push(createRegion(RegionType.SAMPLE_INFO, SAMPLE_INFO_HEIGHT))
+  regions.push(createRegion(RegionType.SAMPLE_INFO, heights.sampleInfo))
   
   // Equipment Info section
-  regions.push(createRegion(RegionType.EQUIPMENT_INFO, EQUIPMENT_INFO_HEIGHT))
+  regions.push(createRegion(RegionType.EQUIPMENT_INFO, heights.equipmentInfo))
   
-  // Test Conditions section
-  regions.push(createRegion(RegionType.TEST_CONDITIONS, TEST_CONDITIONS_HEIGHT))
+  // Test Conditions - split into header, test standard, and judgment standard
+  regions.push(createRegion(RegionType.TEST_CONDITIONS_HEADER, heights.testConditionsHeader))
+  regions.push(createRegion(RegionType.TEST_STANDARD, heights.testStandard))
+  regions.push(createRegion(RegionType.JUDGMENT_STANDARD, heights.judgmentStandard))
   
   // Test Results section (splittable)
   const resultRows = reportStore.testResultRows
-  const resultTableHeight = SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT + (resultRows.length * ROW_HEIGHT) + 40 // +40 for controls
+  const resultTableHeight = SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT + (resultRows.length * ROW_HEIGHT) + 45
   regions.push(createRegion(
     RegionType.TEST_RESULTS, 
     resultTableHeight, 
@@ -463,11 +536,11 @@ const contentRegions = computed(() => {
   ))
   
   // Judgment Result section
-  regions.push(createRegion(RegionType.JUDGMENT_RESULT, JUDGMENT_HEIGHT))
+  regions.push(createRegion(RegionType.JUDGMENT_RESULT, heights.judgmentResult))
   
   // Test Images section (splittable)
   const imageRows = reportStore.testImageRows
-  const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT) // +50 for headers and controls
+  const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT)
   regions.push(createRegion(
     RegionType.TEST_IMAGES, 
     imagesSectionHeight, 
@@ -658,6 +731,12 @@ onMounted(async () => {
   await loadTemplateSettings()
   
   loading.value = false
+  
+  // Measure actual DOM heights after initial render
+  await nextTick()
+  setTimeout(() => {
+    measureSectionHeights()
+  }, 100)
   
   window.addEventListener('export-pdf', handleExportPdf)
 })

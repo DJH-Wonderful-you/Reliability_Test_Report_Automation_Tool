@@ -47,6 +47,60 @@ const router = useRouter()
 const route = useRoute()
 
 const versionsData = {
+  'v0.6': {
+    version: 'V0.6',
+    title: '多页分页布局优化',
+    date: '2026年2月4日',
+    type: 'warning',
+    tag: '内部测试版',
+    sections: [
+      {
+        title: '分页逻辑重构',
+        items: [
+          '拆分“测试条件”区域为三个独立可分页元素：测试条件标题、测试标准、判定标准',
+          '当“测试标准”内容过多时，只有该文本框移到下一页，“判定标准”保留在原页面（如果空间足够）',
+          '每个子元素独立计算高度，实现更精细的页面空间利用',
+          '新增 testConditionsHeader、testStandard、judgmentStandard 区域类型'
+        ]
+      },
+      {
+        title: '缺陷修复',
+        items: [
+          '修复测试图片行接触页面底部时被遮挡的问题',
+          '修复 IMAGE_ROW_HEIGHT 计算不准确的问题（从 175px 调整为 260px）',
+          '修复内容减少后无法正确回流到原页面的问题',
+          '修复第二页及以后页面的换页判定阈值与第一页不一致的问题'
+        ]
+      },
+      {
+        title: '分页阈值优化',
+        items: [
+          '重新校准 HEADER_HEIGHT_PX（120px → 75px）和 FOOTER_HEIGHT_PX（100px → 95px）',
+          'USABLE_CONTENT_HEIGHT 从 788px 增加到 843px，增加 55px 可用空间',
+          '统一所有页面的换页判定阈值，确保布局一致性',
+          '优化安全边距设置，最大化页面空间利用率'
+        ]
+      },
+      {
+        title: 'DOM 测量优化',
+        items: [
+          '使用防抖（debounce）机制监听文本内容变化',
+          '监听具体字段变化（testStandard、judgmentStandard、judgmentResult 等）',
+          '遍历所有页面进行测量，确保获取完整的元素高度',
+          '为每个区域添加 data-section 属性用于 DOM 查询'
+        ]
+      },
+      {
+        title: '技术改进',
+        items: [
+          'usePagination.js 新增 TEST_CONDITIONS_HEADER、TEST_STANDARD、JUDGMENT_STANDARD 区域类型',
+          '导出 USABLE_CONTENT_HEIGHT 等常量供其他组件使用',
+          '移除动态 usableHeight 的复杂逻辑，统一使用预设常量',
+          'GeneralTemplate.vue 模板拆分为细粒度可分页元素'
+        ]
+      }
+    ]
+  },
   'v0.5': {
     version: 'V0.5',
     title: '报告编辑界面重构',

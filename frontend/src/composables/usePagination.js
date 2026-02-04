@@ -3,16 +3,17 @@ import { ref, computed, watch, nextTick } from 'vue'
 /**
  * Pagination composable for multi-page PDF report generation
  * Handles content measurement, page break calculation, and content distribution
+ * Uses fine-grained element-level pagination for precise layout control
  */
 
 // A4 page dimensions
 const A4_WIDTH_MM = 210
 const A4_HEIGHT_MM = 297
 
-// Page padding in mm
+// Page padding in mm (must match PageContainer.vue padding)
 const PAGE_PADDING = {
-  top: 10,
-  bottom: 15,
+  top: 10,    // 10mm
+  bottom: 15, // 15mm
   left: 15,
   right: 15
 }
@@ -24,30 +25,36 @@ const MM_TO_PX = 3.78
 const A4_WIDTH_PX = Math.round(A4_WIDTH_MM * MM_TO_PX)  // ~794px
 const A4_HEIGHT_PX = Math.round(A4_HEIGHT_MM * MM_TO_PX) // ~1123px
 
-// Header height in pixels (company name, title, record code, report number, test project table)
-const HEADER_HEIGHT_PX = 120
-
-// Footer height in pixels (signatures, remarks)
-const FOOTER_HEIGHT_PX = 100
-
 // Padding in pixels
-const PADDING_TOP_PX = Math.round(PAGE_PADDING.top * MM_TO_PX)
-const PADDING_BOTTOM_PX = Math.round(PAGE_PADDING.bottom * MM_TO_PX)
+const PADDING_TOP_PX = Math.round(PAGE_PADDING.top * MM_TO_PX)   // ~38px
+const PADDING_BOTTOM_PX = Math.round(PAGE_PADDING.bottom * MM_TO_PX) // ~57px
 
-// Usable content height per page (excluding header, footer, and paddings)
-const USABLE_CONTENT_HEIGHT = A4_HEIGHT_PX - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX - PADDING_TOP_PX - PADDING_BOTTOM_PX
+// Header height in pixels (measured from PageContainer: company name, title, record code + margin)
+// .company-name(18px) + margin(8px) + .report-title(16px) + margin(5px) + .record-code(9px) + margin-bottom(15px) ≈ 75px
+const HEADER_HEIGHT_PX = 75
+
+// Footer height in pixels (measured from PageContainer: signatures, notes, page number)
+// .signature-row(~35px) + margin(10px) + .footer-note(~25px) + .page-number(~25px with margins) ≈ 95px
+const FOOTER_HEIGHT_PX = 95
+
+// Usable content height per page - uniform for all pages
+// Total A4 height minus padding, header, footer, and a minimal safety buffer
+const USABLE_CONTENT_HEIGHT = A4_HEIGHT_PX - PADDING_TOP_PX - PADDING_BOTTOM_PX - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX - 15
 
 // Section header height (for repeated headers on continuation pages)
-const SECTION_HEADER_HEIGHT = 30
+const SECTION_HEADER_HEIGHT = 28
 
 // Table header row height
-const TABLE_HEADER_HEIGHT = 30
+const TABLE_HEADER_HEIGHT = 32
 
 // Minimum row height for tables
 const MIN_ROW_HEIGHT = 35
 
-// Image row height (approximate)
-const IMAGE_ROW_HEIGHT = 180
+// Image row height (actual rendered height with square images and margins)
+const IMAGE_ROW_HEIGHT = 260
+
+// Export constants for use in other components
+export { USABLE_CONTENT_HEIGHT, SECTION_HEADER_HEIGHT, TABLE_HEADER_HEIGHT, MIN_ROW_HEIGHT, IMAGE_ROW_HEIGHT }
 
 /**
  * Content region types
@@ -56,7 +63,9 @@ export const RegionType = {
   REPORT_INFO: 'reportInfo',
   SAMPLE_INFO: 'sampleInfo', 
   EQUIPMENT_INFO: 'equipmentInfo',
-  TEST_CONDITIONS: 'testConditions',
+  TEST_CONDITIONS_HEADER: 'testConditionsHeader',
+  TEST_STANDARD: 'testStandard',
+  JUDGMENT_STANDARD: 'judgmentStandard',
   TEST_RESULTS: 'testResults',
   TEST_IMAGES: 'testImages',
   JUDGMENT_RESULT: 'judgmentResult'
@@ -231,6 +240,10 @@ export function usePagination() {
       pageNumber: 1
     }
     
+    // Minimum height needed to start a splittable section on current page
+    // (at least header + 1 row should fit)
+    const MIN_SPLIT_HEIGHT = SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT + MIN_ROW_HEIGHT + 20
+    
     for (let i = 0; i < regions.length; i++) {
       const region = regions[i]
       
@@ -239,6 +252,20 @@ export function usePagination() {
         currentPage.regions.push({ ...region })
         currentPage.remainingHeight -= region.height
       } else if (region.splittable) {
+        // Check if we have enough space to meaningfully split
+        // If remaining space is too small, move entire section to next page
+        if (currentPage.remainingHeight < MIN_SPLIT_HEIGHT && region.height <= usableHeight) {
+          // Not enough space to start - move to next page
+          if (currentPage.regions.length > 0) {
+            resultPages.push(currentPage)
+            currentPage = {
+              regions: [],
+              remainingHeight: usableHeight,
+              pageNumber: resultPages.length + 1
+            }
+          }
+        }
+        
         // Split across pages
         const parts = splitRegion(region, currentPage.remainingHeight, usableHeight)
         

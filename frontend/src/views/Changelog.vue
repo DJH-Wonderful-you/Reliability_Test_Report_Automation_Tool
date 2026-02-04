@@ -44,6 +44,20 @@ const router = useRouter()
 
 const versions = ref([
   {
+    id: 'v0.6',
+    version: 'V0.6',
+    title: '多页分页布局优化',
+    date: '2026年2月4日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      '拆分“测试条件”区域为独立可分页元素',
+      '修复测试图片行高度计算不准确导致的遮挡问题',
+      '统一所有页面的换页判定阈值',
+      '优化 DOM 测量机制，内容减少时能正确回流'
+    ]
+  },
+  {
     id: 'v0.5',
     version: 'V0.5',
     title: '报告编辑界面重构',

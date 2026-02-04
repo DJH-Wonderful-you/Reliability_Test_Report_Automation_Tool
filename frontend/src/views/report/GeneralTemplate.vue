@@ -437,6 +437,9 @@ const measuredHeights = ref({
   judgmentResult: 65
 })
 
+// 动态测量的实际行高
+const measuredRowHeight = ref(36)  // 默认值
+
 // Computed content
 const content = computed(() => reportStore.content)
 
@@ -446,7 +449,7 @@ const templateContentData = computed(() => reportStore.templateSettings.template
 // Height constants for splittable sections
 const SECTION_HEADER_HEIGHT = 28
 const TABLE_HEADER_HEIGHT = 32
-const ROW_HEIGHT = 38
+const ROW_HEIGHT = 36  // 修正后的实际行高：padding(8px) + content(24px) + border(2px) + buffer(2px)
 const IMAGE_ROW_HEIGHT = 260 // Actual row height with margin (square image uploaders ~240px + 15px margin + buffer)
 
 // Measure actual DOM heights after content changes
@@ -475,6 +478,19 @@ const measureSectionHeights = async () => {
         const rect = element.getBoundingClientRect()
         // Add small buffer
         newHeights[sectionType] = Math.ceil(rect.height) + 8
+        break
+      }
+    }
+  }
+  
+  // 动态测量测试结果表格的实际行高
+  for (const page of allPages) {
+    const tableElement = page.querySelector('.result-table tbody tr')
+    if (tableElement) {
+      const rowRect = tableElement.getBoundingClientRect()
+      if (rowRect.height > 0) {
+        measuredRowHeight.value = Math.ceil(rowRect.height)
+        console.log('[Row Height Measurement] 实际行高:', measuredRowHeight.value, 'px')
         break
       }
     }
@@ -527,11 +543,12 @@ const contentRegions = computed(() => {
   
   // Test Results section (splittable)
   const resultRows = reportStore.testResultRows
-  const resultTableHeight = SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT + (resultRows.length * ROW_HEIGHT) + 45
+  // 使用动态测量的行高进行更精确的计算
+  const resultTableHeight = SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT + (resultRows.length * measuredRowHeight.value) + 45
   regions.push(createRegion(
     RegionType.TEST_RESULTS, 
     resultTableHeight, 
-    { rows: resultRows, rowHeight: ROW_HEIGHT },
+    { rows: resultRows, rowHeight: measuredRowHeight.value },
     true // splittable
   ))
   

@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
-    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    }
+    },
+    "size": 100
   },
   "signatures": {
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,34 +31,46 @@
       "dataUrl": null,
       "size": 15
     },
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "size": 120,
+    "opacity": 0.3,
     "position": {
       "x": 400,
       "y": 650
     },
-    "opacity": 0.3
+    "size": 120
   },
   "templateContentData": {
     "companyName": "",
-    "reportTitle": "",
+    "placeholders": {},
     "recordCode": "",
-    "placeholders": {}
+    "reportTitle": "",
+    "testConditionsHeader": "测试条件",
+    "equipmentInfoHeader": "设备信息"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "infoTable": [],
-    "sampleTable": [],
     "equipmentTable": [],
-    "resultTable": []
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
   },
-  "fieldFormats": {},
+  "fieldFormats": {
+    "equipmentInfoHeader": {
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 14,
+      "color": "#000000",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "start"
+    }
+  },
   "createdAt": "2026-02-04T18:43:40.827947",
-  "updatedAt": "2026-02-04T18:43:41.439554"
+  "updatedAt": "2026-02-04T20:30:27.166054"
 }

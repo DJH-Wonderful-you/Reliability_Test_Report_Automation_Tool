@@ -69,7 +69,9 @@ const versionsData = {
           '修复测试图片行接触页面底部时被遮挡的问题',
           '修复 IMAGE_ROW_HEIGHT 计算不准确的问题（从 175px 调整为 260px）',
           '修复内容减少后无法正确回流到原页面的问题',
-          '修复第二页及以后页面的换页判定阈值与第一页不一致的问题'
+          '修复第二页及以后页面的换页判定阈值与第一页不一致的问题',
+          '修复行高估算不准确导致分页空白区域不一致的问题',
+          '修复固定行高值(38px)与实际渲染行高(33px)不符的问题'
         ]
       },
       {
@@ -97,6 +99,17 @@ const versionsData = {
           '导出 USABLE_CONTENT_HEIGHT 等常量供其他组件使用',
           '移除动态 usableHeight 的复杂逻辑，统一使用预设常量',
           'GeneralTemplate.vue 模板拆分为细粒度可分页元素'
+        ]
+      },
+      {
+        title: '行高测量优化',
+        items: [
+          '实现动态行高测量机制，替代固定行高估算',
+          '在 GeneralTemplate.vue 中添加 measuredRowHeight 响应式变量',
+          '通过 DOM.getBoundingClientRect() 精确测量实际行高',
+          '使用控制台日志输出行高测量结果便于调试',
+          '修正 usePagination.js 中的 MIN_ROW_HEIGHT 默认值从 35px 到 36px',
+          '分页计算现在基于动态测量的真实行高，提高空间利用效率'
         ]
       }
     ]

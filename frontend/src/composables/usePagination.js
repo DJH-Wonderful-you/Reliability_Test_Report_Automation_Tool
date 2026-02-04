@@ -38,8 +38,8 @@ const HEADER_HEIGHT_PX = 75
 const FOOTER_HEIGHT_PX = 95
 
 // Usable content height per page - uniform for all pages
-// Total A4 height minus padding, header, footer, and a minimal safety buffer
-const USABLE_CONTENT_HEIGHT = A4_HEIGHT_PX - PADDING_TOP_PX - PADDING_BOTTOM_PX - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX - 15
+// Total A4 height minus padding, header, footer, and a balanced safety buffer
+const USABLE_CONTENT_HEIGHT = A4_HEIGHT_PX - PADDING_TOP_PX - PADDING_BOTTOM_PX - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX - 25
 
 // Section header height (for repeated headers on continuation pages)
 const SECTION_HEADER_HEIGHT = 28
@@ -48,7 +48,7 @@ const SECTION_HEADER_HEIGHT = 28
 const TABLE_HEADER_HEIGHT = 32
 
 // Minimum row height for tables
-const MIN_ROW_HEIGHT = 35
+const MIN_ROW_HEIGHT = 36  // 更新为更准确的默认行高
 
 // Image row height (actual rendered height with square images and margins)
 const IMAGE_ROW_HEIGHT = 260
@@ -141,15 +141,22 @@ export function usePagination() {
       const headerHeight = TABLE_HEADER_HEIGHT + SECTION_HEADER_HEIGHT
       const rowHeight = region.data.rowHeight || MIN_ROW_HEIGHT
       
+      // 输出分页计算调试信息
+      console.log('[Pagination] 分页计算参数:', {
+        总行数: rows.length,
+        可用高度: availableHeight,
+        页面可用高度: usableHeight,
+        头部高度: headerHeight,
+        行高: rowHeight,
+        是否续页: region.isContinuation
+      })
+      
       let currentStart = region.startIndex || 0
       let remainingHeight = availableHeight
       
-      // First part - check if we need to account for section header
-      if (!region.isContinuation) {
-        remainingHeight -= headerHeight
-      } else {
-        remainingHeight -= TABLE_HEADER_HEIGHT // Just table header for continuation
-      }
+      // First part - unified height calculation for consistency
+      // Always subtract full header height (section + table headers)
+      remainingHeight -= headerHeight
       
       const rowsInFirstPart = Math.max(0, Math.floor(remainingHeight / rowHeight))
       
@@ -157,7 +164,7 @@ export function usePagination() {
         const endIndex = Math.min(currentStart + rowsInFirstPart, rows.length)
         parts.push({
           ...region,
-          height: (rowsInFirstPart * rowHeight) + (region.isContinuation ? TABLE_HEADER_HEIGHT : headerHeight),
+          height: (rowsInFirstPart * rowHeight) + headerHeight,
           startIndex: currentStart,
           endIndex: endIndex,
           isContinuation: region.isContinuation
@@ -165,15 +172,19 @@ export function usePagination() {
         currentStart = endIndex
       }
       
-      // Additional parts for remaining rows
+      // Additional parts for remaining rows - use unified calculation
       while (currentStart < rows.length) {
+        // Unified available height calculation: total usable height minus headers
         const contentHeight = usableHeight - SECTION_HEADER_HEIGHT - TABLE_HEADER_HEIGHT
         const rowsPerPage = Math.floor(contentHeight / rowHeight)
         const endIndex = Math.min(currentStart + rowsPerPage, rows.length)
         
+        // Consistent height calculation: rows + section header + table header
+        const partHeight = ((endIndex - currentStart) * rowHeight) + SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT
+        
         parts.push({
           ...region,
-          height: ((endIndex - currentStart) * rowHeight) + SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT,
+          height: partHeight,
           startIndex: currentStart,
           endIndex: endIndex,
           isContinuation: true
@@ -186,6 +197,16 @@ export function usePagination() {
       const imageRows = region.data.rows || []
       const rowHeight = region.data.rowHeight || IMAGE_ROW_HEIGHT
       const headerHeight = SECTION_HEADER_HEIGHT
+      
+      // 输出图片分页调试信息
+      console.log('[Pagination] 图片分页计算参数:', {
+        总行数: imageRows.length,
+        可用高度: availableHeight,
+        页面可用高度: usableHeight,
+        头部高度: headerHeight,
+        行高: rowHeight,
+        是否续页: region.isContinuation
+      })
       
       let currentStart = region.startIndex || 0
       let remainingHeight = availableHeight

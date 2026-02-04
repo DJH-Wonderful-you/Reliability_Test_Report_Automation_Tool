@@ -58,6 +58,11 @@ export const useReportStore = defineStore('report', () => {
     { id: 3, before: [], during: [], after: [] }
   ])
 
+  // Pagination state
+  const currentPage = ref(1)
+  const totalPages = ref(1)
+  const paginationEnabled = ref(true)
+
   // Computed
   const hasContent = computed(() => {
     return Object.keys(content.value).length > 0 || 
@@ -542,6 +547,11 @@ export const useReportStore = defineStore('report', () => {
     templateSettings,
     testResultRows,
     testImageRows,
+    
+    // Pagination state
+    currentPage,
+    totalPages,
+    paginationEnabled,
     
     // Computed
     hasContent,

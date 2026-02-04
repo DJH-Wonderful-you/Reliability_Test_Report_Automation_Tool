@@ -3,433 +3,405 @@
     <el-skeleton v-if="loading" :rows="20" animated />
     
     <template v-else>
-      <!-- Page 1 -->
-      <div class="a4-page" ref="page1Ref">
-        <!-- Main Content Area -->
-        <div class="page-content">
-          <!-- Header -->
-          <div class="page-header">
-            <!-- Logo -->
-            <div 
-              v-if="reportStore.templateSettings.logo?.dataUrl" 
-              class="logo-area"
-              :style="logoStyle"
-            >
-              <img :src="reportStore.templateSettings.logo.dataUrl" alt="Logo" />
-            </div>
-            <div class="company-name" :style="getFieldStyle('companyName')" v-html="getLabelHtml('companyName', '深圳市欣威智能有限公司')"></div>
-            <div class="report-title" :style="getFieldStyle('reportTitle')" v-html="getLabelHtml('reportTitle', '可靠性实验报告')"></div>
-            <div class="record-code" :style="getFieldStyle('recordCode')" v-html="getLabelHtml('recordCode', '记录代码：F-SUN1-XV-15.11.1.1/A0')"></div>
-          </div>
-        
-        <!-- Report Number -->
-        <div class="report-info-row">
-          <span class="label" :style="getFieldStyle('reportNumberLabel')" v-html="getLabelHtml('reportNumberLabel', '报告编号：')"></span>
-          <EditableField 
-            field-id="reportNumber"
-            :placeholder="getPlaceholder('reportNumber', '请输入报告编号')"
-            :value="content.reportNumber"
-            @update="updateField('reportNumber', $event)"
-            text-align="left"
-          />
-        </div>
-        
-        <!-- Test Project and Conclusion -->
-        <table class="info-table">
-          <colgroup>
-            <col :style="getColumnWidthStyle('infoTable', 0)">
-            <col :style="getColumnWidthStyle('infoTable', 1)">
-            <col :style="getColumnWidthStyle('infoTable', 2)">
-            <col :style="getColumnWidthStyle('infoTable', 3)">
-          </colgroup>
-          <tr>
-            <td class="label-cell" :style="getFieldStyle('testProjectLabel')" v-html="getLabelHtml('testProjectLabel', '测试项目')"></td>
-            <td class="editable-cell">
-              <EditableField 
-                field-id="testProject"
-                :placeholder="getPlaceholder('testProject', '请输入测试项目')"
-                :value="content.testProject"
-                @update="updateField('testProject', $event)"
-              />
-            </td>
-            <td class="label-cell" :style="getFieldStyle('testConclusionLabel')" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
-            <td class="editable-cell">
-              <EditableField 
-                field-id="testConclusion"
-                :placeholder="getPlaceholder('testConclusion', '请输入测试结论')"
-                :value="content.testConclusion"
-                @update="updateField('testConclusion', $event)"
-              />
-            </td>
-          </tr>
-        </table>
-        
-        <!-- Sample Information Section -->
-        <div class="section">
-          <div class="section-header" :style="getFieldStyle('sampleInfoHeader')" v-html="getLabelHtml('sampleInfoHeader', '样品信息')"></div>
-          <table class="info-table">
-            <colgroup>
-              <col :style="getColumnWidthStyle('sampleTable', 0)">
-              <col :style="getColumnWidthStyle('sampleTable', 1)">
-              <col :style="getColumnWidthStyle('sampleTable', 2)">
-              <col :style="getColumnWidthStyle('sampleTable', 3)">
-              <col :style="getColumnWidthStyle('sampleTable', 4)">
-              <col :style="getColumnWidthStyle('sampleTable', 5)">
-            </colgroup>
-            <tr>
-              <td class="label-cell" :style="getFieldStyle('customerLabel')" v-html="getLabelHtml('customerLabel', '客户')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="customer" :placeholder="getPlaceholder('customer', '请输入客户名称')" :value="content.customer" @update="updateField('customer', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('departmentLabel')" v-html="getLabelHtml('departmentLabel', '委托部门')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="department" :placeholder="getPlaceholder('department', '请输入委托部门')" :value="content.department" @update="updateField('department', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('sampleCountLabel')" v-html="getLabelHtml('sampleCountLabel', '样品数量')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="sampleCount" :placeholder="getPlaceholder('sampleCount', '数量')" :value="content.sampleCount" @update="updateField('sampleCount', $event)" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label-cell" :style="getFieldStyle('projectNameLabel')" v-html="getLabelHtml('projectNameLabel', '项目名称')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="projectName" :placeholder="getPlaceholder('projectName', '请输入项目名称')" :value="content.projectName" @update="updateField('projectName', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('requesterLabel')" v-html="getLabelHtml('requesterLabel', '委托人员')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="requester" :placeholder="getPlaceholder('requester', '请输入委托人员')" :value="content.requester" @update="updateField('requester', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('startTimeLabel')" v-html="getLabelHtml('startTimeLabel', '开始时间')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="startTime" :placeholder="getPlaceholder('startTime', '开始时间')" :value="content.startTime" @update="updateField('startTime', $event)" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label-cell" :style="getFieldStyle('productNameLabel')" v-html="getLabelHtml('productNameLabel', '产品名称')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="productName" :placeholder="getPlaceholder('productName', '请输入产品名称')" :value="content.productName" @update="updateField('productName', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('sampleStageLabel')" v-html="getLabelHtml('sampleStageLabel', '样品阶段')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="sampleStage" :placeholder="getPlaceholder('sampleStage', '请输入样品阶段')" :value="content.sampleStage" @update="updateField('sampleStage', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('endTimeLabel')" v-html="getLabelHtml('endTimeLabel', '完成时间')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="endTime" :placeholder="getPlaceholder('endTime', '完成时间')" :value="content.endTime" @update="updateField('endTime', $event)" />
-              </td>
-            </tr>
-            <tr>
-              <td class="label-cell" :style="getFieldStyle('testPurposeLabel')" v-html="getLabelHtml('testPurposeLabel', '测试目的')"></td>
-              <td class="editable-cell" colspan="5">
-                <EditableField field-id="testPurpose" :placeholder="getPlaceholder('testPurpose', '请输入测试目的')" :value="content.testPurpose" @update="updateField('testPurpose', $event)" />
-              </td>
-            </tr>
-          </table>
-        </div>
-        
-        <!-- Equipment Information Section -->
-        <div class="section">
-          <div class="section-header" :style="getFieldStyle('equipmentInfoHeader')" v-html="getLabelHtml('equipmentInfoHeader', '设备信息')"></div>
-          <table class="info-table">
-            <colgroup>
-              <col :style="getColumnWidthStyle('equipmentTable', 0)">
-              <col :style="getColumnWidthStyle('equipmentTable', 1)">
-              <col :style="getColumnWidthStyle('equipmentTable', 2)">
-              <col :style="getColumnWidthStyle('equipmentTable', 3)">
-              <col :style="getColumnWidthStyle('equipmentTable', 4)">
-              <col :style="getColumnWidthStyle('equipmentTable', 5)">
-            </colgroup>
-            <tr>
-              <td class="label-cell" :style="getFieldStyle('testEquipmentLabel')" v-html="getLabelHtml('testEquipmentLabel', '测试设备')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="testEquipment" :placeholder="getPlaceholder('testEquipment', '请输入测试设备')" :value="content.testEquipment" @update="updateField('testEquipment', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('equipmentModelLabel')" v-html="getLabelHtml('equipmentModelLabel', '设备型号')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="equipmentModel" :placeholder="getPlaceholder('equipmentModel', '请输入设备型号')" :value="content.equipmentModel" @update="updateField('equipmentModel', $event)" />
-              </td>
-              <td class="label-cell" :style="getFieldStyle('calibrationDateLabel')" v-html="getLabelHtml('calibrationDateLabel', '校准日期')"></td>
-              <td class="editable-cell">
-                <EditableField field-id="calibrationDate" :placeholder="getPlaceholder('calibrationDate', '校准日期')" :value="content.calibrationDate" @update="updateField('calibrationDate', $event)" />
-              </td>
-            </tr>
-          </table>
-        </div>
-        
-        <!-- Test Conditions Section -->
-        <div class="section">
-          <div class="section-header" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
-          
-          <div class="subsection">
-            <div class="subsection-row centered-label">
-              <span class="label" :style="getFieldStyle('testStandardLabel')" v-html="getLabelHtml('testStandardLabel', '测试标准')"></span>
-              <div class="subsection-content">
-                <EditableField 
-                  field-id="testStandard"
-                  :placeholder="getPlaceholder('testStandard', '请输入测试标准...')"
-                  :value="content.testStandard"
-                  @update="updateField('testStandard', $event)"
-                  :multiline="true"
-                  text-align="left"
-                />
-              </div>
-            </div>
-          </div>
-          
-          <div class="subsection">
-            <div class="subsection-row centered-label">
-              <span class="label" :style="getFieldStyle('judgmentStandardLabel')" v-html="getLabelHtml('judgmentStandardLabel', '判定标准')"></span>
-              <div class="subsection-content">
-                <EditableField 
-                  field-id="judgmentStandard"
-                  :placeholder="getPlaceholder('judgmentStandard', '请输入判定标准...')"
-                  :value="content.judgmentStandard"
-                  @update="updateField('judgmentStandard', $event)"
-                  :multiline="true"
-                  text-align="left"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Test Results Section -->
-        <div class="section">
-          <div class="section-header" :style="getFieldStyle('testResultsHeader')" v-html="getLabelHtml('testResultsHeader', '测试结果信息')"></div>
-          
-          <!-- Row Controls -->
-          <div class="row-controls">
-            <el-button size="small" type="primary" @click="addResultRow">
-              <el-icon><Plus /></el-icon> 添加行
-            </el-button>
-            <el-input-number 
-              v-model="batchAddCount" 
-              :min="1" 
-              :max="20" 
-              size="small" 
-              class="row-count-input"
-            />
-            <el-button size="small" @click="addResultRows(batchAddCount)">批量添加</el-button>
-          </div>
-          
-          <table class="result-table">
-            <colgroup>
-              <col :style="getColumnWidthStyle('resultTable', 0) || { width: '40px' }">
-              <col :style="getColumnWidthStyle('resultTable', 1)">
-              <col :style="getColumnWidthStyle('resultTable', 2)">
-              <col :style="getColumnWidthStyle('resultTable', 3)">
-              <col :style="getColumnWidthStyle('resultTable', 4)">
-              <col :style="getColumnWidthStyle('resultTable', 5)">
-              <col style="width: 60px;">
-            </colgroup>
-            <thead>
-              <tr>
-                <th :style="getFieldStyle('resultIdHeader')" v-html="getLabelHtml('resultIdHeader', '编号')"></th>
-                <th :style="getFieldStyle('appearanceHeader')" v-html="getLabelHtml('appearanceHeader', '实验后外观检查')"></th>
-                <th :style="getFieldStyle('functionHeader')" v-html="getLabelHtml('functionHeader', '实验后功能检查')"></th>
-                <th :style="getFieldStyle('otherHeader')" v-html="getLabelHtml('otherHeader', '其它性能检查')"></th>
-                <th :style="getFieldStyle('conclusionHeader')" v-html="getLabelHtml('conclusionHeader', '测试结论')"></th>
-                <th :style="getFieldStyle('noteHeader')" v-html="getLabelHtml('noteHeader', '备注')"></th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(row, index) in reportStore.testResultRows" :key="row.id">
-                <td class="text-center">{{ index + 1 }}</td>
-                <td class="editable-cell">
-                  <EditableField 
-                    :field-id="`result_${row.id}_appearance`"
-                    :placeholder="getPlaceholder('appearance', '外观检查结果')"
-                    :value="row.appearance"
-                    @update="updateResultRow(index, 'appearance', $event)"
-                  />
-                </td>
-                <td class="editable-cell">
-                  <EditableField 
-                    :field-id="`result_${row.id}_function`"
-                    :placeholder="getPlaceholder('function', '功能检查结果')"
-                    :value="row.function"
-                    @update="updateResultRow(index, 'function', $event)"
-                  />
-                </td>
-                <td class="editable-cell">
-                  <EditableField 
-                    :field-id="`result_${row.id}_other`"
-                    :placeholder="getPlaceholder('other', '其它性能')"
-                    :value="row.other"
-                    @update="updateResultRow(index, 'other', $event)"
-                  />
-                </td>
-                <td class="editable-cell">
-                  <EditableField 
-                    :field-id="`result_${row.id}_conclusion`"
-                    :placeholder="getPlaceholder('conclusion', '结论')"
-                    :value="row.conclusion"
-                    @update="updateResultRow(index, 'conclusion', $event)"
-                  />
-                </td>
-                <td class="editable-cell">
-                  <EditableField 
-                    :field-id="`result_${row.id}_note`"
-                    :placeholder="getPlaceholder('note', '备注')"
-                    :value="row.note"
-                    @update="updateResultRow(index, 'note', $event)"
-                  />
-                </td>
-                <td class="text-center">
-                  <el-button 
-                    type="danger" 
-                    size="small" 
-                    circle
-                    @click="deleteResultRow(index)"
-                  >
-                    <el-icon><Delete /></el-icon>
-                  </el-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <!-- Judgment Result -->
-          <div class="judgment-section">
-            <div class="judgment-row centered-label">
-              <span class="label" :style="getFieldStyle('judgmentResultLabel')" v-html="getLabelHtml('judgmentResultLabel', '判定结果')"></span>
-              <div class="judgment-content">
-                <EditableField 
-                  field-id="judgmentResult"
-                  :placeholder="getPlaceholder('judgmentResult', '请输入判定结果...')"
-                  :value="content.judgmentResult"
-                  @update="updateField('judgmentResult', $event)"
-                  :multiline="true"
-                  text-align="left"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Test Images Section -->
-        <div class="section" ref="imagesSectionRef">
-          <div class="section-header" :style="getFieldStyle('testImagesHeader')" v-html="getLabelHtml('testImagesHeader', '测试图片')"></div>
-          
-          <!-- Row Controls -->
-          <div class="row-controls">
-            <el-button size="small" type="primary" @click="addImageRow">
-              <el-icon><Plus /></el-icon> 添加行
-            </el-button>
-            <el-input-number 
-              v-model="batchImageAddCount" 
-              :min="1" 
-              :max="10" 
-              size="small" 
-              class="row-count-input"
-            />
-            <el-button size="small" @click="addImageRows(batchImageAddCount)">批量添加</el-button>
-          </div>
-          
-          <!-- Image Headers -->
-          <div class="image-headers">
-            <div class="image-header" :style="getFieldStyle('beforeTestLabel')" v-html="getLabelHtml('beforeTestLabel', '测试前')"></div>
-            <div class="image-header" :style="getFieldStyle('duringTestLabel')" v-html="getLabelHtml('duringTestLabel', '测试中')"></div>
-            <div class="image-header" :style="getFieldStyle('afterTestLabel')" v-html="getLabelHtml('afterTestLabel', '测试后')"></div>
-          </div>
-          
-          <!-- Image Rows -->
-          <template v-for="(row, rowIndex) in reportStore.testImageRows" :key="row.id">
-            <div class="image-row">
-              <div class="image-row-content">
-                <ImageUploader 
-                  :images="row.before"
-                  position="before"
-                  @update="updateImages(rowIndex, 'before', $event)"
-                />
-                <ImageUploader 
-                  :images="row.during"
-                  position="during"
-                  @update="updateImages(rowIndex, 'during', $event)"
-                />
-                <ImageUploader 
-                  :images="row.after"
-                  position="after"
-                  @update="updateImages(rowIndex, 'after', $event)"
-                />
-              </div>
-              <div class="image-row-actions">
-                <el-button 
-                  type="danger" 
-                  size="small" 
-                  circle
-                  @click="deleteImageRow(rowIndex)"
-                >
-                  <el-icon><Delete /></el-icon>
-                </el-button>
-              </div>
-            </div>
-          </template>
-        </div>
-        
-        <!-- Department Seal -->
-        <div 
-          v-if="reportStore.templateSettings.departmentSeal?.dataUrl"
-          class="department-seal"
-          :style="sealStyle"
+      <!-- Multi-page rendering -->
+      <template v-for="(page, pageIndex) in paginatedPages" :key="pageIndex">
+        <PageContainer
+          :page-number="pageIndex + 1"
+          :total-pages="totalPages"
+          :content="content"
+          :security-level="securityLevel"
+          :export-mode="isExportMode"
+          :show-page-number="totalPages > 1"
+          @update-field="updateField"
+          @update-security-level="securityLevel = $event"
         >
-          <img :src="reportStore.templateSettings.departmentSeal.dataUrl" alt="Seal" />
-        </div>
-        </div>
+          <!-- Page-specific content -->
+          <template v-for="region in page.regions" :key="region.type + '-' + region.startIndex">
+            <!-- Report Info Section (only on first page, not continuation) -->
+            <template v-if="region.type === 'reportInfo' && !region.isContinuation">
+              <div class="report-info-row">
+                <span class="label" :style="getFieldStyle('reportNumberLabel')" v-html="getLabelHtml('reportNumberLabel', '报告编号：')"></span>
+                <EditableField 
+                  field-id="reportNumber"
+                  :placeholder="getPlaceholder('reportNumber', '请输入报告编号')"
+                  :value="content.reportNumber"
+                  @update="updateField('reportNumber', $event)"
+                  text-align="left"
+                />
+              </div>
+              
+              <table class="info-table">
+                <colgroup>
+                  <col :style="getColumnWidthStyle('infoTable', 0)">
+                  <col :style="getColumnWidthStyle('infoTable', 1)">
+                  <col :style="getColumnWidthStyle('infoTable', 2)">
+                  <col :style="getColumnWidthStyle('infoTable', 3)">
+                </colgroup>
+                <tr>
+                  <td class="label-cell" :style="getFieldStyle('testProjectLabel')" v-html="getLabelHtml('testProjectLabel', '测试项目')"></td>
+                  <td class="editable-cell">
+                    <EditableField 
+                      field-id="testProject"
+                      :placeholder="getPlaceholder('testProject', '请输入测试项目')"
+                      :value="content.testProject"
+                      @update="updateField('testProject', $event)"
+                    />
+                  </td>
+                  <td class="label-cell" :style="getFieldStyle('testConclusionLabel')" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
+                  <td class="editable-cell">
+                    <EditableField 
+                      field-id="testConclusion"
+                      :placeholder="getPlaceholder('testConclusion', '请输入测试结论')"
+                      :value="content.testConclusion"
+                      @update="updateField('testConclusion', $event)"
+                    />
+                  </td>
+                </tr>
+              </table>
+            </template>
+            
+            <!-- Sample Information Section -->
+            <template v-if="region.type === 'sampleInfo'">
+              <div class="section">
+                <div class="section-header" :style="getFieldStyle('sampleInfoHeader')" v-html="getLabelHtml('sampleInfoHeader', '样品信息')"></div>
+                <table class="info-table">
+                  <colgroup>
+                    <col :style="getColumnWidthStyle('sampleTable', 0)">
+                    <col :style="getColumnWidthStyle('sampleTable', 1)">
+                    <col :style="getColumnWidthStyle('sampleTable', 2)">
+                    <col :style="getColumnWidthStyle('sampleTable', 3)">
+                    <col :style="getColumnWidthStyle('sampleTable', 4)">
+                    <col :style="getColumnWidthStyle('sampleTable', 5)">
+                  </colgroup>
+                  <tr>
+                    <td class="label-cell" :style="getFieldStyle('customerLabel')" v-html="getLabelHtml('customerLabel', '客户')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="customer" :placeholder="getPlaceholder('customer', '请输入客户名称')" :value="content.customer" @update="updateField('customer', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('departmentLabel')" v-html="getLabelHtml('departmentLabel', '委托部门')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="department" :placeholder="getPlaceholder('department', '请输入委托部门')" :value="content.department" @update="updateField('department', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('sampleCountLabel')" v-html="getLabelHtml('sampleCountLabel', '样品数量')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="sampleCount" :placeholder="getPlaceholder('sampleCount', '数量')" :value="content.sampleCount" @update="updateField('sampleCount', $event)" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="label-cell" :style="getFieldStyle('projectNameLabel')" v-html="getLabelHtml('projectNameLabel', '项目名称')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="projectName" :placeholder="getPlaceholder('projectName', '请输入项目名称')" :value="content.projectName" @update="updateField('projectName', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('requesterLabel')" v-html="getLabelHtml('requesterLabel', '委托人员')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="requester" :placeholder="getPlaceholder('requester', '请输入委托人员')" :value="content.requester" @update="updateField('requester', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('startTimeLabel')" v-html="getLabelHtml('startTimeLabel', '开始时间')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="startTime" :placeholder="getPlaceholder('startTime', '开始时间')" :value="content.startTime" @update="updateField('startTime', $event)" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="label-cell" :style="getFieldStyle('productNameLabel')" v-html="getLabelHtml('productNameLabel', '产品名称')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="productName" :placeholder="getPlaceholder('productName', '请输入产品名称')" :value="content.productName" @update="updateField('productName', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('sampleStageLabel')" v-html="getLabelHtml('sampleStageLabel', '样品阶段')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="sampleStage" :placeholder="getPlaceholder('sampleStage', '请输入样品阶段')" :value="content.sampleStage" @update="updateField('sampleStage', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('endTimeLabel')" v-html="getLabelHtml('endTimeLabel', '完成时间')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="endTime" :placeholder="getPlaceholder('endTime', '完成时间')" :value="content.endTime" @update="updateField('endTime', $event)" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="label-cell" :style="getFieldStyle('testPurposeLabel')" v-html="getLabelHtml('testPurposeLabel', '测试目的')"></td>
+                    <td class="editable-cell" colspan="5">
+                      <EditableField field-id="testPurpose" :placeholder="getPlaceholder('testPurpose', '请输入测试目的')" :value="content.testPurpose" @update="updateField('testPurpose', $event)" />
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </template>
+            
+            <!-- Equipment Information Section -->
+            <template v-if="region.type === 'equipmentInfo'">
+              <div class="section">
+                <div class="section-header" :style="getFieldStyle('equipmentInfoHeader')" v-html="getLabelHtml('equipmentInfoHeader', '设备信息')"></div>
+                <table class="info-table">
+                  <colgroup>
+                    <col :style="getColumnWidthStyle('equipmentTable', 0)">
+                    <col :style="getColumnWidthStyle('equipmentTable', 1)">
+                    <col :style="getColumnWidthStyle('equipmentTable', 2)">
+                    <col :style="getColumnWidthStyle('equipmentTable', 3)">
+                    <col :style="getColumnWidthStyle('equipmentTable', 4)">
+                    <col :style="getColumnWidthStyle('equipmentTable', 5)">
+                  </colgroup>
+                  <tr>
+                    <td class="label-cell" :style="getFieldStyle('testEquipmentLabel')" v-html="getLabelHtml('testEquipmentLabel', '测试设备')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="testEquipment" :placeholder="getPlaceholder('testEquipment', '请输入测试设备')" :value="content.testEquipment" @update="updateField('testEquipment', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('equipmentModelLabel')" v-html="getLabelHtml('equipmentModelLabel', '设备型号')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="equipmentModel" :placeholder="getPlaceholder('equipmentModel', '请输入设备型号')" :value="content.equipmentModel" @update="updateField('equipmentModel', $event)" />
+                    </td>
+                    <td class="label-cell" :style="getFieldStyle('calibrationDateLabel')" v-html="getLabelHtml('calibrationDateLabel', '校准日期')"></td>
+                    <td class="editable-cell">
+                      <EditableField field-id="calibrationDate" :placeholder="getPlaceholder('calibrationDate', '校准日期')" :value="content.calibrationDate" @update="updateField('calibrationDate', $event)" />
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </template>
+            
+            <!-- Test Conditions Section -->
+            <template v-if="region.type === 'testConditions'">
+              <div class="section">
+                <div class="section-header" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
+                
+                <div class="subsection">
+                  <div class="subsection-row centered-label">
+                    <span class="label" :style="getFieldStyle('testStandardLabel')" v-html="getLabelHtml('testStandardLabel', '测试标准')"></span>
+                    <div class="subsection-content">
+                      <EditableField 
+                        field-id="testStandard"
+                        :placeholder="getPlaceholder('testStandard', '请输入测试标准...')"
+                        :value="content.testStandard"
+                        @update="updateField('testStandard', $event)"
+                        :multiline="true"
+                        text-align="left"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="subsection">
+                  <div class="subsection-row centered-label">
+                    <span class="label" :style="getFieldStyle('judgmentStandardLabel')" v-html="getLabelHtml('judgmentStandardLabel', '判定标准')"></span>
+                    <div class="subsection-content">
+                      <EditableField 
+                        field-id="judgmentStandard"
+                        :placeholder="getPlaceholder('judgmentStandard', '请输入判定标准...')"
+                        :value="content.judgmentStandard"
+                        @update="updateField('judgmentStandard', $event)"
+                        :multiline="true"
+                        text-align="left"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            
+            <!-- Test Results Section -->
+            <template v-if="region.type === 'testResults'">
+              <div class="section">
+                <div class="section-header" :style="getFieldStyle('testResultsHeader')">
+                  <span v-html="getLabelHtml('testResultsHeader', '测试结果信息')"></span>
+                  <span v-if="region.isContinuation" class="continuation-mark">（续）</span>
+                </div>
+                
+                <!-- Row Controls (only on first occurrence) -->
+                <div v-if="!region.isContinuation" class="row-controls">
+                  <el-button size="small" type="primary" @click="addResultRow">
+                    <el-icon><Plus /></el-icon> 添加行
+                  </el-button>
+                  <el-input-number 
+                    v-model="batchAddCount" 
+                    :min="1" 
+                    :max="20" 
+                    size="small" 
+                    class="row-count-input"
+                  />
+                  <el-button size="small" @click="addResultRows(batchAddCount)">批量添加</el-button>
+                </div>
+                
+                <table class="result-table">
+                  <colgroup>
+                    <col :style="getColumnWidthStyle('resultTable', 0) || { width: '40px' }">
+                    <col :style="getColumnWidthStyle('resultTable', 1)">
+                    <col :style="getColumnWidthStyle('resultTable', 2)">
+                    <col :style="getColumnWidthStyle('resultTable', 3)">
+                    <col :style="getColumnWidthStyle('resultTable', 4)">
+                    <col :style="getColumnWidthStyle('resultTable', 5)">
+                    <col style="width: 60px;">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th :style="getFieldStyle('resultIdHeader')" v-html="getLabelHtml('resultIdHeader', '编号')"></th>
+                      <th :style="getFieldStyle('appearanceHeader')" v-html="getLabelHtml('appearanceHeader', '实验后外观检查')"></th>
+                      <th :style="getFieldStyle('functionHeader')" v-html="getLabelHtml('functionHeader', '实验后功能检查')"></th>
+                      <th :style="getFieldStyle('otherHeader')" v-html="getLabelHtml('otherHeader', '其它性能检查')"></th>
+                      <th :style="getFieldStyle('conclusionHeader')" v-html="getLabelHtml('conclusionHeader', '测试结论')"></th>
+                      <th :style="getFieldStyle('noteHeader')" v-html="getLabelHtml('noteHeader', '备注')"></th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(row, index) in getResultRowsForRegion(region)" :key="row.id">
+                      <td class="text-center">{{ region.startIndex + index + 1 }}</td>
+                      <td class="editable-cell">
+                        <EditableField 
+                          :field-id="`result_${row.id}_appearance`"
+                          :placeholder="getPlaceholder('appearance', '外观检查结果')"
+                          :value="row.appearance"
+                          @update="updateResultRow(region.startIndex + index, 'appearance', $event)"
+                        />
+                      </td>
+                      <td class="editable-cell">
+                        <EditableField 
+                          :field-id="`result_${row.id}_function`"
+                          :placeholder="getPlaceholder('function', '功能检查结果')"
+                          :value="row.function"
+                          @update="updateResultRow(region.startIndex + index, 'function', $event)"
+                        />
+                      </td>
+                      <td class="editable-cell">
+                        <EditableField 
+                          :field-id="`result_${row.id}_other`"
+                          :placeholder="getPlaceholder('other', '其它性能')"
+                          :value="row.other"
+                          @update="updateResultRow(region.startIndex + index, 'other', $event)"
+                        />
+                      </td>
+                      <td class="editable-cell">
+                        <EditableField 
+                          :field-id="`result_${row.id}_conclusion`"
+                          :placeholder="getPlaceholder('conclusion', '结论')"
+                          :value="row.conclusion"
+                          @update="updateResultRow(region.startIndex + index, 'conclusion', $event)"
+                        />
+                      </td>
+                      <td class="editable-cell">
+                        <EditableField 
+                          :field-id="`result_${row.id}_note`"
+                          :placeholder="getPlaceholder('note', '备注')"
+                          :value="row.note"
+                          @update="updateResultRow(region.startIndex + index, 'note', $event)"
+                        />
+                      </td>
+                      <td class="text-center">
+                        <el-button 
+                          type="danger" 
+                          size="small" 
+                          circle
+                          @click="deleteResultRow(region.startIndex + index)"
+                        >
+                          <el-icon><Delete /></el-icon>
+                        </el-button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </template>
+            
+            <!-- Judgment Result Section -->
+            <template v-if="region.type === 'judgmentResult'">
+              <div class="judgment-section">
+                <div class="judgment-row centered-label">
+                  <span class="label" :style="getFieldStyle('judgmentResultLabel')" v-html="getLabelHtml('judgmentResultLabel', '判定结果')"></span>
+                  <div class="judgment-content">
+                    <EditableField 
+                      field-id="judgmentResult"
+                      :placeholder="getPlaceholder('judgmentResult', '请输入判定结果...')"
+                      :value="content.judgmentResult"
+                      @update="updateField('judgmentResult', $event)"
+                      :multiline="true"
+                      text-align="left"
+                    />
+                  </div>
+                </div>
+              </div>
+            </template>
+            
+            <!-- Test Images Section -->
+            <template v-if="region.type === 'testImages'">
+              <div class="section">
+                <div class="section-header" :style="getFieldStyle('testImagesHeader')">
+                  <span v-html="getLabelHtml('testImagesHeader', '测试图片')"></span>
+                  <span v-if="region.isContinuation" class="continuation-mark">（续）</span>
+                </div>
+                
+                <!-- Row Controls (only on first occurrence) -->
+                <div v-if="!region.isContinuation" class="row-controls">
+                  <el-button size="small" type="primary" @click="addImageRow">
+                    <el-icon><Plus /></el-icon> 添加行
+                  </el-button>
+                  <el-input-number 
+                    v-model="batchImageAddCount" 
+                    :min="1" 
+                    :max="10" 
+                    size="small" 
+                    class="row-count-input"
+                  />
+                  <el-button size="small" @click="addImageRows(batchImageAddCount)">批量添加</el-button>
+                </div>
+                
+                <!-- Image Headers -->
+                <div class="image-headers">
+                  <div class="image-header" :style="getFieldStyle('beforeTestLabel')" v-html="getLabelHtml('beforeTestLabel', '测试前')"></div>
+                  <div class="image-header" :style="getFieldStyle('duringTestLabel')" v-html="getLabelHtml('duringTestLabel', '测试中')"></div>
+                  <div class="image-header" :style="getFieldStyle('afterTestLabel')" v-html="getLabelHtml('afterTestLabel', '测试后')"></div>
+                </div>
+                
+                <!-- Image Rows -->
+                <template v-for="(row, rowIndex) in getImageRowsForRegion(region)" :key="row.id">
+                  <div class="image-row">
+                    <div class="image-row-content">
+                      <ImageUploader 
+                        :images="row.before"
+                        position="before"
+                        @update="updateImages(region.startIndex + rowIndex, 'before', $event)"
+                      />
+                      <ImageUploader 
+                        :images="row.during"
+                        position="during"
+                        @update="updateImages(region.startIndex + rowIndex, 'during', $event)"
+                      />
+                      <ImageUploader 
+                        :images="row.after"
+                        position="after"
+                        @update="updateImages(region.startIndex + rowIndex, 'after', $event)"
+                      />
+                    </div>
+                    <div class="image-row-actions">
+                      <el-button 
+                        type="danger" 
+                        size="small" 
+                        circle
+                        @click="deleteImageRow(region.startIndex + rowIndex)"
+                      >
+                        <el-icon><Delete /></el-icon>
+                      </el-button>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </template>
+        </PageContainer>
         
-        <!-- Footer -->
-        <div class="page-footer">
-          <div class="signature-row">
-            <div class="signature-item">
-              <span class="label" :style="getSignatureLabelStyle('testerLabel')" v-html="getLabelHtml('testerLabel', '测试员：')"></span>
-              <img v-if="reportStore.templateSettings.signatures?.tester?.dataUrl" :src="reportStore.templateSettings.signatures.tester.dataUrl" class="signature-img" :style="{ maxHeight: (reportStore.templateSettings.signatures.tester.size || 30) + 'px' }" />
-              <EditableField v-else field-id="tester" :placeholder="getPlaceholder('tester', '测试员姓名')" :value="content.tester" @update="updateField('tester', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
-            </div>
-            <div class="signature-item">
-              <span class="label" :style="getSignatureLabelStyle('reviewerLabel')" v-html="getLabelHtml('reviewerLabel', '审核：')"></span>
-              <img v-if="reportStore.templateSettings.signatures?.reviewer?.dataUrl" :src="reportStore.templateSettings.signatures.reviewer.dataUrl" class="signature-img" :style="{ maxHeight: (reportStore.templateSettings.signatures.reviewer.size || 30) + 'px' }" />
-              <EditableField v-else field-id="reviewer" :placeholder="getPlaceholder('reviewer', '审核人姓名')" :value="content.reviewer" @update="updateField('reviewer', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
-            </div>
-            <div class="signature-item">
-              <span class="label" :style="getSignatureLabelStyle('approverLabel')" v-html="getLabelHtml('approverLabel', '核准：')"></span>
-              <img v-if="reportStore.templateSettings.signatures?.approver?.dataUrl" :src="reportStore.templateSettings.signatures.approver.dataUrl" class="signature-img" :style="{ maxHeight: (reportStore.templateSettings.signatures.approver.size || 30) + 'px' }" />
-              <EditableField v-else field-id="approver" :placeholder="getPlaceholder('approver', '核准人姓名')" :value="content.approver" @update="updateField('approver', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
-            </div>
-          </div>
-          <div class="footer-note">
-            <div class="footer-note-content">
-              <div class="footer-note-item">
-                <span :style="getFooterNoteLabelStyle('saveDeptLabel')" v-html="getLabelHtml('saveDeptLabel', '备注：保存部门：')"></span>
-                <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="updateField('saveDept', $event)" style="width: 80px;" :font-size="9" color="#999" />
-              </div>
-              <div class="footer-note-item center">
-                <span :style="getFooterNoteLabelStyle('saveYearsLabel')" v-html="getLabelHtml('saveYearsLabel', '保存年限：')"></span>
-                <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="updateField('saveYears', $event)" style="width: 60px;" :font-size="9" color="#999" />
-              </div>
-              <div class="footer-note-item security-level-section">
-                <span :style="getFooterNoteLabelStyle('securityLevelLabel')" v-html="getLabelHtml('securityLevelLabel', '保密等级：')"></span>
-                <el-radio-group v-model="securityLevel" size="small">
-                  <el-radio label="绝密">绝密</el-radio>
-                  <el-radio label="机密">机密</el-radio>
-                  <el-radio label="内部公开">内部公开</el-radio>
-                  <el-radio label="外部公开">外部公开</el-radio>
-                </el-radio-group>
-              </div>
-            </div>
-          </div>
+        <!-- Page break indicator (between pages in edit mode) -->
+        <div v-if="pageIndex < paginatedPages.length - 1 && !isExportMode" class="page-break-indicator">
+          <div class="page-break-line"></div>
+          <span class="page-break-label">第 {{ pageIndex + 1 }} 页结束 - 第 {{ pageIndex + 2 }} 页开始</span>
+          <div class="page-break-line"></div>
         </div>
-      </div>
+      </template>
     </template>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, onActivated, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useReportStore } from '@/stores/report'
+import { usePagination, RegionType, createRegion } from '@/composables/usePagination'
+import PageContainer from '@/components/report/PageContainer.vue'
 import EditableField from '@/components/report/EditableField.vue'
 import ImageUploader from '@/components/report/ImageUploader.vue'
-import ResizableSection from '@/components/report/ResizableSection.vue'
 import { Plus, Delete } from '@element-plus/icons-vue'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
@@ -438,46 +410,100 @@ import { useRoute } from 'vue-router'
 
 const reportStore = useReportStore()
 const route = useRoute()
+const pagination = usePagination()
 
 const templateRef = ref(null)
-const page1Ref = ref(null)
-const imagesSectionRef = ref(null)
 const loading = ref(true)
 const batchAddCount = ref(1)
 const batchImageAddCount = ref(1)
 const securityLevel = ref('内部公开')
+const isExportMode = ref(false)
 
-// Track which rows should show page break headers
-const pageBreakRows = ref(new Set())
+// Computed content
+const content = computed(() => reportStore.content)
 
-// Computed styles for logo and seal
-const logoStyle = computed(() => {
-  const logo = reportStore.templateSettings.logo
-  if (!logo) return {}
-  return {
-    position: 'absolute',
-    left: `${logo.position?.x || 20}px`,
-    top: `${logo.position?.y || 10}px`,
-    width: `${logo.size || 100}px`,
-    zIndex: 10
-  }
-})
-
-const sealStyle = computed(() => {
-  const seal = reportStore.templateSettings.departmentSeal
-  if (!seal) return {}
-  return {
-    position: 'absolute',
-    left: `${seal.position?.x || 400}px`,
-    top: `${seal.position?.y || 650}px`,
-    width: `${seal.size || 120}px`,
-    opacity: 1, // Full opacity in report view
-    zIndex: 5
-  }
-})
-
-// Template content data for labels and placeholders
+// Template content data
 const templateContentData = computed(() => reportStore.templateSettings.templateContentData || {})
+
+// Calculate heights for each section
+const REPORT_INFO_HEIGHT = 80
+const SAMPLE_INFO_HEIGHT = 180
+const EQUIPMENT_INFO_HEIGHT = 80
+const TEST_CONDITIONS_HEIGHT = 180
+const SECTION_HEADER_HEIGHT = 30
+const TABLE_HEADER_HEIGHT = 35
+const ROW_HEIGHT = 40
+const IMAGE_ROW_HEIGHT = 180
+const JUDGMENT_HEIGHT = 80
+
+// Create paginated content regions
+const contentRegions = computed(() => {
+  const regions = []
+  
+  // Report Info section
+  regions.push(createRegion(RegionType.REPORT_INFO, REPORT_INFO_HEIGHT))
+  
+  // Sample Info section
+  regions.push(createRegion(RegionType.SAMPLE_INFO, SAMPLE_INFO_HEIGHT))
+  
+  // Equipment Info section
+  regions.push(createRegion(RegionType.EQUIPMENT_INFO, EQUIPMENT_INFO_HEIGHT))
+  
+  // Test Conditions section
+  regions.push(createRegion(RegionType.TEST_CONDITIONS, TEST_CONDITIONS_HEIGHT))
+  
+  // Test Results section (splittable)
+  const resultRows = reportStore.testResultRows
+  const resultTableHeight = SECTION_HEADER_HEIGHT + TABLE_HEADER_HEIGHT + (resultRows.length * ROW_HEIGHT) + 40 // +40 for controls
+  regions.push(createRegion(
+    RegionType.TEST_RESULTS, 
+    resultTableHeight, 
+    { rows: resultRows, rowHeight: ROW_HEIGHT },
+    true // splittable
+  ))
+  
+  // Judgment Result section
+  regions.push(createRegion(RegionType.JUDGMENT_RESULT, JUDGMENT_HEIGHT))
+  
+  // Test Images section (splittable)
+  const imageRows = reportStore.testImageRows
+  const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT) // +50 for headers and controls
+  regions.push(createRegion(
+    RegionType.TEST_IMAGES, 
+    imagesSectionHeight, 
+    { rows: imageRows, rowHeight: IMAGE_ROW_HEIGHT },
+    true // splittable
+  ))
+  
+  return regions
+})
+
+// Register regions with pagination system and get paginated pages
+const paginatedPages = computed(() => {
+  pagination.registerRegions(contentRegions.value)
+  return pagination.pages.value
+})
+
+// Total pages
+const totalPages = computed(() => paginatedPages.value.length || 1)
+
+// Get result rows for a specific region
+const getResultRowsForRegion = (region) => {
+  const startIdx = region.startIndex || 0
+  const endIdx = region.endIndex !== null && region.endIndex !== undefined 
+    ? region.endIndex 
+    : reportStore.testResultRows.length
+  return reportStore.testResultRows.slice(startIdx, endIdx)
+}
+
+// Get image rows for a specific region
+const getImageRowsForRegion = (region) => {
+  const startIdx = region.startIndex || 0
+  const endIdx = region.endIndex !== null && region.endIndex !== undefined 
+    ? region.endIndex 
+    : reportStore.testImageRows.length
+  return reportStore.testImageRows.slice(startIdx, endIdx)
+}
 
 // Get style for a field from fieldFormats
 const getFieldStyle = (fieldId) => {
@@ -495,62 +521,10 @@ const getFieldStyle = (fieldId) => {
   }
 }
 
-// Get style for signature labels (testerLabel, reviewerLabel, approverLabel)
-// Default: black, 12px, Microsoft YaHei - matching template editor
-const getSignatureLabelStyle = (fieldId) => {
-  const defaultStyle = {
-    color: '#000000',
-    fontFamily: '"Microsoft YaHei", sans-serif',
-    fontSize: '12px'
-  }
-  const format = reportStore.getFieldFormat(fieldId)
-  if (!format) return defaultStyle
-  
-  return {
-    ...defaultStyle,
-    ...(format.fontFamily && { fontFamily: format.fontFamily }),
-    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
-    ...(format.color && { color: format.color }),
-    ...(format.fontWeight && { fontWeight: format.fontWeight }),
-    ...(format.fontStyle && { fontStyle: format.fontStyle }),
-    ...(format.textDecoration && { textDecoration: format.textDecoration }),
-    ...(format.textAlign && { textAlign: format.textAlign })
-  }
-}
-
-// Get style for footer note labels (saveDeptLabel, saveYearsLabel, securityLevelLabel)
-// Default: black, 9px - matching template editor
-const getFooterNoteLabelStyle = (fieldId) => {
-  const defaultStyle = {
-    color: '#000000',
-    fontFamily: '"Microsoft YaHei", sans-serif',
-    fontSize: '9px'
-  }
-  const format = reportStore.getFieldFormat(fieldId)
-  if (!format) return defaultStyle
-  
-  return {
-    ...defaultStyle,
-    ...(format.fontFamily && { fontFamily: format.fontFamily }),
-    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
-    ...(format.color && { color: format.color }),
-    ...(format.fontWeight && { fontWeight: format.fontWeight }),
-    ...(format.fontStyle && { fontStyle: format.fontStyle }),
-    ...(format.textDecoration && { textDecoration: format.textDecoration }),
-    ...(format.textAlign && { textAlign: format.textAlign })
-  }
-}
-
-// Helper to get template label with fallback
-const getLabel = (key, defaultValue) => {
-  return templateContentData.value[key] || defaultValue
-}
-
-// Helper to get template label as HTML (converts newlines to <br>)
+// Helper to get template label as HTML
 const getLabelHtml = (key, defaultValue) => {
   const value = templateContentData.value[key] || defaultValue
   if (!value) return ''
-  // Escape HTML entities and convert newlines to <br>
   return value
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -558,12 +532,12 @@ const getLabelHtml = (key, defaultValue) => {
     .replace(/\n/g, '<br>')
 }
 
-// Helper to get placeholder text with fallback
+// Helper to get placeholder text
 const getPlaceholder = (key, defaultValue) => {
   return templateContentData.value.placeholders?.[key] || defaultValue
 }
 
-// Computed column widths for each table
+// Computed column widths
 const getColumnWidthStyle = (tableName, columnIndex) => {
   const widths = reportStore.templateSettings.tableColumnWidths?.[tableName]
   if (widths && widths.length > columnIndex && widths[columnIndex] > 0) {
@@ -572,91 +546,9 @@ const getColumnWidthStyle = (tableName, columnIndex) => {
   return {}
 }
 
-// Helper to generate colgroup with saved widths
-const getTableColWidths = (tableName, defaultWidths) => {
-  const savedWidths = reportStore.templateSettings.tableColumnWidths?.[tableName]
-  if (savedWidths && savedWidths.length > 0) {
-    return savedWidths
-  }
-  return defaultWidths
-}
-
-// Page overflow tracking
-const pageOverflows = ref([])
-const continuedSections = ref([]) // Sections that continue to next page
-
-// A4 dimensions in mm and approximate px (at 96 DPI)
-const A4_HEIGHT_MM = 297
-const A4_WIDTH_MM = 210
-const PAGE_CONTENT_HEIGHT_PX = 1050 // Approximate usable height in pixels
-
-const content = computed(() => reportStore.content)
-
-// Handle section overflow - track which sections need to continue on next page
-const handleSectionOverflow = (sectionName, overflowData) => {
-  const existingIndex = pageOverflows.value.findIndex(p => p.section === sectionName)
-  if (existingIndex > -1) {
-    pageOverflows.value[existingIndex] = { section: sectionName, ...overflowData }
-  } else {
-    pageOverflows.value.push({ section: sectionName, ...overflowData })
-  }
-  
-  // If content overflows, mark section as continued
-  if (overflowData.overflow > 0 && !continuedSections.value.includes(sectionName)) {
-    continuedSections.value.push(sectionName)
-  }
-}
-
-// Check if a section should show continued header
-const shouldShowContinuedHeader = (sectionName) => {
-  return continuedSections.value.includes(sectionName)
-}
-
-// Check page content height and update page breaks
-const checkPageBreaks = () => {
-  nextTick(() => {
-    if (!page1Ref.value) return
-    
-    const pageContent = page1Ref.value
-    const contentHeight = pageContent.scrollHeight
-    const maxHeight = PAGE_CONTENT_HEIGHT_PX
-    
-    // If content exceeds page height, we need to handle overflow
-    if (contentHeight > maxHeight) {
-      // Find sections that overflow
-      const sections = pageContent.querySelectorAll('.section')
-      let accumulatedHeight = 0
-      
-      sections.forEach(section => {
-        const sectionRect = section.getBoundingClientRect()
-        const pageRect = pageContent.getBoundingClientRect()
-        const sectionBottom = sectionRect.bottom - pageRect.top
-        
-        if (sectionBottom > maxHeight) {
-          const sectionName = section.querySelector('.section-header')?.textContent || 'unknown'
-          if (!continuedSections.value.includes(sectionName)) {
-            continuedSections.value.push(sectionName)
-          }
-        }
-      })
-    }
-  })
-}
-
-// Watch for content changes and check page breaks
-watch(
-  () => [reportStore.testResultRows.length, reportStore.content],
-  () => {
-    checkPageBreaks()
-  },
-  { deep: true }
-)
-
 // Field update handler
 const updateField = (fieldId, value) => {
   reportStore.updateField(fieldId, value)
-  // Check page breaks after content update
-  nextTick(() => checkPageBreaks())
 }
 
 // Result row handlers
@@ -693,37 +585,45 @@ const deleteImageRow = (index) => {
   reportStore.deleteTestImageRow(index)
 }
 
-// Load template settings from backend (only load applied template, not latest)
+// Load template settings
 const loadTemplateSettings = async () => {
   await reportStore.loadAppliedTemplateSettings()
-  // Update local security level from template
   if (reportStore.templateSettings.securityLevel) {
     securityLevel.value = reportStore.templateSettings.securityLevel
   }
 }
 
-// PDF Export handler
+// PDF Export handler - now handles multiple pages
 const handleExportPdf = async () => {
   try {
     ElMessage.info('正在生成PDF，请稍候...')
     
-    // Add export mode class to hide controls
-    templateRef.value.classList.add('pdf-export-mode')
+    isExportMode.value = true
+    await nextTick()
+    
+    // Wait a bit for DOM to update
+    await new Promise(resolve => setTimeout(resolve, 100))
     
     const pdf = new jsPDF('p', 'mm', 'a4')
-    const page = page1Ref.value
+    const pages = templateRef.value.querySelectorAll('.a4-page')
     
-    if (page) {
-      const canvas = await html2canvas(page, {
+    for (let i = 0; i < pages.length; i++) {
+      if (i > 0) {
+        pdf.addPage()
+      }
+      
+      const canvas = await html2canvas(pages[i], {
         scale: 2,
         useCORS: true,
         logging: false,
         backgroundColor: '#ffffff',
+        width: pages[i].offsetWidth,
+        height: pages[i].offsetHeight,
         ignoreElements: (element) => {
-          // Ignore row controls, delete buttons, and other UI elements
           return element.classList.contains('row-controls') ||
                  element.classList.contains('image-row-actions') ||
                  element.classList.contains('el-button--danger') ||
+                 element.classList.contains('page-break-indicator') ||
                  element.closest('.row-controls') !== null ||
                  element.closest('.image-row-actions') !== null
         }
@@ -731,13 +631,12 @@ const handleExportPdf = async () => {
       
       const imgData = canvas.toDataURL('image/jpeg', 0.95)
       const imgWidth = 210 // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      const imgHeight = 297 // A4 height in mm
       
       pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight)
     }
     
-    // Remove export mode class
-    templateRef.value.classList.remove('pdf-export-mode')
+    isExportMode.value = false
     
     // Generate filename
     const title = content.value.testProject || '可靠性测试报告'
@@ -747,40 +646,27 @@ const handleExportPdf = async () => {
     ElMessage.success('PDF导出成功')
   } catch (error) {
     console.error('PDF export error:', error)
-    // Remove export mode class in case of error
-    if (templateRef.value) {
-      templateRef.value.classList.remove('pdf-export-mode')
-    }
+    isExportMode.value = false
     ElMessage.error('PDF导出失败：' + error.message)
   }
 }
 
 // Initialize
 onMounted(async () => {
-  // Load template and auto-saved content
   await reportStore.loadTemplate('general')
   await reportStore.loadAutoSave('general')
-  
-  // Load template settings from saved template
   await loadTemplateSettings()
   
   loading.value = false
   
-  // Listen for export event
   window.addEventListener('export-pdf', handleExportPdf)
-  
-  // Initial page break check
-  nextTick(() => {
-    checkPageBreaks()
-  })
 })
 
-// Watch route changes to reload template settings when navigating back to this page
+// Watch route changes
 watch(
   () => route.path,
   async (newPath) => {
     if (newPath.includes('/report/general')) {
-      // Reload template settings when navigating to this page
       await loadTemplateSettings()
     }
   }
@@ -799,76 +685,34 @@ onUnmounted(() => {
   align-items: center;
 }
 
-.a4-page {
-  width: 210mm;
-  min-height: 297mm;
-  background: white;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  margin: 0 auto 20px;
-  padding: 10mm 15mm 15mm 15mm;
-  position: relative;
+.page-break-indicator {
   display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  width: 210mm;
+  margin: 10px 0;
+  gap: 15px;
   
-  // Page height indicator - shows exact A4 boundary
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  .page-break-line {
+    flex: 1;
     height: 2px;
-    background: linear-gradient(to right, 
-      transparent 0%, 
-      #e74c3c 20%, 
-      #e74c3c 80%, 
-      transparent 100%
+    background: repeating-linear-gradient(
+      to right,
+      #409eff,
+      #409eff 8px,
+      transparent 8px,
+      transparent 16px
     );
-    opacity: 0.5;
-  }
-}
-
-.page-content {
-  flex: 1 0 auto;
-  position: relative;
-}
-
-.logo-area {
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-}
-
-.department-seal {
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-}
-
-.page-header {
-  text-align: center;
-  margin-bottom: 15px;
-  
-  .company-name {
-    font-size: 18px;
-    font-weight: 600;
-    color: #000;
-    font-family: SimSun, serif;
   }
   
-  .report-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 8px;
-  }
-  
-  .record-code {
-    font-size: 9px;
-    color: #666;
-    margin-top: 5px;
+  .page-break-label {
+    padding: 4px 12px;
+    background: #ecf5ff;
+    color: #409eff;
+    font-size: 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    border: 1px solid #b3d8ff;
   }
 }
 
@@ -927,8 +771,6 @@ onUnmounted(() => {
 
 .section {
   margin-bottom: 15px;
-  position: relative;
-  page-break-inside: avoid;
   
   .section-header {
     font-weight: 600;
@@ -936,32 +778,14 @@ onUnmounted(() => {
     padding: 5px 0;
     border-bottom: 1px solid #000;
     margin-bottom: 8px;
-    page-break-after: avoid;
-  }
-  
-  // Resize handle for manual height adjustment
-  &:hover::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 4px;
-    background: #409eff;
-    border-radius: 2px;
-    opacity: 0.5;
-    cursor: ns-resize;
-  }
-}
-
-// Allow test results and images sections to break across pages
-.section.allow-break {
-  page-break-inside: auto;
-  
-  // Repeat header after page break
-  .section-header {
-    display: table-header-group;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    
+    .continuation-mark {
+      color: #909399;
+      font-weight: normal;
+    }
   }
 }
 
@@ -1045,6 +869,7 @@ onUnmounted(() => {
 
 .judgment-section {
   margin-top: 15px;
+  margin-bottom: 15px;
   
   .judgment-row {
     display: flex;
@@ -1074,118 +899,6 @@ onUnmounted(() => {
   }
 }
 
-.page-footer {
-  flex-shrink: 0;
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: none;
-  
-  .signature-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 12px;
-    
-    .signature-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex: 1;
-      
-      .label {
-        font-weight: 500;
-        flex-shrink: 0;
-      }
-      
-      .signature-img {
-        object-fit: contain;
-      }
-      
-      :deep(.editable-field) {
-        min-width: 80px;
-        min-height: 1.5em;
-        flex-shrink: 0;
-      }
-    }
-  }
-  
-  .footer-note {
-    font-size: 9px;
-    
-    .footer-note-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      
-      .footer-note-item {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        
-        :deep(.editable-field) {
-          min-height: 1.5em;
-        }
-        
-        &.center {
-          justify-content: center;
-        }
-        
-        &.security-level-section {
-          justify-content: flex-end;
-          
-          :deep(.el-radio-group) {
-            display: flex;
-            gap: 8px;
-            
-            .el-radio {
-              margin-right: 0;
-              
-              .el-radio__label {
-                font-size: 9px;
-                padding-left: 4px;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-.page-break {
-  position: relative;
-  height: 30px;
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 210mm;
-  
-  &::before,
-  &::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: repeating-linear-gradient(
-      to right,
-      #dcdfe6,
-      #dcdfe6 5px,
-      transparent 5px,
-      transparent 10px
-    );
-  }
-  
-  .page-break-label {
-    padding: 0 15px;
-    color: #909399;
-    font-size: 12px;
-    background: #f5f7fa;
-    white-space: nowrap;
-  }
-}
-
-// Image section styles
 .image-headers {
   display: flex;
   gap: 10px;
@@ -1208,7 +921,6 @@ onUnmounted(() => {
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 15px;
-  page-break-inside: avoid;
   
   .image-row-content {
     flex: 1;
@@ -1221,34 +933,12 @@ onUnmounted(() => {
   }
 }
 
-.image-page-break {
-  margin: 20px 0;
-  padding-top: 20px;
-  border-top: 2px dashed #e4e7ed;
-  page-break-before: always;
-  
-  .page-break-marker {
-    text-align: center;
-    color: #909399;
-    font-size: 12px;
-    margin-bottom: 15px;
-  }
-  
-  .continued-header {
-    font-weight: 600;
-    font-size: 12px;
-    padding: 5px 0;
-    border-bottom: 1px solid #000;
-    margin-bottom: 8px;
-  }
-}
-
 .text-center {
   text-align: center;
 }
 
-// PDF export mode - hide UI controls
-.pdf-export-mode {
+// PDF export mode styles
+:deep(.pdf-export-mode) {
   .row-controls {
     display: none !important;
   }
@@ -1263,6 +953,10 @@ onUnmounted(() => {
   }
   
   .el-button--danger {
+    display: none !important;
+  }
+  
+  .page-number {
     display: none !important;
   }
 }

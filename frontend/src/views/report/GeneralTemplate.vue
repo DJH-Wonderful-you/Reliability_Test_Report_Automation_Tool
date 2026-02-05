@@ -209,21 +209,6 @@
                   <span v-if="region.isContinuation" class="continuation-mark">（续）</span>
                 </div>
                 
-                <!-- Row Controls (only on first occurrence) -->
-                <div v-if="!region.isContinuation" class="row-controls">
-                  <el-button size="small" type="primary" @click="addResultRow">
-                    <el-icon><Plus /></el-icon> 添加行
-                  </el-button>
-                  <el-input-number 
-                    v-model="batchAddCount" 
-                    :min="1" 
-                    :max="20" 
-                    size="small" 
-                    class="row-count-input"
-                  />
-                  <el-button size="small" @click="addResultRows(batchAddCount)">批量添加</el-button>
-                </div>
-                
                 <table class="result-table">
                   <colgroup>
                     <col :style="getColumnWidthStyle('resultTable', 0) || { width: '40px' }">
@@ -232,7 +217,6 @@
                     <col :style="getColumnWidthStyle('resultTable', 3)">
                     <col :style="getColumnWidthStyle('resultTable', 4)">
                     <col :style="getColumnWidthStyle('resultTable', 5)">
-                    <col style="width: 60px;">
                   </colgroup>
                   <thead>
                     <tr>
@@ -242,7 +226,6 @@
                       <th :style="getFieldStyle('otherHeader')" v-html="getLabelHtml('otherHeader', '其它性能检查')"></th>
                       <th :style="getFieldStyle('conclusionHeader')" v-html="getLabelHtml('conclusionHeader', '测试结论')"></th>
                       <th :style="getFieldStyle('noteHeader')" v-html="getLabelHtml('noteHeader', '备注')"></th>
-                      <th>操作</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -288,16 +271,6 @@
                           @update="updateResultRow(region.startIndex + index, 'note', $event)"
                         />
                       </td>
-                      <td class="text-center">
-                        <el-button 
-                          type="danger" 
-                          size="small" 
-                          circle
-                          @click="deleteResultRow(region.startIndex + index)"
-                        >
-                          <el-icon><Delete /></el-icon>
-                        </el-button>
-                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -331,21 +304,6 @@
                   <span v-if="region.isContinuation" class="continuation-mark">（续）</span>
                 </div>
                 
-                <!-- Row Controls (only on first occurrence) -->
-                <div v-if="!region.isContinuation" class="row-controls">
-                  <el-button size="small" type="primary" @click="addImageRow">
-                    <el-icon><Plus /></el-icon> 添加行
-                  </el-button>
-                  <el-input-number 
-                    v-model="batchImageAddCount" 
-                    :min="1" 
-                    :max="10" 
-                    size="small" 
-                    class="row-count-input"
-                  />
-                  <el-button size="small" @click="addImageRows(batchImageAddCount)">批量添加</el-button>
-                </div>
-                
                 <!-- Image Headers -->
                 <div class="image-headers">
                   <div class="image-header" :style="getFieldStyle('beforeTestLabel')" v-html="getLabelHtml('beforeTestLabel', '测试前')"></div>
@@ -373,16 +331,6 @@
                         @update="updateImages(region.startIndex + rowIndex, 'after', $event)"
                       />
                     </div>
-                    <div class="image-row-actions">
-                      <el-button 
-                        type="danger" 
-                        size="small" 
-                        circle
-                        @click="deleteImageRow(region.startIndex + rowIndex)"
-                      >
-                        <el-icon><Delete /></el-icon>
-                      </el-button>
-                    </div>
                   </div>
                 </template>
               </div>
@@ -408,7 +356,7 @@ import { usePagination, RegionType, createRegion } from '@/composables/usePagina
 import PageContainer from '@/components/report/PageContainer.vue'
 import EditableField from '@/components/report/EditableField.vue'
 import ImageUploader from '@/components/report/ImageUploader.vue'
-import { Plus, Delete } from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { ElMessage } from 'element-plus'
@@ -654,26 +602,16 @@ const updateResultRow = (index, field, value) => {
   reportStore.updateTestResultRow(index, field, value)
 }
 
-const deleteResultRow = (index) => {
-  reportStore.deleteTestResultRow(index)
-}
+
 
 // Image row handlers
-const addImageRow = () => {
-  reportStore.addTestImageRows(1)
-}
 
-const addImageRows = (count) => {
-  reportStore.addTestImageRows(count)
-}
 
 const updateImages = (rowIndex, position, images) => {
   reportStore.updateTestImage(rowIndex, position, images)
 }
 
-const deleteImageRow = (index) => {
-  reportStore.deleteTestImageRow(index)
-}
+
 
 // Load template settings
 const loadTemplateSettings = async () => {
@@ -710,12 +648,8 @@ const handleExportPdf = async () => {
         width: pages[i].offsetWidth,
         height: pages[i].offsetHeight,
         ignoreElements: (element) => {
-          return element.classList.contains('row-controls') ||
-                 element.classList.contains('image-row-actions') ||
-                 element.classList.contains('el-button--danger') ||
-                 element.classList.contains('page-break-indicator') ||
-                 element.closest('.row-controls') !== null ||
-                 element.closest('.image-row-actions') !== null
+          return element.classList.contains('el-button--danger') ||
+                 element.classList.contains('page-break-indicator')
         }
       })
       
@@ -949,19 +883,7 @@ onUnmounted(() => {
   }
 }
 
-.row-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding: 8px;
-  background: #f5f7fa;
-  border-radius: 4px;
-  
-  .row-count-input {
-    width: 80px;
-  }
-}
+
 
 .judgment-section {
   margin-top: 15px;
@@ -1036,10 +958,6 @@ onUnmounted(() => {
 // PDF export mode styles
 :deep(.pdf-export-mode) {
   .row-controls {
-    display: none !important;
-  }
-  
-  .image-row-actions {
     display: none !important;
   }
   

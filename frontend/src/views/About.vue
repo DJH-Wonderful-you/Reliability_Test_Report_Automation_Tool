@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.6（内部测试版）</p>
+        <p class="version">版本 V0.7（内部测试版）</p>
       </div>
       
       <el-divider />
@@ -24,7 +24,7 @@
             <div class="instruction-number">2</div>
             <div class="instruction-content">
               <h3>动态内容管理</h3>
-              <p>在测试结果和测试图片区域，可以根据实际需要添加或删除行数。支持批量添加多行。</p>
+              <p>在测试结果和测试图片区域，可以通过侧边栏进行行操作：末尾添加行、指定位置插入行、末尾删除行、指定位置删除行。支持批量操作和精确控制。</p>
             </div>
           </div>
           
@@ -73,11 +73,11 @@
           </div>
           <div class="info-item">
             <span class="info-label">开发日期</span>
-            <span class="info-value">2026年2月4日</span>
+            <span class="info-value">2026年2月5日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.6</span>
+            <span class="info-value">V0.7</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>

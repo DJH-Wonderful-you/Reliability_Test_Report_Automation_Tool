@@ -206,6 +206,25 @@ export const useReportStore = defineStore('report', () => {
     }
   }
 
+  // Batch delete test result rows
+  const batchDeleteTestResultRows = (indices) => {
+    if (indices.length >= testResultRows.value.length) {
+      ElMessage.warning('不能删除所有行，至少保留一行')
+      return
+    }
+    
+    // Sort indices in descending order to avoid index shifting
+    indices.sort((a, b) => b - a)
+    
+    for (const index of indices) {
+      if (index >= 0 && index < testResultRows.value.length) {
+        testResultRows.value.splice(index, 1)
+      }
+    }
+    isDirty.value = true
+    ElMessage.success(`已删除 ${indices.length} 行`)
+  }
+
   const addTestImageRows = (count = 1) => {
     const lastId = testImageRows.value.length > 0 
       ? Math.max(...testImageRows.value.map(r => r.id)) 
@@ -239,6 +258,25 @@ export const useReportStore = defineStore('report', () => {
     } catch {
       // User cancelled
     }
+  }
+
+  // Batch delete test image rows
+  const batchDeleteTestImageRows = (indices) => {
+    if (indices.length >= testImageRows.value.length) {
+      ElMessage.warning('不能删除所有行，至少保留一行')
+      return
+    }
+    
+    // Sort indices in descending order to avoid index shifting
+    indices.sort((a, b) => b - a)
+    
+    for (const index of indices) {
+      if (index >= 0 && index < testImageRows.value.length) {
+        testImageRows.value.splice(index, 1)
+      }
+    }
+    isDirty.value = true
+    ElMessage.success(`已删除 ${indices.length} 行`)
   }
 
   const updateTestImage = (rowIndex, position, images) => {
@@ -568,8 +606,10 @@ export const useReportStore = defineStore('report', () => {
     updateTestResultRow,
     addTestResultRows,
     deleteTestResultRow,
+    batchDeleteTestResultRows,
     addTestImageRows,
     deleteTestImageRow,
+    batchDeleteTestImageRows,
     updateTestImage,
     selectField,
     clearSelection,

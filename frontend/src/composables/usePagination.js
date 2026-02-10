@@ -225,7 +225,7 @@ export function usePagination() {
           height: (rowsInFirstPart * rowHeight) + (region.isContinuation ? 0 : headerHeight),
           startIndex: currentStart,
           endIndex: endIndex,
-          isContinuation: region.isContinuation
+          isContinuation: region.isContinuation  // 第一部分保持原始的isContinuation值
         })
         currentStart = endIndex
       }

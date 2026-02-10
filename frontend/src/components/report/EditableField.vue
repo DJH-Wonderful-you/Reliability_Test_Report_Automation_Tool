@@ -54,7 +54,7 @@ const props = defineProps({
   },
   textAlign: {
     type: String,
-    default: 'center'
+    default: 'left'
   }
 })
 
@@ -77,7 +77,7 @@ const placeholderFormat = ref({
   fontWeight: 'normal',
   fontStyle: 'italic',
   textDecoration: 'none',
-  textAlign: 'left'
+  textAlign: props.textAlign || 'center'  // Default to passed textAlign prop or center
 })
 
 // User-modified format state (only for actual content styling in report editor)
@@ -199,12 +199,13 @@ const handleBlur = () => {
     nextTick(() => {
       if (fieldRef.value && !isFocused.value) {
         fieldRef.value.innerHTML = textToHtml(props.placeholder)
-        // Apply placeholder style from placeholderFormat
+        // Apply placeholder style from placeholderFormat including textAlign
         Object.assign(fieldRef.value.style, {
           color: placeholderFormat.value.color,
           fontStyle: placeholderFormat.value.fontStyle,
           fontWeight: placeholderFormat.value.fontWeight,
-          textDecoration: placeholderFormat.value.textDecoration
+          textDecoration: placeholderFormat.value.textDecoration,
+          textAlign: placeholderFormat.value.textAlign
         })
       }
     })
@@ -279,12 +280,13 @@ watch(() => props.value, (newValue, oldValue) => {
       setContent(newValue)
     } else {
       setContent(props.placeholder)
-      // Apply placeholder style from placeholderFormat
+      // Apply placeholder style from placeholderFormat including textAlign
       Object.assign(fieldRef.value.style, {
         color: placeholderFormat.value.color,
         fontStyle: placeholderFormat.value.fontStyle,
         fontWeight: placeholderFormat.value.fontWeight,
-        textDecoration: placeholderFormat.value.textDecoration
+        textDecoration: placeholderFormat.value.textDecoration,
+        textAlign: placeholderFormat.value.textAlign
       })
     }
   }
@@ -304,7 +306,11 @@ onMounted(() => {
     if (savedFormat.fontWeight) placeholderFormat.value.fontWeight = savedFormat.fontWeight
     if (savedFormat.fontStyle) placeholderFormat.value.fontStyle = savedFormat.fontStyle
     if (savedFormat.textDecoration) placeholderFormat.value.textDecoration = savedFormat.textDecoration
-    if (savedFormat.textAlign) placeholderFormat.value.textAlign = savedFormat.textAlign
+    // Use saved textAlign or fall back to component's default
+    placeholderFormat.value.textAlign = savedFormat.textAlign || props.textAlign
+  } else {
+    // No saved format - use defaults with component's textAlign setting
+    placeholderFormat.value.textAlign = props.textAlign
   }
   
   // Set initial content
@@ -330,7 +336,7 @@ const defaultPlaceholderStyle = {
   fontWeight: 'normal',
   fontStyle: 'italic',
   textDecoration: 'none',
-  textAlign: 'left'
+  textAlign: props.textAlign || 'left'  // Use passed textAlign or left as default
 }
 
 // Default template format values
@@ -353,7 +359,8 @@ watch(
         placeholderFormat.value.fontWeight = newFormat.fontWeight || defaultPlaceholderStyle.fontWeight
         placeholderFormat.value.fontStyle = newFormat.fontStyle || defaultPlaceholderStyle.fontStyle
         placeholderFormat.value.textDecoration = newFormat.textDecoration || defaultPlaceholderStyle.textDecoration
-        placeholderFormat.value.textAlign = newFormat.textAlign || defaultPlaceholderStyle.textAlign
+        // Use newFormat textAlign or fall back to component's default
+        placeholderFormat.value.textAlign = newFormat.textAlign || props.textAlign
       } else {
         // No format found - reset to defaults (template was reset)
         templateFormat.value.fontFamily = props.fontFamily || defaultTemplateFormat.fontFamily
@@ -362,7 +369,8 @@ watch(
         placeholderFormat.value.fontWeight = defaultPlaceholderStyle.fontWeight
         placeholderFormat.value.fontStyle = defaultPlaceholderStyle.fontStyle
         placeholderFormat.value.textDecoration = defaultPlaceholderStyle.textDecoration
-        placeholderFormat.value.textAlign = defaultPlaceholderStyle.textAlign
+        // Reset to component's textAlign setting
+        placeholderFormat.value.textAlign = props.textAlign
       }
       
       // If showing placeholder, update DOM style
@@ -371,7 +379,8 @@ watch(
           color: placeholderFormat.value.color,
           fontStyle: placeholderFormat.value.fontStyle,
           fontWeight: placeholderFormat.value.fontWeight,
-          textDecoration: placeholderFormat.value.textDecoration
+          textDecoration: placeholderFormat.value.textDecoration,
+          textAlign: placeholderFormat.value.textAlign  // Apply textAlign to DOM
         })
       }
     }

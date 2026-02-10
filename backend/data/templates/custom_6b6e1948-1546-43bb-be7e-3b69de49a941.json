@@ -1,5 +1,5 @@
 {
-  "id": "6d6b4b60-0d73-4436-bb4e-c28d9509eba5",
+  "id": "6b6e1948-1546-43bb-be7e-3b69de49a941",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
-    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    }
+    },
+    "size": 100
   },
   "signatures": {
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,34 +31,47 @@
       "dataUrl": null,
       "size": 15
     },
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "size": 120,
+    "opacity": 0.3,
     "position": {
       "x": 400,
       "y": 650
     },
-    "opacity": 0.3
+    "size": 120
   },
   "templateContentData": {
     "companyName": "",
-    "reportTitle": "",
-    "recordCode": "",
     "placeholders": {
-      "tester": "测试员姓名"
-    }
+      "testProject": "请输入测试项目",
+      "testConclusion": "请输入测试结论",
+      "testStandard": "请输入测试标准...",
+      "judgmentStandard": "请输入判定标准...",
+      "judgmentResult": "请输入判定结果...",
+      "tester": "测试员姓名",
+      "reviewer": "审核人姓名",
+      "saveDept": "部门",
+      "reportNumber": "请输入报告编号",
+      "customer": "请输入客户名称",
+      "department": "请输入委托部门",
+      "sampleStage": "请输入样品阶段",
+      "projectName": "请输入项目名称"
+    },
+    "recordCode": "",
+    "reportTitle": "",
+    "beforeTestLabel": "测试前"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "infoTable": [],
-    "sampleTable": [],
     "equipmentTable": [],
-    "resultTable": []
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
   },
   "fieldFormats": {
     "tester": {
@@ -68,10 +81,9 @@
       "fontWeight": "normal",
       "fontStyle": "italic",
       "textDecoration": "none",
-      "textAlign": "right"
+      "textAlign": "left"
     }
   },
-  "createdAt": "2026-02-10T19:40:54.102503",
-  "updatedAt": "2026-02-10T19:41:03.460558",
-  "appliedAt": "2026-02-10T19:41:03.481636"
+  "createdAt": "2026-02-06T13:48:53.812271",
+  "updatedAt": "2026-02-06T15:23:59.755660"
 }

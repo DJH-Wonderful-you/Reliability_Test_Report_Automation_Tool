@@ -185,6 +185,7 @@ export const useReportStore = defineStore('report', () => {
       })
     }
     isDirty.value = true
+    scheduleAutoSave()
   }
 
   const deleteTestResultRow = async (rowIndex) => {
@@ -239,6 +240,7 @@ export const useReportStore = defineStore('report', () => {
       })
     }
     isDirty.value = true
+    scheduleAutoSave()
   }
 
   const deleteTestImageRow = async (rowIndex) => {

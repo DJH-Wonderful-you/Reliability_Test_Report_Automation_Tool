@@ -47,6 +47,75 @@ const router = useRouter()
 const route = useRoute()
 
 const versionsData = {
+  'v0.9': {
+    version: 'V0.9',
+    title: '表格文本对齐优化',
+    date: '2026年2月10日',
+    type: 'warning',
+    tag: '内部测试版',
+    sections: [
+      {
+        title: '功能优化',
+        items: [
+          '统一模板编辑和报告编辑界面中表格内可编辑文本框的占位符文本对齐方式为居中对齐',
+          '修复报告编辑界面中表格占位符文本未继承模板对齐设置的问题',
+          '确保模板编辑界面的对齐样式修改能正确同步到报告编辑界面',
+          '优化占位符文本样式继承机制，实现真正的模板-报告一致性'
+        ]
+      },
+      {
+        title: '缺陷修复',
+        items: [
+          '修复 EditableField 组件中 placeholderFormat 对象定义语法错误',
+          '修复报告编辑界面表格内文本框占位符文本默认对齐方式不正确的问题',
+          '修复模板编辑界面修改对齐样式后报告编辑界面未同步更新的问题'
+        ]
+      },
+      {
+        title: '技术实现',
+        items: [
+          '在 report/GeneralTemplate.vue 中为所有表格内 EditableField 组件添加 :text-align="getFieldAlign(\'fieldName\')" 属性',
+          '新增 getFieldAlign 方法从 fieldFormats 获取字段对齐设置',
+          '完善 EditableField 组件的样式继承逻辑，确保占位符文本正确响应模板设置',
+          '修复 JavaScript 对象定义语法错误，确保组件正常编译'
+        ]
+      }
+    ]
+  },
+  'v0.8': {
+    version: 'V0.8',
+    title: '稳定性与体验优化',
+    date: '2026年2月6日',
+    type: 'warning',
+    tag: '内部测试版',
+    sections: [
+      {
+        title: '界面显示修复',
+        items: [
+          '修复"测试条件"小标题样式不一致的问题',
+          '统一各区域标题的显示效果和间距',
+          '确保所有小标题具有相同的视觉层级和布局'
+        ]
+      },
+      {
+        title: '自动保存优化',
+        items: [
+          '修复新增行无法自动保存的缺陷',
+          '优化自动保存机制，确保空白行也能被正确保存',
+          '改善用户体验，减少因刷新导致的数据丢失问题',
+          '提升数据持久化可靠性'
+        ]
+      },
+      {
+        title: '技术实现',
+        items: [
+          '在 addTestResultRows 和 addTestImageRows 方法中添加 scheduleAutoSave() 调用',
+          '统一行操作的自动保存行为',
+          '优化数据状态管理和变更检测机制'
+        ]
+      }
+    ]
+  },
   'v0.7': {
     version: 'V0.7',
     title: '行操作界面优化',
@@ -98,8 +167,8 @@ const versionsData = {
       {
         title: '分页逻辑重构',
         items: [
-          '拆分“测试条件”区域为三个独立可分页元素：测试条件标题、测试标准、判定标准',
-          '当“测试标准”内容过多时，只有该文本框移到下一页，“判定标准”保留在原页面（如果空间足够）',
+          '拆分"测试条件"区域为三个独立可分页元素：测试条件标题、测试标准、判定标准',
+          '当"测试标准"内容过多时，只有该文本框移到下一页，"判定标准"保留在原页面（如果空间足够）',
           '每个子元素独立计算高度，实现更精细的页面空间利用',
           '新增 testConditionsHeader、testStandard、judgmentStandard 区域类型'
         ]

@@ -46,6 +46,7 @@
                         :placeholder="getPlaceholder('testProject', '请输入测试项目')"
                         :value="content.testProject"
                         @update="updateField('testProject', $event)"
+                        :text-align="getFieldAlign('testProject')"
                       />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('testConclusionLabel')" v-html="getLabelHtml('testConclusionLabel', '测试结论')"></td>
@@ -55,6 +56,7 @@
                         :placeholder="getPlaceholder('testConclusion', '请输入测试结论')"
                         :value="content.testConclusion"
                         @update="updateField('testConclusion', $event)"
+                        :text-align="getFieldAlign('testConclusion')"
                       />
                     </td>
                   </tr>
@@ -78,49 +80,49 @@
                   <tr>
                     <td class="label-cell" :style="getFieldStyle('customerLabel')" v-html="getLabelHtml('customerLabel', '客户')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="customer" :placeholder="getPlaceholder('customer', '请输入客户名称')" :value="content.customer" @update="updateField('customer', $event)" />
+                      <EditableField field-id="customer" :placeholder="getPlaceholder('customer', '请输入客户名称')" :value="content.customer" @update="updateField('customer', $event)" :text-align="getFieldAlign('customer')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('departmentLabel')" v-html="getLabelHtml('departmentLabel', '委托部门')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="department" :placeholder="getPlaceholder('department', '请输入委托部门')" :value="content.department" @update="updateField('department', $event)" />
+                      <EditableField field-id="department" :placeholder="getPlaceholder('department', '请输入委托部门')" :value="content.department" @update="updateField('department', $event)" :text-align="getFieldAlign('department')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('sampleCountLabel')" v-html="getLabelHtml('sampleCountLabel', '样品数量')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="sampleCount" :placeholder="getPlaceholder('sampleCount', '数量')" :value="content.sampleCount" @update="updateField('sampleCount', $event)" />
+                      <EditableField field-id="sampleCount" :placeholder="getPlaceholder('sampleCount', '数量')" :value="content.sampleCount" @update="updateField('sampleCount', $event)" :text-align="getFieldAlign('sampleCount')" />
                     </td>
                   </tr>
                   <tr>
                     <td class="label-cell" :style="getFieldStyle('projectNameLabel')" v-html="getLabelHtml('projectNameLabel', '项目名称')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="projectName" :placeholder="getPlaceholder('projectName', '请输入项目名称')" :value="content.projectName" @update="updateField('projectName', $event)" />
+                      <EditableField field-id="projectName" :placeholder="getPlaceholder('projectName', '请输入项目名称')" :value="content.projectName" @update="updateField('projectName', $event)" :text-align="getFieldAlign('projectName')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('requesterLabel')" v-html="getLabelHtml('requesterLabel', '委托人员')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="requester" :placeholder="getPlaceholder('requester', '请输入委托人员')" :value="content.requester" @update="updateField('requester', $event)" />
+                      <EditableField field-id="requester" :placeholder="getPlaceholder('requester', '请输入委托人员')" :value="content.requester" @update="updateField('requester', $event)" :text-align="getFieldAlign('requester')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('startTimeLabel')" v-html="getLabelHtml('startTimeLabel', '开始时间')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="startTime" :placeholder="getPlaceholder('startTime', '开始时间')" :value="content.startTime" @update="updateField('startTime', $event)" />
+                      <EditableField field-id="startTime" :placeholder="getPlaceholder('startTime', '开始时间')" :value="content.startTime" @update="updateField('startTime', $event)" :text-align="getFieldAlign('startTime')" />
                     </td>
                   </tr>
                   <tr>
                     <td class="label-cell" :style="getFieldStyle('productNameLabel')" v-html="getLabelHtml('productNameLabel', '产品名称')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="productName" :placeholder="getPlaceholder('productName', '请输入产品名称')" :value="content.productName" @update="updateField('productName', $event)" />
+                      <EditableField field-id="productName" :placeholder="getPlaceholder('productName', '请输入产品名称')" :value="content.productName" @update="updateField('productName', $event)" :text-align="getFieldAlign('productName')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('sampleStageLabel')" v-html="getLabelHtml('sampleStageLabel', '样品阶段')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="sampleStage" :placeholder="getPlaceholder('sampleStage', '请输入样品阶段')" :value="content.sampleStage" @update="updateField('sampleStage', $event)" />
+                      <EditableField field-id="sampleStage" :placeholder="getPlaceholder('sampleStage', '请输入样品阶段')" :value="content.sampleStage" @update="updateField('sampleStage', $event)" :text-align="getFieldAlign('sampleStage')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('endTimeLabel')" v-html="getLabelHtml('endTimeLabel', '完成时间')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="endTime" :placeholder="getPlaceholder('endTime', '完成时间')" :value="content.endTime" @update="updateField('endTime', $event)" />
+                      <EditableField field-id="endTime" :placeholder="getPlaceholder('endTime', '完成时间')" :value="content.endTime" @update="updateField('endTime', $event)" :text-align="getFieldAlign('endTime')" />
                     </td>
                   </tr>
                   <tr>
                     <td class="label-cell" :style="getFieldStyle('testPurposeLabel')" v-html="getLabelHtml('testPurposeLabel', '测试目的')"></td>
                     <td class="editable-cell" colspan="5">
-                      <EditableField field-id="testPurpose" :placeholder="getPlaceholder('testPurpose', '请输入测试目的')" :value="content.testPurpose" @update="updateField('testPurpose', $event)" />
+                      <EditableField field-id="testPurpose" :placeholder="getPlaceholder('testPurpose', '请输入测试目的')" :value="content.testPurpose" @update="updateField('testPurpose', $event)" :text-align="getFieldAlign('testPurpose')" />
                     </td>
                   </tr>
                 </table>
@@ -143,15 +145,15 @@
                   <tr>
                     <td class="label-cell" :style="getFieldStyle('testEquipmentLabel')" v-html="getLabelHtml('testEquipmentLabel', '测试设备')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="testEquipment" :placeholder="getPlaceholder('testEquipment', '请输入测试设备')" :value="content.testEquipment" @update="updateField('testEquipment', $event)" />
+                      <EditableField field-id="testEquipment" :placeholder="getPlaceholder('testEquipment', '请输入测试设备')" :value="content.testEquipment" @update="updateField('testEquipment', $event)" :text-align="getFieldAlign('testEquipment')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('equipmentModelLabel')" v-html="getLabelHtml('equipmentModelLabel', '设备型号')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="equipmentModel" :placeholder="getPlaceholder('equipmentModel', '请输入设备型号')" :value="content.equipmentModel" @update="updateField('equipmentModel', $event)" />
+                      <EditableField field-id="equipmentModel" :placeholder="getPlaceholder('equipmentModel', '请输入设备型号')" :value="content.equipmentModel" @update="updateField('equipmentModel', $event)" :text-align="getFieldAlign('equipmentModel')" />
                     </td>
                     <td class="label-cell" :style="getFieldStyle('calibrationDateLabel')" v-html="getLabelHtml('calibrationDateLabel', '校准日期')"></td>
                     <td class="editable-cell">
-                      <EditableField field-id="calibrationDate" :placeholder="getPlaceholder('calibrationDate', '校准日期')" :value="content.calibrationDate" @update="updateField('calibrationDate', $event)" />
+                      <EditableField field-id="calibrationDate" :placeholder="getPlaceholder('calibrationDate', '校准日期')" :value="content.calibrationDate" @update="updateField('calibrationDate', $event)" :text-align="getFieldAlign('calibrationDate')" />
                     </td>
                   </tr>
                 </table>
@@ -160,7 +162,9 @@
             
             <!-- Test Conditions Header -->
             <template v-if="region.type === 'testConditionsHeader'">
-              <div class="section-header" data-section="testConditionsHeader" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
+              <div class="section">
+                <div class="section-header" data-section="testConditionsHeader" :style="getFieldStyle('testConditionsHeader')" v-html="getLabelHtml('testConditionsHeader', '测试条件')"></div>
+              </div>
             </template>
             
             <!-- Test Standard Section -->
@@ -206,7 +210,7 @@
               <div class="section">
                 <div class="section-header" :style="getFieldStyle('testResultsHeader')">
                   <span v-html="getLabelHtml('testResultsHeader', '测试结果信息')"></span>
-                  <span v-if="region.isContinuation" class="continuation-mark">（续）</span>
+                  <span v-if="shouldShowContinuationMark(region, 'testResults')" class="continuation-mark">（续）</span>
                 </div>
                 
                 <table class="result-table">
@@ -237,6 +241,7 @@
                           :placeholder="getPlaceholder('appearance', '外观检查结果')"
                           :value="row.appearance"
                           @update="updateResultRow(region.startIndex + index, 'appearance', $event)"
+                          :text-align="getFieldAlign('appearance')"
                         />
                       </td>
                       <td class="editable-cell">
@@ -245,6 +250,7 @@
                           :placeholder="getPlaceholder('function', '功能检查结果')"
                           :value="row.function"
                           @update="updateResultRow(region.startIndex + index, 'function', $event)"
+                          :text-align="getFieldAlign('function')"
                         />
                       </td>
                       <td class="editable-cell">
@@ -253,6 +259,7 @@
                           :placeholder="getPlaceholder('other', '其它性能')"
                           :value="row.other"
                           @update="updateResultRow(region.startIndex + index, 'other', $event)"
+                          :text-align="getFieldAlign('other')"
                         />
                       </td>
                       <td class="editable-cell">
@@ -261,6 +268,7 @@
                           :placeholder="getPlaceholder('conclusion', '结论')"
                           :value="row.conclusion"
                           @update="updateResultRow(region.startIndex + index, 'conclusion', $event)"
+                          :text-align="getFieldAlign('conclusion')"
                         />
                       </td>
                       <td class="editable-cell">
@@ -269,6 +277,7 @@
                           :placeholder="getPlaceholder('note', '备注')"
                           :value="row.note"
                           @update="updateResultRow(region.startIndex + index, 'note', $event)"
+                          :text-align="getFieldAlign('note')"
                         />
                       </td>
                     </tr>
@@ -301,7 +310,7 @@
               <div class="section">
                 <div class="section-header" :style="getFieldStyle('testImagesHeader')">
                   <span v-html="getLabelHtml('testImagesHeader', '测试图片')"></span>
-                  <span v-if="region.isContinuation" class="continuation-mark">（续）</span>
+                  <span v-if="shouldShowContinuationMark(region, 'testImages')" class="continuation-mark">（续）</span>
                 </div>
                 
                 <!-- Image Headers -->
@@ -543,6 +552,41 @@ const getImageRowsForRegion = (region) => {
   return reportStore.testImageRows.slice(startIdx, endIdx)
 }
 
+// Determine if continuation mark should be shown for a region
+const shouldShowContinuationMark = (region, regionType) => {
+  // For test images, only show continuation mark if:
+  // 1. It's actually a continuation (isContinuation is true)
+  // 2. It's not the first occurrence of this region type on the page
+  if (!region.isContinuation) {
+    return false
+  }
+  
+  // Check if this is the first occurrence of testImages on this page
+  // by looking at the page index and region index
+  const currentPageIndex = paginatedPages.value.findIndex(page => 
+    page.regions.some(r => r === region)
+  )
+  
+  if (currentPageIndex === -1) return false
+  
+  const currentPage = paginatedPages.value[currentPageIndex]
+  const regionIndexOnPage = currentPage.regions.findIndex(r => r === region)
+  
+  // Find the first occurrence of this region type on or before this page
+  let firstOccurrencePageIndex = -1
+  for (let i = 0; i <= currentPageIndex; i++) {
+    const page = paginatedPages.value[i]
+    const hasRegion = page.regions.some(r => r.type === regionType)
+    if (hasRegion) {
+      firstOccurrencePageIndex = i
+      break
+    }
+  }
+  
+  // Show continuation mark only if this is not the first occurrence
+  return firstOccurrencePageIndex !== currentPageIndex
+}
+
 // Get style for a field from fieldFormats
 const getFieldStyle = (fieldId) => {
   const format = reportStore.getFieldFormat(fieldId)
@@ -557,6 +601,12 @@ const getFieldStyle = (fieldId) => {
     ...(format.textDecoration && { textDecoration: format.textDecoration }),
     ...(format.textAlign && { textAlign: format.textAlign })
   }
+}
+
+// Helper to get field alignment from template settings
+const getFieldAlign = (fieldId) => {
+  const format = reportStore.getFieldFormat(fieldId)
+  return format?.textAlign || 'center'  // Default to center alignment
 }
 
 // Helper to get template label as HTML

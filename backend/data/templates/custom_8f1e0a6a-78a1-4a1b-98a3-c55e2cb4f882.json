@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
-    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    }
+    },
+    "size": 100
   },
   "signatures": {
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,34 +31,45 @@
       "dataUrl": null,
       "size": 15
     },
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "size": 120,
+    "opacity": 0.3,
     "position": {
       "x": 400,
       "y": 650
     },
-    "opacity": 0.3
+    "size": 120
   },
   "templateContentData": {
     "companyName": "",
-    "reportTitle": "",
+    "placeholders": {},
     "recordCode": "",
-    "placeholders": {}
+    "reportTitle": "",
+    "testConditionsHeader": "测试条件"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "infoTable": [],
-    "sampleTable": [],
     "equipmentTable": [],
-    "resultTable": []
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
   },
-  "fieldFormats": {},
+  "fieldFormats": {
+    "testConditionsHeader": {
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 14,
+      "color": "#000000",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "start"
+    }
+  },
   "createdAt": "2026-02-05T14:39:26.043609",
-  "updatedAt": "2026-02-05T14:39:26.817476"
+  "updatedAt": "2026-02-06T13:48:48.724086"
 }

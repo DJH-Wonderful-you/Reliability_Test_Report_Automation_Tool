@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.7（内部测试版）</p>
+        <p class="version">版本 V0.9（内部测试版）</p>
       </div>
       
       <el-divider />
@@ -73,11 +73,11 @@
           </div>
           <div class="info-item">
             <span class="info-label">开发日期</span>
-            <span class="info-value">2026年2月5日</span>
+            <span class="info-value">2026年2月10日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.7</span>
+            <span class="info-value">V0.9</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>

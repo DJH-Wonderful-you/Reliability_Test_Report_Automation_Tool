@@ -46,8 +46,8 @@
     "opacity": 0.3
   },
   "templateContentData": {
-    "companyName": "",
-    "reportTitle": "",
+    "companyName": "深圳市欣威智能有限公司",
+    "reportTitle": "可靠性实验报告",
     "recordCode": "",
     "placeholders": {
       "tester": "测试员姓名"
@@ -72,6 +72,5 @@
     }
   },
   "createdAt": "2026-02-10T19:40:54.102503",
-  "updatedAt": "2026-02-10T19:41:03.460558",
-  "appliedAt": "2026-02-10T19:41:03.481636"
+  "updatedAt": "2026-02-10T19:44:18.172765"
 }

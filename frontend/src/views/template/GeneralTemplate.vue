@@ -844,7 +844,7 @@ onUnmounted(() => {
   border: none;
   background: transparent;
   font-style: italic;
-  text-align: left;
+  text-align: center;
   box-sizing: border-box;
   display: block;
   white-space: pre-wrap;

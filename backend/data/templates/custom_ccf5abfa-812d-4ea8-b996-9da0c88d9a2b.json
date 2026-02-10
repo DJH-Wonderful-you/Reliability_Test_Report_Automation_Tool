@@ -1,5 +1,5 @@
 {
-  "id": "6d6b4b60-0d73-4436-bb4e-c28d9509eba5",
+  "id": "ccf5abfa-812d-4ea8-b996-9da0c88d9a2b",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
-    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    }
+    },
+    "size": 100
   },
   "signatures": {
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,47 +31,62 @@
       "dataUrl": null,
       "size": 15
     },
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "size": 120,
+    "opacity": 0.3,
     "position": {
       "x": 400,
       "y": 650
     },
-    "opacity": 0.3
+    "size": 120
   },
   "templateContentData": {
     "companyName": "",
-    "reportTitle": "",
-    "recordCode": "",
+    "judgmentResultLabel": "判定结果",
+    "judgmentStandardLabel": "判定标准",
     "placeholders": {
-      "tester": "测试员姓名"
-    }
+      "judgmentResult": "请输入判定结果...",
+      "saveDept": "部门",
+      "tester": "测试员姓名",
+      "testEquipment": "请输入测试设备"
+    },
+    "recordCode": "",
+    "reportNumberLabel": "报告编号：",
+    "reportTitle": "",
+    "testStandardLabel": "测试标准"
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "infoTable": [],
-    "sampleTable": [],
     "equipmentTable": [],
-    "resultTable": []
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
   },
   "fieldFormats": {
     "tester": {
+      "color": "#999999",
       "fontFamily": "Microsoft YaHei",
       "fontSize": 12,
+      "fontStyle": "italic",
+      "fontWeight": "normal",
+      "textAlign": "right",
+      "textDecoration": "none"
+    },
+    "testEquipment": {
+      "fontFamily": "FangSong",
+      "fontSize": 14,
       "color": "#999999",
       "fontWeight": "normal",
       "fontStyle": "italic",
       "textDecoration": "none",
-      "textAlign": "right"
+      "textAlign": "center"
     }
   },
-  "createdAt": "2026-02-10T19:40:54.102503",
-  "updatedAt": "2026-02-10T19:41:03.460558",
-  "appliedAt": "2026-02-10T19:41:03.481636"
+  "createdAt": "2026-02-10T17:03:10.701355",
+  "updatedAt": "2026-02-10T19:21:10.368270"
 }

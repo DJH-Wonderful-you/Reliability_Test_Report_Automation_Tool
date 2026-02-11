@@ -299,7 +299,7 @@ const getPlaceholder = (key, defaultValue) => {
 .page-footer {
   flex-shrink: 0;
   margin-top: auto;
-  padding-top: 15px;
+  padding-top: 5px;
   position: relative;
   
   .signature-row {

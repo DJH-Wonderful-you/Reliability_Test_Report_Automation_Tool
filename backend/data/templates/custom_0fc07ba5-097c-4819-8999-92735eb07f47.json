@@ -1,5 +1,5 @@
 {
-  "id": "6d6b4b60-0d73-4436-bb4e-c28d9509eba5",
+  "id": "0fc07ba5-097c-4819-8999-92735eb07f47",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
+    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    },
-    "size": 100
+    }
   },
   "signatures": {
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,46 +31,44 @@
       "dataUrl": null,
       "size": 15
     },
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "opacity": 0.3,
+    "size": 120,
     "position": {
       "x": 400,
       "y": 650
     },
-    "size": 120
+    "opacity": 0.3
   },
   "templateContentData": {
-    "companyName": "深圳市欣威智能有限公司",
-    "placeholders": {
-      "tester": "测试员姓名"
-    },
+    "companyName": "",
+    "reportTitle": "",
     "recordCode": "",
-    "reportTitle": "可靠性实验报告"
+    "placeholders": {}
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "equipmentTable": [],
     "infoTable": [],
-    "resultTable": [],
-    "sampleTable": []
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
   },
   "fieldFormats": {
     "tester": {
-      "color": "#999999",
       "fontFamily": "Microsoft YaHei",
       "fontSize": 12,
-      "fontStyle": "italic",
+      "color": "#999999",
       "fontWeight": "normal",
-      "textAlign": "left",
-      "textDecoration": "none"
+      "fontStyle": "italic",
+      "textDecoration": "none",
+      "textAlign": "right"
     }
   },
-  "createdAt": "2026-02-10T19:40:54.102503",
-  "updatedAt": "2026-02-10T20:29:25.886688"
+  "createdAt": "2026-02-10T20:29:27.835064",
+  "updatedAt": "2026-02-10T20:29:29.013195"
 }

@@ -35,7 +35,7 @@ const HEADER_HEIGHT_PX = 75
 
 // Footer height in pixels (measured from PageContainer: signatures, notes, page number)
 // .signature-row(~35px) + margin(10px) + .footer-note(~25px) + .page-number(~25px with margins) ≈ 95px
-const FOOTER_HEIGHT_PX = 95
+const FOOTER_HEIGHT_PX = 60
 
 // Usable content height per page - uniform for all pages
 // Total A4 height minus padding, header, footer, and a balanced safety buffer

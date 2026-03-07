@@ -307,7 +307,7 @@
             
             <!-- Test Images Section -->
             <template v-if="region.type === 'testImages'">
-              <div class="section">
+              <div class="section" data-section="testImages">
                 <div class="section-header" :style="getFieldStyle('testImagesHeader')">
                   <span v-html="getLabelHtml('testImagesHeader', '测试图片')"></span>
                   <span v-if="shouldShowContinuationMark(region, 'testImages')" class="continuation-mark">（续）</span>
@@ -402,6 +402,7 @@ const content = computed(() => reportStore.content)
 
 // Template content data
 const templateContentData = computed(() => reportStore.templateSettings.templateContentData || {})
+const imagePositions = ['before', 'during', 'after']
 
 // Height constants for splittable sections
 const SECTION_HEADER_HEIGHT = 28
@@ -513,14 +514,16 @@ const contentRegions = computed(() => {
   regions.push(createRegion(RegionType.JUDGMENT_RESULT, heights.judgmentResult))
   
   // Test Images section (splittable)
-  const imageRows = reportStore.testImageRows
-  const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT)
-  regions.push(createRegion(
-    RegionType.TEST_IMAGES, 
-    imagesSectionHeight, 
-    { rows: imageRows, rowHeight: IMAGE_ROW_HEIGHT },
-    true // splittable
-  ))
+  const imageRows = getImageRowsForCurrentMode()
+  if (imageRows.length > 0 || !isExportMode.value) {
+    const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT)
+    regions.push(createRegion(
+      RegionType.TEST_IMAGES, 
+      imagesSectionHeight, 
+      { rows: imageRows, rowHeight: IMAGE_ROW_HEIGHT },
+      true // splittable
+    ))
+  }
   
   return regions
 })
@@ -543,13 +546,46 @@ const getResultRowsForRegion = (region) => {
   return reportStore.testResultRows.slice(startIdx, endIdx)
 }
 
+const rowHasAnyImage = (row) => {
+  if (!row) return false
+
+  return imagePositions.some((position) => {
+    const images = row[position]
+    if (!Array.isArray(images)) return false
+
+    return images.some((img) => {
+      if (!img) return false
+      if (typeof img === 'string') {
+        return img.trim().length > 0
+      }
+      return typeof img.dataUrl === 'string' && img.dataUrl.trim().length > 0
+    })
+  })
+}
+
+const getImageRowsForCurrentMode = () => {
+  const allRows = reportStore.testImageRows || []
+  if (!isExportMode.value) {
+    return allRows
+  }
+
+  // Export ignores trailing empty rows, which otherwise create blank PDF pages.
+  const lastFilledIndex = allRows.map(rowHasAnyImage).lastIndexOf(true)
+  if (lastFilledIndex === -1) {
+    return []
+  }
+
+  return allRows.slice(0, lastFilledIndex + 1)
+}
+
 // Get image rows for a specific region
 const getImageRowsForRegion = (region) => {
+  const sourceRows = getImageRowsForCurrentMode()
   const startIdx = region.startIndex || 0
   const endIdx = region.endIndex !== null && region.endIndex !== undefined 
     ? region.endIndex 
-    : reportStore.testImageRows.length
-  return reportStore.testImageRows.slice(startIdx, endIdx)
+    : sourceRows.length
+  return sourceRows.slice(startIdx, endIdx)
 }
 
 // Determine if continuation mark should be shown for a region
@@ -672,7 +708,7 @@ const loadTemplateSettings = async () => {
 }
 
 // PDF Export handler - now handles multiple pages
-const handleExportPdf = async () => {
+const exportPdfAsRasterFallback = async () => {
   try {
     ElMessage.info('正在生成PDF，请稍候...')
     
@@ -722,6 +758,281 @@ const handleExportPdf = async () => {
     console.error('PDF export error:', error)
     isExportMode.value = false
     ElMessage.error('PDF导出失败：' + error.message)
+  }
+}
+
+const VECTOR_EXPORT_REMOVE_SELECTORS = [
+  '.row-controls',
+  '.image-row-actions',
+  '.page-break-indicator',
+  '.page-number',
+  '.el-button--danger',
+  '.image-actions',
+  '.add-more',
+  'input[type="file"]'
+].join(',')
+
+const getExportFileInfo = () => {
+  const rawTitle = String(content.value.testProject || '可靠性测试报告')
+  const safeTitle = rawTitle.replace(/[\\/:*?"<>|]/g, '_').trim() || '可靠性测试报告'
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+  return {
+    title: safeTitle,
+    filename: `${safeTitle}_${date}.pdf`
+  }
+}
+
+const prepareCloneForVectorExport = (node) => {
+  if (node.classList?.contains('pdf-export-mode')) {
+    node.classList.remove('pdf-export-mode')
+  }
+
+  node.querySelectorAll(VECTOR_EXPORT_REMOVE_SELECTORS).forEach((el) => el.remove())
+
+  // Prevent editable fields from rendering focus artifacts in PDF.
+  node.querySelectorAll('[contenteditable]').forEach((el) => {
+    el.removeAttribute('contenteditable')
+  })
+
+  // Remove image rows with no uploaded pictures to avoid blank export pages.
+  node.querySelectorAll('[data-section="testImages"] .image-row').forEach((row) => {
+    if (!row.querySelector('.image-item img[src]')) {
+      row.remove()
+    }
+  })
+
+  // Drop test image section if all its rows were removed.
+  node.querySelectorAll('[data-section="testImages"]').forEach((section) => {
+    if (!section.querySelector('.image-row')) {
+      section.remove()
+    }
+  })
+}
+
+const getDocumentCssText = () => {
+  const chunks = []
+  for (const sheet of Array.from(document.styleSheets)) {
+    try {
+      const rules = sheet.cssRules
+      if (!rules) continue
+      for (const rule of Array.from(rules)) {
+        chunks.push(rule.cssText)
+      }
+    } catch (e) {
+      // Ignore unreadable stylesheets (cross-origin or browser-restricted).
+    }
+  }
+  return chunks.join('\n')
+}
+
+const createVectorExportHtml = () => {
+  if (!templateRef.value) {
+    throw new Error('未找到可导出的报告区域')
+  }
+
+  const pages = Array.from(templateRef.value.querySelectorAll('.a4-page'))
+  if (!pages.length) {
+    throw new Error('当前没有可导出的页面')
+  }
+
+  const exportRoot = document.createElement('div')
+  exportRoot.className = 'export-document'
+
+  pages.forEach((page) => {
+    const clone = page.cloneNode(true)
+    prepareCloneForVectorExport(clone)
+    exportRoot.appendChild(clone)
+  })
+
+  const stylesheetText = getDocumentCssText()
+
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      ${stylesheetText}
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .export-document .a4-page {
+        break-after: page;
+        page-break-after: always;
+        margin: 0 !important;
+        box-shadow: none !important;
+      }
+      .export-document .a4-page:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+      .page-break-indicator,
+      .row-controls,
+      .image-row-actions,
+      .el-button--danger,
+      .image-actions,
+      .add-more,
+      .page-number {
+        display: none !important;
+      }
+      .editable-field {
+        box-shadow: none !important;
+      }
+      .export-document .result-table th:last-child,
+      .export-document .result-table td:last-child {
+        display: table-cell !important;
+      }
+      .export-document .footer-note-content {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+      }
+      .export-document .footer-note-item {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+      }
+      .export-document .footer-note-item > span,
+      .export-document .footer-note-item .el-radio__label {
+        white-space: nowrap !important;
+      }
+      .export-document .footer-note-item.security-level-section .el-radio-group {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+      }
+      .export-document .footer-note-item.security-level-section .el-radio {
+        display: inline-flex !important;
+        align-items: center !important;
+        white-space: nowrap !important;
+      }
+      .export-document .image-uploader {
+        height: 240px !important;
+        min-height: 240px !important;
+        max-height: 240px !important;
+        aspect-ratio: auto !important;
+      }
+      .export-document .images-container {
+        height: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-content: stretch !important;
+        gap: 4px !important;
+        padding: 4px !important;
+      }
+      .export-document .images-container.layout-1 .image-item {
+        width: 100% !important;
+        height: calc(100% - 8px) !important;
+      }
+      .export-document .images-container.layout-2 .image-item {
+        width: calc(50% - 2px) !important;
+        height: calc(100% - 8px) !important;
+      }
+      .export-document .images-container.layout-4 .image-item {
+        width: calc(50% - 2px) !important;
+        height: calc(50% - 2px) !important;
+      }
+      .export-document .images-container.layout-9 .image-item {
+        width: calc(33.333% - 3px) !important;
+        height: calc(33.333% - 3px) !important;
+      }
+      .export-document .image-item {
+        min-height: 0 !important;
+      }
+      .export-document .image-item img {
+        display: block !important;
+      }
+      .export-document .upload-placeholder {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    </style>
+  </head>
+  <body>${exportRoot.outerHTML}</body>
+</html>`
+}
+
+const triggerPdfDownload = (blob, filename) => {
+  const url = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(url)
+}
+
+const exportPdfByServer = async () => {
+  const html = createVectorExportHtml()
+  const { title, filename } = getExportFileInfo()
+  const htmlBytes = new Blob([html]).size
+  if (htmlBytes > 60 * 1024 * 1024) {
+    throw new Error('导出内容过大，无法进行矢量导出')
+  }
+
+  const response = await fetch('/api/export/pdf', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      html,
+      title,
+      templateType: 'general'
+    })
+  })
+
+  if (!response.ok) {
+    if (response.status === 413) {
+      throw new Error('导出内容过大（服务器限制），将自动使用兼容模式')
+    }
+    const errorText = await response.text()
+    throw new Error(errorText || `服务器导出失败（${response.status}）`)
+  }
+
+  const contentType = response.headers.get('content-type') || ''
+  if (contentType.includes('application/pdf')) {
+    const blob = await response.blob()
+    triggerPdfDownload(blob, filename)
+    return
+  }
+
+  const result = await response.json()
+  if (result?.error) {
+    throw new Error(result.error)
+  }
+  if (result?.fallback) {
+    throw new Error(result.message || '服务器矢量导出不可用')
+  }
+
+  throw new Error('服务器返回了无法识别的导出结果')
+}
+
+const handleExportPdf = async () => {
+  try {
+    ElMessage.info('正在生成PDF，请稍候...')
+    isExportMode.value = true
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 120))
+
+    await exportPdfByServer()
+    isExportMode.value = false
+    ElMessage.success('PDF导出成功')
+  } catch (vectorError) {
+    console.error('Vector PDF export failed:', vectorError)
+    isExportMode.value = false
+    ElMessage.warning('矢量导出失败，正在使用兼容模式导出...')
+    await exportPdfAsRasterFallback()
   }
 }
 
@@ -1008,11 +1319,6 @@ onUnmounted(() => {
 // PDF export mode styles
 :deep(.pdf-export-mode) {
   .row-controls {
-    display: none !important;
-  }
-  
-  .result-table th:last-child,
-  .result-table td:last-child {
     display: none !important;
   }
   

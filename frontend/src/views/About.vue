@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.9（内部测试版）</p>
+        <p class="version">版本 V0.10（内部测试版）</p>
       </div>
       
       <el-divider />
@@ -48,7 +48,7 @@
             <div class="instruction-number">5</div>
             <div class="instruction-content">
               <h3>导出PDF</h3>
-              <p>编辑完成后，点击右上角"导出PDF"按钮生成PDF文档。系统会自动处理分页，确保输出格式规范。</p>
+              <p>编辑完成后，点击右上角"导出PDF"按钮生成PDF文档。系统优先使用矢量导出，并在异常时自动回退兼容模式，确保清晰度与可用性。</p>
             </div>
           </div>
           
@@ -72,12 +72,12 @@
             <span class="info-value">邓景华</span>
           </div>
           <div class="info-item">
-            <span class="info-label">开发日期</span>
-            <span class="info-value">2026年2月10日</span>
+            <span class="info-label">最近更新</span>
+            <span class="info-value">2026年3月8日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.9</span>
+            <span class="info-value">V0.10</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>

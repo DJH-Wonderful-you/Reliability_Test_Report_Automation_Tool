@@ -10,6 +10,7 @@ REM 设置工作目录
 set PROJECT_ROOT=%~dp0
 set BACKEND_DIR=%PROJECT_ROOT%backend
 set FRONTEND_DIR=%PROJECT_ROOT%frontend
+set WEASY_DLL_DIR=
 
 echo 项目根目录: %PROJECT_ROOT%
 echo.
@@ -37,7 +38,24 @@ echo.
 
 REM 启动后端服务
 echo [3/4] 启动后端服务 (Flask)...
-start "Reliability Test Report Backend" cmd /c "cd /d %BACKEND_DIR% && ..\.venv\Scripts\python.exe app.py"
+REM Configure WeasyPrint runtime DLL directory (vector PDF export)
+if exist "D:\RJHZ\msys64\ucrt64\bin\libgobject-2.0-0.dll" (
+    set WEASY_DLL_DIR=D:\RJHZ\msys64\ucrt64\bin
+) else if exist "D:\RJHZ\msys64\mingw64\bin\libgobject-2.0-0.dll" (
+    set WEASY_DLL_DIR=D:\RJHZ\msys64\mingw64\bin
+) else if exist "C:\msys64\ucrt64\bin\libgobject-2.0-0.dll" (
+    set WEASY_DLL_DIR=C:\msys64\ucrt64\bin
+) else if exist "C:\msys64\mingw64\bin\libgobject-2.0-0.dll" (
+    set WEASY_DLL_DIR=C:\msys64\mingw64\bin
+)
+
+if defined WEASY_DLL_DIR (
+    echo [Info] WeasyPrint DLL directory: %WEASY_DLL_DIR%
+    start "Reliability Test Report Backend" cmd /c "cd /d %BACKEND_DIR% && set WEASYPRINT_DLL_DIRECTORIES=%WEASY_DLL_DIR% && set PATH=%WEASY_DLL_DIR%;%PATH% && ..\.venv\Scripts\python.exe app.py"
+) else (
+    echo [Warning] WeasyPrint DLL not found. PDF export may fall back to raster mode.
+    start "Reliability Test Report Backend" cmd /c "cd /d %BACKEND_DIR% && ..\.venv\Scripts\python.exe app.py"
+)
 
 REM 等待后端启动
 timeout /t 5 /nobreak >nul

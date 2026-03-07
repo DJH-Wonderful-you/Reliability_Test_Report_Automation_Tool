@@ -338,15 +338,19 @@ const getPlaceholder = (key, defaultValue) => {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: nowrap;
       width: 100%;
       
       .footer-note-item {
         display: flex;
         align-items: center;
+        flex-wrap: nowrap;
+        white-space: nowrap;
         gap: 4px;
         
         :deep(.editable-field) {
           min-height: 1.5em;
+          white-space: nowrap;
         }
         
         &.center {
@@ -359,13 +363,18 @@ const getPlaceholder = (key, defaultValue) => {
           :deep(.el-radio-group) {
             display: flex;
             gap: 8px;
-            
+            flex-wrap: nowrap;
+             
             .el-radio {
+              display: inline-flex;
+              align-items: center;
               margin-right: 0;
-              
+              white-space: nowrap;
+               
               .el-radio__label {
                 font-size: 9px;
                 padding-left: 4px;
+                white-space: nowrap;
               }
             }
           }

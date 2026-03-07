@@ -25,7 +25,7 @@ def create_app():
     
     # Configuration
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
-    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+    app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  # 64MB max request size (supports vector PDF payloads)
     
     # Data storage directory
     app.config['DATA_DIR'] = os.path.join(os.path.dirname(__file__), 'data')

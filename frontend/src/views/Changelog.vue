@@ -44,6 +44,21 @@ const router = useRouter()
 
 const versions = ref([
   {
+    id: 'v0.10',
+    version: 'V0.10',
+    title: 'PDF导出引擎重构与版式修复',
+    date: '2026年3月8日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      'PDF导出升级为服务端矢量渲染，文本和线条清晰度提升',
+      '新增矢量导出失败自动回退兼容模式，保障导出可用性',
+      '修复测试结果信息表格“备注”列在导出PDF中消失的问题',
+      '修复脚注区域导出后换行和超宽问题，确保版式与页面一致',
+      '优化一键启动脚本，自动注入WeasyPrint运行库路径'
+    ]
+  },
+  {
     id: 'v0.9',
     version: 'V0.9',
     title: '表格文本对齐优化',

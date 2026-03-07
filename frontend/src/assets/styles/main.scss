@@ -399,13 +399,6 @@ html, body {
     display: none !important;
   }
   
-  .result-table {
-    th:last-child,
-    td:last-child {
-      display: none !important;
-    }
-  }
-  
   .el-button--danger {
     display: none !important;
   }
@@ -458,10 +451,4 @@ html, body {
     display: none !important;
   }
   
-  .result-table {
-    th:last-child,
-    td:last-child {
-      display: none !important;
-    }
-  }
 }

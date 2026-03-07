@@ -13,6 +13,67 @@ from flask import Blueprint, request, jsonify, send_file, current_app
 
 export_bp = Blueprint('export', __name__)
 
+_dll_directory_handles = []
+_registered_dll_directories = set()
+_selected_weasy_dll_directory = None
+
+
+def _has_weasyprint_runtime(directory):
+    return (
+        os.path.isfile(os.path.join(directory, 'libgobject-2.0-0.dll')) and
+        os.path.isfile(os.path.join(directory, 'libpango-1.0-0.dll'))
+    )
+
+
+def _prepare_weasyprint_windows_dlls():
+    """
+    On Windows + Python 3.8+, ctypes doesn't reliably search PATH for DLLs.
+    Try known Pango/GTK locations and WEASYPRINT_DLL_DIRECTORIES.
+    """
+    if os.name != 'nt':
+        return
+
+    global _selected_weasy_dll_directory
+
+    if _selected_weasy_dll_directory:
+        return
+
+    configured = os.environ.get('WEASYPRINT_DLL_DIRECTORIES', '')
+    configured_dirs = [p.strip() for p in configured.split(';') if p.strip()]
+    default_dirs = [
+        r'C:\msys64\ucrt64\bin',
+        r'C:\msys64\mingw64\bin',
+        r'C:\msys64\clang64\bin',
+        r'C:\Program Files\GTK3-Runtime Win64\bin',
+        r'C:\Program Files\GTK3-Runtime\bin',
+    ]
+    candidate_dirs = configured_dirs if configured_dirs else default_dirs
+
+    # Use exactly one runtime directory to avoid mixing different GTK toolchains.
+    selected = None
+    for directory in candidate_dirs:
+        if os.path.isdir(directory) and _has_weasyprint_runtime(directory):
+            selected = directory
+            break
+
+    if not selected:
+        for directory in candidate_dirs:
+            if os.path.isdir(directory):
+                selected = directory
+                break
+
+    if not selected or selected in _registered_dll_directories:
+        return
+
+    try:
+        handle = os.add_dll_directory(selected)
+    except Exception:
+        return
+
+    _dll_directory_handles.append(handle)
+    _registered_dll_directories.add(selected)
+    _selected_weasy_dll_directory = selected
+
 
 @export_bp.route('/pdf', methods=['POST'])
 def export_pdf():
@@ -36,15 +97,25 @@ def export_pdf():
     date_str = datetime.now().strftime('%Y%m%d')
     safe_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).strip()
     filename = f"{safe_title}_{date_str}.pdf"
-    
+
     try:
+        _prepare_weasyprint_windows_dlls()
         # Try to use weasyprint for PDF generation
         from weasyprint import HTML, CSS
-        
+    except Exception as e:
+        current_app.logger.warning(f"WeasyPrint unavailable: {e}")
+        return jsonify({
+            'fallback': True,
+            'message': f'Server-side PDF generation not available: {e}',
+            'html': html_content,
+            'filename': filename
+        })
+
+    try:
         # Create PDF in temporary file
         with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_file:
             tmp_path = tmp_file.name
-        
+
         # Base CSS for PDF
         base_css = CSS(string='''
             @page {
@@ -66,7 +137,7 @@ def export_pdf():
         
         # Generate PDF
         HTML(string=html_content).write_pdf(tmp_path, stylesheets=[base_css])
-        
+
         # Send file
         response = send_file(
             tmp_path,
@@ -82,17 +153,8 @@ def export_pdf():
                 os.unlink(tmp_path)
             except:
                 pass
-        
+
         return response
-        
-    except ImportError:
-        # Fallback: Return HTML for client-side PDF generation
-        return jsonify({
-            'fallback': True,
-            'message': 'Server-side PDF generation not available. Use client-side generation.',
-            'html': html_content,
-            'filename': filename
-        })
     except Exception as e:
         current_app.logger.error(f"PDF export error: {e}")
         return jsonify({'error': str(e)}), 500
@@ -109,11 +171,19 @@ def preview_pdf():
         return jsonify({'error': 'No HTML content provided'}), 400
     
     html_content = data['html']
-    
+
     try:
         import base64
+        _prepare_weasyprint_windows_dlls()
         from weasyprint import HTML, CSS
-        
+    except Exception as e:
+        current_app.logger.warning(f"WeasyPrint preview unavailable: {e}")
+        return jsonify({
+            'fallback': True,
+            'message': f'Server-side PDF generation not available: {e}'
+        })
+
+    try:
         # Base CSS for PDF
         base_css = CSS(string='''
             @page {
@@ -126,22 +196,16 @@ def preview_pdf():
                 padding: 0;
             }
         ''')
-        
+
         # Generate PDF to bytes
         pdf_bytes = HTML(string=html_content).write_pdf(stylesheets=[base_css])
-        
+
         # Convert to base64
         pdf_base64 = base64.b64encode(pdf_bytes).decode('utf-8')
-        
+
         return jsonify({
             'success': True,
             'pdfData': f'data:application/pdf;base64,{pdf_base64}'
-        })
-        
-    except ImportError:
-        return jsonify({
-            'fallback': True,
-            'message': 'Server-side PDF generation not available'
         })
     except Exception as e:
         current_app.logger.error(f"PDF preview error: {e}")

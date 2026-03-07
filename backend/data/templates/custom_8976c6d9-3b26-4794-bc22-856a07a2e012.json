@@ -1,5 +1,5 @@
 {
-  "id": "9a182609-e2b8-4b17-ab4d-a821cb21e64e",
+  "id": "8976c6d9-3b26-4794-bc22-856a07a2e012",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
+    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    },
-    "size": 100
+    }
   },
   "signatures": {
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,34 +31,38 @@
       "dataUrl": null,
       "size": 15
     },
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "opacity": 0.3,
+    "size": 120,
     "position": {
       "x": 400,
       "y": 650
     },
-    "size": 120
+    "opacity": 0.3
   },
   "templateContentData": {
-    "companyName": "深圳市欣威智能有限公司",
-    "placeholders": {},
+    "companyName": "",
+    "reportTitle": "",
     "recordCode": "",
-    "reportTitle": "可靠性实验报告"
+    "placeholders": {},
+    "resultIdHeader": "编号",
+    "testProjectLabel": "测试项目",
+    "sampleInfoHeader": "样品信息",
+    "reportNumberLabel": "报告编号："
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "equipmentTable": [],
     "infoTable": [],
-    "resultTable": [],
-    "sampleTable": []
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
   },
-  "fieldFormats": {},
-  "createdAt": "2026-02-10T20:29:30.123270",
-  "updatedAt": "2026-03-01T21:51:12.612090"
+  "inlineStyles": {},
+  "createdAt": "2026-01-29T01:08:09.515812",
+  "updatedAt": "2026-01-29T01:08:56.075883"
 }

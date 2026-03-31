@@ -1,6 +1,105 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import {
+  DEFAULT_TEMPLATE_SECURITY_LEVEL,
+  createDefaultTableColumnWidths,
+  normalizeTableColumnWidths
+} from '@/constants/generalTemplateDefaults'
+
+const createDefaultLogo = () => ({
+  dataUrl: null,
+  size: 100,
+  position: { x: 20, y: 10 }
+})
+
+const createDefaultSignatures = () => ({
+  tester: { dataUrl: null, size: 15 },
+  reviewer: { dataUrl: null, size: 15 },
+  approver: { dataUrl: null, size: 15 }
+})
+
+const createDefaultDepartmentSeal = () => ({
+  dataUrl: null,
+  size: 120,
+  position: { x: 400, y: 650 },
+  opacity: 0.3
+})
+
+const createDefaultFixedTextStyles = () => ({
+  color: '#000000',
+  fontFamily: 'Microsoft YaHei',
+  fontSize: 11
+})
+
+const createDefaultEditableTextStyles = () => ({
+  color: '#999999',
+  fontFamily: 'Microsoft YaHei',
+  fontSize: 11
+})
+
+const createDefaultTemplateContentData = () => ({
+  companyName: '',
+  reportTitle: '',
+  recordCode: '',
+  placeholders: {}
+})
+
+const normalizeTemplateState = (type = 'general', data = {}) => {
+  const defaultLogo = createDefaultLogo()
+  const defaultSignatures = createDefaultSignatures()
+  const defaultDepartmentSeal = createDefaultDepartmentSeal()
+  const defaultFixedTextStyles = createDefaultFixedTextStyles()
+  const defaultEditableTextStyles = createDefaultEditableTextStyles()
+  const defaultTemplateContentData = createDefaultTemplateContentData()
+
+  return {
+    logo: {
+      ...defaultLogo,
+      ...(data.logo || {}),
+      position: {
+        ...defaultLogo.position,
+        ...(data.logo?.position || {})
+      }
+    },
+    signatures: Object.fromEntries(
+      Object.keys(defaultSignatures).map((key) => [
+        key,
+        {
+          ...defaultSignatures[key],
+          ...(data.signatures?.[key] || {})
+        }
+      ])
+    ),
+    departmentSeal: {
+      ...defaultDepartmentSeal,
+      ...(data.departmentSeal || {}),
+      position: {
+        ...defaultDepartmentSeal.position,
+        ...(data.departmentSeal?.position || {})
+      }
+    },
+    fixedTextStyles: {
+      ...defaultFixedTextStyles,
+      ...(data.settings?.fixedTextStyles || data.fixedTextStyles || {})
+    },
+    editableTextStyles: {
+      ...defaultEditableTextStyles,
+      ...(data.settings?.editableTextStyles || data.editableTextStyles || {})
+    },
+    templateContentData: {
+      ...defaultTemplateContentData,
+      ...(data.templateContentData || {}),
+      placeholders: {
+        ...defaultTemplateContentData.placeholders,
+        ...(data.templateContentData?.placeholders || {})
+      }
+    },
+    securityLevel: data.securityLevel || DEFAULT_TEMPLATE_SECURITY_LEVEL,
+    tableColumnWidths: normalizeTableColumnWidths(type, data.tableColumnWidths),
+    fieldFormats: { ...(data.fieldFormats || {}) }
+  }
+}
 
 export const useTemplateStore = defineStore('template', () => {
   // State
@@ -12,60 +111,42 @@ export const useTemplateStore = defineStore('template', () => {
   const isDirty = ref(false)
 
   // Logo and signature settings
-  const logo = ref({
-    dataUrl: null,
-    size: 100,
-    position: { x: 20, y: 10 }
-  })
+  const logo = ref(createDefaultLogo())
 
-  const signatures = ref({
-    tester: { dataUrl: null, size: 15 },
-    reviewer: { dataUrl: null, size: 15 },
-    approver: { dataUrl: null, size: 15 }
-  })
+  const signatures = ref(createDefaultSignatures())
 
-  const departmentSeal = ref({
-    dataUrl: null,
-    size: 120,
-    position: { x: 400, y: 650 },
-    opacity: 0.3 // Lower opacity for editing, full opacity for export
-  })
+  const departmentSeal = ref(createDefaultDepartmentSeal())
 
   // Text style settings for fixed content
-  const fixedTextStyles = ref({
-    color: '#000000',
-    fontFamily: 'Microsoft YaHei',
-    fontSize: 11
-  })
+  const fixedTextStyles = ref(createDefaultFixedTextStyles())
 
   // Text style settings for editable area placeholders
-  const editableTextStyles = ref({
-    color: '#999999',
-    fontFamily: 'Microsoft YaHei',
-    fontSize: 11
-  })
+  const editableTextStyles = ref(createDefaultEditableTextStyles())
 
   // Template data for custom text content
-  const templateContentData = ref({
-    companyName: '',
-    reportTitle: '',
-    recordCode: '',
-    placeholders: {}
-  })
+  const templateContentData = ref(createDefaultTemplateContentData())
 
   // Security level selection
-  const securityLevel = ref('内部公开')
+  const securityLevel = ref(DEFAULT_TEMPLATE_SECURITY_LEVEL)
 
   // Table column widths configuration
-  const tableColumnWidths = ref({
-    infoTable: [], // Main info table widths
-    sampleTable: [], // Sample information table widths
-    equipmentTable: [], // Equipment table widths
-    resultTable: [] // Test result table widths
-  })
+  const tableColumnWidths = ref(createDefaultTableColumnWidths('general'))
 
   // Individual field formats for each text element
   const fieldFormats = ref({})
+
+  const applyTemplateState = (type, data = {}) => {
+    const nextState = normalizeTemplateState(type, data)
+    logo.value = nextState.logo
+    signatures.value = nextState.signatures
+    departmentSeal.value = nextState.departmentSeal
+    fixedTextStyles.value = nextState.fixedTextStyles
+    editableTextStyles.value = nextState.editableTextStyles
+    templateContentData.value = nextState.templateContentData
+    securityLevel.value = nextState.securityLevel
+    tableColumnWidths.value = nextState.tableColumnWidths
+    fieldFormats.value = nextState.fieldFormats
+  }
 
   // Actions
   const loadDefaultTemplate = async (type) => {
@@ -75,6 +156,10 @@ export const useTemplateStore = defineStore('template', () => {
       if (response.ok) {
         templateData.value = await response.json()
         templateType.value = type
+        currentTemplateId.value = null
+        templateName.value = ''
+        applyTemplateState(type)
+        isDirty.value = false
       } else {
         throw new Error('Failed to load template')
       }
@@ -95,16 +180,8 @@ export const useTemplateStore = defineStore('template', () => {
         currentTemplateId.value = data.id
         templateName.value = data.name
         templateType.value = data.baseType
-        
-        if (data.logo) logo.value = data.logo
-        if (data.signatures) signatures.value = data.signatures
-        if (data.departmentSeal) departmentSeal.value = data.departmentSeal
-        if (data.settings?.fixedTextStyles) fixedTextStyles.value = data.settings.fixedTextStyles
-        if (data.settings?.editableTextStyles) editableTextStyles.value = data.settings.editableTextStyles
-        if (data.templateContentData) templateContentData.value = data.templateContentData
-        if (data.securityLevel) securityLevel.value = data.securityLevel
-        if (data.tableColumnWidths) tableColumnWidths.value = data.tableColumnWidths
-        if (data.fieldFormats) fieldFormats.value = data.fieldFormats
+        applyTemplateState(data.baseType, data)
+        isDirty.value = false
       } else {
         throw new Error('Failed to load template')
       }
@@ -303,10 +380,6 @@ export const useTemplateStore = defineStore('template', () => {
   }
 
   // 专门用于应用到报告编辑的保存方法
-  const saveForReportApply = async () => {
-    return await saveTemplate(true, true) // silent=true, forReportApply=true
-  }
-
   const exportTemplate = async () => {
     if (!currentTemplateId.value) {
       await saveTemplate()
@@ -362,42 +435,7 @@ export const useTemplateStore = defineStore('template', () => {
     // Reset local state
     currentTemplateId.value = null
     templateName.value = ''
-    logo.value = { dataUrl: null, size: 100, position: { x: 20, y: 10 } }
-    signatures.value = {
-      tester: { dataUrl: null, size: 15 },
-      reviewer: { dataUrl: null, size: 15 },
-      approver: { dataUrl: null, size: 15 }
-    }
-    departmentSeal.value = {
-      dataUrl: null,
-      size: 120,
-      position: { x: 400, y: 650 },
-      opacity: 0.3
-    }
-    fixedTextStyles.value = {
-      color: '#000000',
-      fontFamily: 'Microsoft YaHei',
-      fontSize: 11
-    }
-    editableTextStyles.value = {
-      color: '#999999',
-      fontFamily: 'Microsoft YaHei',
-      fontSize: 11
-    }
-    templateContentData.value = {
-      companyName: '',
-      reportTitle: '',
-      recordCode: '',
-      placeholders: {}
-    }
-    securityLevel.value = '内部公开'
-    tableColumnWidths.value = {
-      infoTable: [],
-      sampleTable: [],
-      equipmentTable: [],
-      resultTable: []
-    }
-    fieldFormats.value = {}
+    applyTemplateState(templateType.value)
     isDirty.value = true // 设置为脏状态，表示需要保存
     
     // 立即保存重置后的默认模板到后端
@@ -442,7 +480,6 @@ export const useTemplateStore = defineStore('template', () => {
     updateFieldFormat,
     getFieldFormat,
     saveTemplate,
-    saveForReportApply,
     exportTemplate,
     importTemplate,
     resetToDefault

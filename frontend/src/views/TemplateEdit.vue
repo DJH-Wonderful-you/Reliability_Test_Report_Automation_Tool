@@ -510,10 +510,6 @@ const handleSealUpload = (uploadFile) => {
   }
 }
 
-const saveTemplate = () => {
-  templateStore.saveTemplate()
-}
-
 const exportTemplate = () => {
   templateStore.exportTemplate()
 }
@@ -586,11 +582,14 @@ onMounted(async () => {
       const data = await response.json()
       if (data && data.id) {
         await templateStore.loadCustomTemplate(data.id)
+        return
       }
     }
   } catch (error) {
     console.error('Failed to load saved template:', error)
   }
+
+  await templateStore.loadDefaultTemplate('general')
 })
 
 // Clean up auto-save timer on unmount

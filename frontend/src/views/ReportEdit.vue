@@ -157,7 +157,7 @@ import { ref, computed } from 'vue'
 import Toolbar from '@/components/layout/Toolbar.vue'
 import { useReportStore } from '@/stores/report'
 import { Download, Plus, DocumentAdd, FolderOpened, Delete, CirclePlus, Remove } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox, ElInput } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const reportStore = useReportStore()
 const containerRef = ref(null)
@@ -168,11 +168,6 @@ const batchAddImageCount = ref(1)
 // Tail delete counts
 const tailDeleteResultCount = ref(1)
 const tailDeleteImageCount = ref(1)
-// Insert positions
-const insertResultPosition = ref(1)
-const insertResultCount = ref(1)
-const insertImagePosition = ref(1)
-const insertImageCount = ref(1)
 
 // Selection box state
 const isSelecting = ref(false)
@@ -320,7 +315,7 @@ const deleteTailResultRows = async () => {
     // 从末尾删除指定数量的行
     const startIndex = currentRowCount - tailDeleteResultCount.value
     reportStore.testResultRows.splice(startIndex, tailDeleteResultCount.value)
-    reportStore.isDirty = true
+    reportStore.markDirty()
     ElMessage.success(`已从末尾删除 ${tailDeleteResultCount.value} 行`)
   } catch {
     // 用户取消
@@ -353,7 +348,7 @@ const deleteTailImageRows = async () => {
     // 从末尾删除指定数量的行
     const startIndex = currentRowCount - tailDeleteImageCount.value
     reportStore.testImageRows.splice(startIndex, tailDeleteImageCount.value)
-    reportStore.isDirty = true
+    reportStore.markDirty()
     ElMessage.success(`已从末尾删除 ${tailDeleteImageCount.value} 行`)
   } catch {
     // 用户取消
@@ -436,7 +431,7 @@ const openInsertResultDialog = async () => {
     
     // 插入新行
     reportStore.testResultRows.splice(insertIndex, 0, ...newRows)
-    reportStore.isDirty = true
+    reportStore.markDirty()
     ElMessage.success(`已在第 ${position} 行后插入 ${count} 行`)
   } catch {
     // 用户取消
@@ -516,7 +511,7 @@ const openInsertImageDialog = async () => {
     
     // 插入新行
     reportStore.testImageRows.splice(insertIndex, 0, ...newRows)
-    reportStore.isDirty = true
+    reportStore.markDirty()
     ElMessage.success(`已在第 ${position} 行后插入 ${count} 行`)
   } catch {
     // 用户取消
@@ -613,7 +608,7 @@ const openBatchDeleteResultDialog = async () => {
       reportStore.testResultRows.splice(index, 1)
     }
     
-    reportStore.isDirty = true
+    reportStore.markDirty()
     ElMessage.success(`已删除 ${selectedIndices.length} 行`)
   } catch {
     // 用户取消
@@ -710,7 +705,7 @@ const openBatchDeleteImageDialog = async () => {
       reportStore.testImageRows.splice(index, 1)
     }
     
-    reportStore.isDirty = true
+    reportStore.markDirty()
     ElMessage.success(`已删除 ${selectedIndices.length} 行`)
   } catch {
     // 用户取消

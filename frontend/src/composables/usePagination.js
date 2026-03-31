@@ -1,4 +1,8 @@
 import { ref, computed, watch, nextTick } from 'vue'
+import {
+  GENERAL_PAGE_FOOTER_HEIGHT_PX,
+  GENERAL_PAGE_HEADER_HEIGHT_PX
+} from '@/constants/generalTemplateDefaults'
 
 /**
  * Pagination composable for multi-page PDF report generation
@@ -31,11 +35,11 @@ const PADDING_BOTTOM_PX = Math.round(PAGE_PADDING.bottom * MM_TO_PX) // ~57px
 
 // Header height in pixels (measured from PageContainer: company name, title, record code + margin)
 // .company-name(18px) + margin(8px) + .report-title(16px) + margin(5px) + .record-code(9px) + margin-bottom(15px) ≈ 75px
-const HEADER_HEIGHT_PX = 75
+const HEADER_HEIGHT_PX = GENERAL_PAGE_HEADER_HEIGHT_PX
 
 // Footer height in pixels (measured from PageContainer: signatures, notes, page number)
 // .signature-row(~35px) + margin(10px) + .footer-note(~25px) + .page-number(~25px with margins) ≈ 95px
-const FOOTER_HEIGHT_PX = 60
+const FOOTER_HEIGHT_PX = GENERAL_PAGE_FOOTER_HEIGHT_PX
 
 // Usable content height per page - uniform for all pages
 // Total A4 height minus padding, header, footer, and a balanced safety buffer

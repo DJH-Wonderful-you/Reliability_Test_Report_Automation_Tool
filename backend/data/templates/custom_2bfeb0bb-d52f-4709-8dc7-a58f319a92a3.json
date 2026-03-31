@@ -1,5 +1,5 @@
 {
-  "id": "c5096bec-d3f4-481a-a491-72966683c0b6",
+  "id": "2bfeb0bb-d52f-4709-8dc7-a58f319a92a3",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -94,10 +94,9 @@
       "fontWeight": "normal",
       "fontStyle": "italic",
       "textDecoration": "none",
-      "textAlign": "center"
+      "textAlign": "left"
     }
   },
-  "createdAt": "2026-03-31T23:17:25.914993",
-  "updatedAt": "2026-03-31T23:18:12.920717",
-  "appliedAt": "2026-03-31T23:18:12.931563"
+  "createdAt": "2026-03-31T23:17:00.604992",
+  "updatedAt": "2026-03-31T23:17:20.230107"
 }

@@ -676,28 +676,13 @@ const updateField = (fieldId, value) => {
 }
 
 // Result row handlers
-const addResultRow = () => {
-  reportStore.addTestResultRows(1)
-}
-
-const addResultRows = (count) => {
-  reportStore.addTestResultRows(count)
-}
-
 const updateResultRow = (index, field, value) => {
   reportStore.updateTestResultRow(index, field, value)
 }
 
-
-
-// Image row handlers
-
-
 const updateImages = (rowIndex, position, images) => {
   reportStore.updateTestImage(rowIndex, position, images)
 }
-
-
 
 // Load template settings
 const loadTemplateSettings = async () => {
@@ -1165,7 +1150,7 @@ onUnmounted(() => {
   
   .section-header {
     font-weight: 600;
-    font-size: 12px;
+    font-size: 11px;
     padding: 5px 0;
     border-bottom: 1px solid #000;
     margin-bottom: 8px;
@@ -1214,12 +1199,12 @@ onUnmounted(() => {
 .result-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 10px;
+  font-size: 11px;
   table-layout: fixed;
   
   th, td {
     border: 1px solid #000;
-    padding: 4px 6px;
+    padding: 4px 8px;
     text-align: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -1234,7 +1219,7 @@ onUnmounted(() => {
     padding: 0;
     
     :deep(.editable-field) {
-      padding: 4px 6px;
+      padding: 4px 8px;
       min-height: 24px;
       text-align: center;
       word-wrap: break-word;

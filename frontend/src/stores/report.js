@@ -1,6 +1,48 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import {
+  DEFAULT_TEMPLATE_SECURITY_LEVEL,
+  normalizeTableColumnWidths
+} from '@/constants/generalTemplateDefaults'
+
+const createDefaultTemplateContentData = () => ({
+  companyName: '',
+  reportTitle: '',
+  recordCode: '',
+  placeholders: {}
+})
+
+const createDefaultSignatures = () => ({
+  tester: null,
+  reviewer: null,
+  approver: null
+})
+
+const normalizeTemplateSettings = (type = 'general', data = {}) => {
+  const defaultTemplateContentData = createDefaultTemplateContentData()
+
+  return {
+    logo: data.logo || null,
+    signatures: {
+      ...createDefaultSignatures(),
+      ...(data.signatures || {})
+    },
+    departmentSeal: data.departmentSeal || null,
+    securityLevel: data.securityLevel || DEFAULT_TEMPLATE_SECURITY_LEVEL,
+    tableColumnWidths: normalizeTableColumnWidths(type, data.tableColumnWidths),
+    templateContentData: {
+      ...defaultTemplateContentData,
+      ...(data.templateContentData || {}),
+      placeholders: {
+        ...defaultTemplateContentData.placeholders,
+        ...(data.templateContentData?.placeholders || {})
+      }
+    },
+    fixedTextStyles: data.settings?.fixedTextStyles || data.fixedTextStyles || null,
+    editableTextStyles: data.settings?.editableTextStyles || data.editableTextStyles || null
+  }
+}
 
 export const useReportStore = defineStore('report', () => {
   // State
@@ -18,32 +60,7 @@ export const useReportStore = defineStore('report', () => {
   const templateData = ref(null)
   
   // Template settings (logo, signatures, seal, etc.)
-  const templateSettings = ref({
-    logo: null,
-    signatures: {
-      tester: null,
-      reviewer: null,
-      approver: null
-    },
-    departmentSeal: null,
-    securityLevel: '内部公开',
-    tableColumnWidths: {
-      infoTable: [],
-      sampleTable: [],
-      equipmentTable: [],
-      resultTable: []
-    },
-    // Template content data (labels, placeholders, etc.)
-    templateContentData: {
-      companyName: '',
-      reportTitle: '',
-      recordCode: '',
-      placeholders: {}
-    },
-    // Text styles
-    fixedTextStyles: null,
-    editableTextStyles: null
-  })
+  const templateSettings = ref(normalizeTemplateSettings('general'))
 
   // Dynamic rows for test results and images
   const testResultRows = ref([
@@ -93,42 +110,20 @@ export const useReportStore = defineStore('report', () => {
       const response = await fetch(`/api/template/custom/${templateId}`)
       if (response.ok) {
         const data = await response.json()
-        templateSettings.value = {
-          logo: data.logo || null,
-          signatures: data.signatures || {
-            tester: null,
-            reviewer: null,
-            approver: null
-          },
-          departmentSeal: data.departmentSeal || null,
-          securityLevel: data.securityLevel || '内部公开',
-          tableColumnWidths: data.tableColumnWidths || {
-            infoTable: [],
-            sampleTable: [],
-            equipmentTable: [],
-            resultTable: []
-          },
-          templateContentData: data.templateContentData || {
-            companyName: '',
-            reportTitle: '',
-            recordCode: '',
-            placeholders: {}
-          },
-          fixedTextStyles: data.settings?.fixedTextStyles || null,
-          editableTextStyles: data.settings?.editableTextStyles || null
-        }
+        const resolvedType = data.baseType || templateType.value
+        templateType.value = resolvedType
+        templateSettings.value = normalizeTemplateSettings(resolvedType, data)
         return true
       }
     } catch (error) {
       console.error('Failed to load template settings:', error)
     }
+    templateSettings.value = normalizeTemplateSettings(templateType.value)
     return false
   }
 
-  const applyTemplateSettings = (settings) => {
-    if (settings) {
-      templateSettings.value = { ...templateSettings.value, ...settings }
-    }
+  const applyTemplateSettings = (settings, type = templateType.value) => {
+    templateSettings.value = normalizeTemplateSettings(type, settings || {})
   }
 
   // Apply template field formats (from template editor)
@@ -147,14 +142,12 @@ export const useReportStore = defineStore('report', () => {
 
   const updateField = (fieldId, value) => {
     content.value[fieldId] = value
-    isDirty.value = true
-    scheduleAutoSave()
+    markDirty()
   }
 
   const updateFieldFormat = (fieldId, format) => {
     fieldFormats.value[fieldId] = { ...fieldFormats.value[fieldId], ...format }
-    isDirty.value = true
-    scheduleAutoSave()
+    markDirty()
   }
 
   const getFieldFormat = (fieldId) => {
@@ -164,8 +157,7 @@ export const useReportStore = defineStore('report', () => {
   const updateTestResultRow = (rowIndex, field, value) => {
     if (testResultRows.value[rowIndex]) {
       testResultRows.value[rowIndex][field] = value
-      isDirty.value = true
-      scheduleAutoSave()
+      markDirty()
     }
   }
 
@@ -184,8 +176,7 @@ export const useReportStore = defineStore('report', () => {
         note: ''
       })
     }
-    isDirty.value = true
-    scheduleAutoSave()
+    markDirty()
   }
 
   const deleteTestResultRow = async (rowIndex) => {
@@ -201,7 +192,7 @@ export const useReportStore = defineStore('report', () => {
         type: 'warning'
       })
       testResultRows.value.splice(rowIndex, 1)
-      isDirty.value = true
+      markDirty()
     } catch {
       // User cancelled
     }
@@ -215,14 +206,14 @@ export const useReportStore = defineStore('report', () => {
     }
     
     // Sort indices in descending order to avoid index shifting
-    indices.sort((a, b) => b - a)
-    
-    for (const index of indices) {
+    const sortedIndices = [...indices].sort((a, b) => b - a)
+
+    for (const index of sortedIndices) {
       if (index >= 0 && index < testResultRows.value.length) {
         testResultRows.value.splice(index, 1)
       }
     }
-    isDirty.value = true
+    markDirty()
     ElMessage.success(`已删除 ${indices.length} 行`)
   }
 
@@ -239,8 +230,7 @@ export const useReportStore = defineStore('report', () => {
         after: []
       })
     }
-    isDirty.value = true
-    scheduleAutoSave()
+    markDirty()
   }
 
   const deleteTestImageRow = async (rowIndex) => {
@@ -256,7 +246,7 @@ export const useReportStore = defineStore('report', () => {
         type: 'warning'
       })
       testImageRows.value.splice(rowIndex, 1)
-      isDirty.value = true
+      markDirty()
     } catch {
       // User cancelled
     }
@@ -270,22 +260,21 @@ export const useReportStore = defineStore('report', () => {
     }
     
     // Sort indices in descending order to avoid index shifting
-    indices.sort((a, b) => b - a)
-    
-    for (const index of indices) {
+    const sortedIndices = [...indices].sort((a, b) => b - a)
+
+    for (const index of sortedIndices) {
       if (index >= 0 && index < testImageRows.value.length) {
         testImageRows.value.splice(index, 1)
       }
     }
-    isDirty.value = true
+    markDirty()
     ElMessage.success(`已删除 ${indices.length} 行`)
   }
 
   const updateTestImage = (rowIndex, position, images) => {
     if (testImageRows.value[rowIndex]) {
       testImageRows.value[rowIndex][position] = images
-      isDirty.value = true
-      scheduleAutoSave()
+      markDirty()
     }
   }
 
@@ -304,6 +293,11 @@ export const useReportStore = defineStore('report', () => {
 
   const clearSelection = () => {
     selectedFields.value = []
+  }
+
+  const markDirty = () => {
+    isDirty.value = true
+    scheduleAutoSave()
   }
 
   const scheduleAutoSave = () => {
@@ -433,31 +427,22 @@ export const useReportStore = defineStore('report', () => {
       if (response.ok) {
         const data = await response.json()
         if (data) {
+          const resolvedType = data.baseType || templateType.value
+          templateType.value = resolvedType
           // Apply template settings
-          applyTemplateSettings({
-            logo: data.logo,
-            signatures: data.signatures,
-            departmentSeal: data.departmentSeal,
-            securityLevel: data.securityLevel,
-            tableColumnWidths: data.tableColumnWidths,
-            templateContentData: data.templateContentData || {
-              companyName: '',
-              reportTitle: '',
-              recordCode: '',
-              placeholders: {}
-            },
-            fixedTextStyles: data.settings?.fixedTextStyles || null,
-            editableTextStyles: data.settings?.editableTextStyles || null
-          })
+          applyTemplateSettings(data, resolvedType)
           
           // Apply template field formats (styles from template editor)
           // Always replace fieldFormats, even if empty (to reset to defaults)
           applyTemplateFieldFormats(data.fieldFormats || {})
+          return
         }
       }
     } catch (error) {
       console.error('Failed to load applied template settings:', error)
     }
+    applyTemplateSettings({}, templateType.value)
+    applyTemplateFieldFormats({})
   }
 
   const exportPdf = async () => {
@@ -615,6 +600,7 @@ export const useReportStore = defineStore('report', () => {
     updateTestImage,
     selectField,
     clearSelection,
+    markDirty,
     autoSave,
     loadAutoSave,
     newReport,

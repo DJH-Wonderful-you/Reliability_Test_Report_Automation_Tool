@@ -16,14 +16,14 @@
   },
   "logo": {
     "dataUrl": null,
+    "size": 100,
     "position": {
       "x": 20,
       "y": 10
-    },
-    "size": 100
+    }
   },
   "signatures": {
-    "approver": {
+    "tester": {
       "dataUrl": null,
       "size": 15
     },
@@ -31,34 +31,72 @@
       "dataUrl": null,
       "size": 15
     },
-    "tester": {
+    "approver": {
       "dataUrl": null,
       "size": 15
     }
   },
   "departmentSeal": {
     "dataUrl": null,
-    "opacity": 0.3,
+    "size": 120,
     "position": {
       "x": 400,
       "y": 650
     },
-    "size": 120
+    "opacity": 0.3
   },
   "templateContentData": {
     "companyName": "深圳市欣威智能有限公司",
-    "placeholders": {},
+    "reportTitle": "可靠性实验报告",
     "recordCode": "",
-    "reportTitle": "可靠性实验报告"
+    "placeholders": {
+      "testProject": "请输入测试项目"
+    }
   },
   "securityLevel": "内部公开",
   "tableColumnWidths": {
-    "equipmentTable": [],
-    "infoTable": [],
-    "resultTable": [],
-    "sampleTable": []
+    "infoTable": [
+      70,
+      270,
+      70,
+      270
+    ],
+    "sampleTable": [
+      70,
+      157,
+      70,
+      157,
+      70,
+      156
+    ],
+    "equipmentTable": [
+      70,
+      157,
+      70,
+      157,
+      70,
+      156
+    ],
+    "resultTable": [
+      40,
+      128,
+      128,
+      128,
+      128,
+      128
+    ]
   },
-  "fieldFormats": {},
+  "fieldFormats": {
+    "testProject": {
+      "fontFamily": "SimSun",
+      "fontSize": 11,
+      "color": "#999999",
+      "fontWeight": "normal",
+      "fontStyle": "italic",
+      "textDecoration": "none",
+      "textAlign": "left"
+    }
+  },
   "createdAt": "2026-02-10T20:29:30.123270",
-  "updatedAt": "2026-03-01T21:51:12.612090"
+  "updatedAt": "2026-03-31T23:10:57.703854"
 }

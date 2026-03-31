@@ -15,7 +15,7 @@
         </div>
         <div class="company-name editable-text" :style="getFieldStyle('companyName', companyNameStyle)" contenteditable="true" data-field-id="companyName" @blur="updateFixedText('companyName', $event)">{{ templateData.companyName || '深圳市欣威智能有限公司' }}</div>
         <div class="report-title editable-text" :style="getFieldStyle('reportTitle', reportTitleStyle)" contenteditable="true" data-field-id="reportTitle" @blur="updateFixedText('reportTitle', $event)">{{ templateData.reportTitle || '可靠性实验报告' }}</div>
-        <div class="record-code editable-text" :style="getFieldStyle('recordCode', { ...fixedTextStyle, fontSize: '9px' })" contenteditable="true" data-field-id="recordCode" @blur="updateFixedText('recordCode', $event)">{{ templateData.recordCode || '记录代码：F-SUN1-XV-15.11.1.1/A0' }}</div>
+        <div class="record-code editable-text" :style="getFieldStyle('recordCode', { ...GENERAL_SHARED_FIELD_STYLES.recordCode, color: templateStore.fixedTextStyles.color, fontFamily: templateStore.fixedTextStyles.fontFamily || GENERAL_SHARED_FIELD_STYLES.recordCode.fontFamily })" contenteditable="true" data-field-id="recordCode" @blur="updateFixedText('recordCode', $event)">{{ templateData.recordCode || '记录代码：F-SUN1-XV-15.11.1.1/A0' }}</div>
       </div>
       
       <!-- Report Number -->
@@ -269,6 +269,7 @@
 import { computed, onMounted, onUnmounted, ref, reactive, watch, nextTick } from 'vue'
 import { useTemplateStore } from '@/stores/template'
 import ResizableTable from '@/components/report/ResizableTable.vue'
+import { GENERAL_SHARED_FIELD_STYLES } from '@/constants/generalTemplateDefaults'
 
 const templateStore = useTemplateStore()
 const pageRef = ref(null)
@@ -356,41 +357,30 @@ const getFieldStyle = (fieldId, baseStyle) => {
   }
 }
 
-// Company name style: SimSun 20px bold
 const companyNameStyle = computed(() => ({
-  color: templateStore.fixedTextStyles.color,
-  fontFamily: 'SimSun, serif',
-  fontSize: '20px',
-  fontWeight: 'bold'
+  ...GENERAL_SHARED_FIELD_STYLES.companyName,
+  color: templateStore.fixedTextStyles.color
 }))
 
-// Report title style: Microsoft YaHei 18px
 const reportTitleStyle = computed(() => ({
-  color: templateStore.fixedTextStyles.color,
-  fontFamily: '"Microsoft YaHei", sans-serif',
-  fontSize: '18px'
+  ...GENERAL_SHARED_FIELD_STYLES.reportTitle,
+  color: templateStore.fixedTextStyles.color
 }))
 
-// Signature label style: Microsoft YaHei 12px
 const signatureLabelStyle = computed(() => ({
-  color: templateStore.fixedTextStyles.color,
-  fontFamily: '"Microsoft YaHei", sans-serif',
-  fontSize: '12px'
+  ...GENERAL_SHARED_FIELD_STYLES.signatureLabel,
+  color: templateStore.fixedTextStyles.color
 }))
 
-// Signature placeholder style: 12px for tester/reviewer/approver names
 const signaturePlaceholderStyle = computed(() => ({
-  color: templateStore.editableTextStyles.color,
-  fontFamily: '"Microsoft YaHei", sans-serif',
-  fontSize: '12px',
-  fontStyle: 'italic'
+  ...GENERAL_SHARED_FIELD_STYLES.signaturePlaceholder,
+  color: templateStore.editableTextStyles.color
 }))
 
-// Footer note label style: 9px
 const footerNoteLabelStyle = computed(() => ({
+  ...GENERAL_SHARED_FIELD_STYLES.footerNoteLabel,
   color: templateStore.fixedTextStyles.color,
-  fontFamily: templateStore.fixedTextStyles.fontFamily,
-  fontSize: '9px'
+  fontFamily: templateStore.fixedTextStyles.fontFamily
 }))
 
 const editableTextStyle = computed(() => ({
@@ -634,29 +624,6 @@ const handleTableWidthsChange = (tableName, widths) => {
 }
 
 onMounted(async () => {
-  // Only load default template if no custom template is loaded
-  // TemplateEdit.vue handles loading the latest custom template
-  if (!templateStore.currentTemplateId) {
-    // Check if there's a saved custom template first
-    try {
-      const response = await fetch('/api/template/latest/general')
-      if (response.ok) {
-        const data = await response.json()
-        if (data && data.id) {
-          await templateStore.loadCustomTemplate(data.id)
-        } else {
-          // No custom template exists, load default
-          templateStore.loadDefaultTemplate('general')
-        }
-      } else {
-        templateStore.loadDefaultTemplate('general')
-      }
-    } catch (error) {
-      console.error('Failed to check for saved template:', error)
-      templateStore.loadDefaultTemplate('general')
-    }
-  }
-  
   // Load saved security level
   if (templateStore.securityLevel) {
     securityLevel.value = templateStore.securityLevel
@@ -772,15 +739,7 @@ onUnmounted(() => {
   text-align: center;
   margin-bottom: 15px;
   
-  .company-name {
-    font-size: 18px;
-    font-weight: 600;
-    font-family: SimSun, serif;
-  }
-  
   .report-title {
-    font-size: 16px;
-    font-weight: normal;
     margin-top: 8px;
   }
   

@@ -10,9 +10,9 @@
       >
         <img :src="templateSettings.logo.dataUrl" alt="Logo" />
       </div>
-      <div class="company-name" :style="getFieldStyle('companyName')" v-html="getLabelHtml('companyName', '深圳市欣威智能有限公司')"></div>
-      <div class="report-title" :style="getFieldStyle('reportTitle')" v-html="getLabelHtml('reportTitle', '可靠性实验报告')"></div>
-      <div class="record-code" :style="getFieldStyle('recordCode')" v-html="getLabelHtml('recordCode', '记录代码：F-SUN1-XV-15.11.1.1/A0')"></div>
+      <div class="company-name" :style="getCompanyNameStyle()" v-html="getLabelHtml('companyName', '深圳市欣威智能有限公司')"></div>
+      <div class="report-title" :style="getReportTitleStyle()" v-html="getLabelHtml('reportTitle', '可靠性实验报告')"></div>
+      <div class="record-code" :style="getRecordCodeStyle()" v-html="getLabelHtml('recordCode', '记录代码：F-SUN1-XV-15.11.1.1/A0')"></div>
     </div>
     
     <!-- Page Content -->
@@ -35,28 +35,28 @@
         <div class="signature-item">
           <span class="label" :style="getSignatureLabelStyle('testerLabel')" v-html="getLabelHtml('testerLabel', '测试员：')"></span>
           <img v-if="templateSettings.signatures?.tester?.dataUrl" :src="templateSettings.signatures.tester.dataUrl" class="signature-img" :style="{ maxHeight: (templateSettings.signatures.tester.size || 30) + 'px' }" />
-          <EditableField v-else field-id="tester" :placeholder="getPlaceholder('tester', '测试员姓名')" :value="content.tester" @update="$emit('update-field', 'tester', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
+          <EditableField v-else field-id="tester" :placeholder="getPlaceholder('tester', '测试员姓名')" :value="content.tester" @update="$emit('update-field', 'tester', $event)" :font-size="signaturePlaceholderProps.fontSize" :font-family="signaturePlaceholderProps.fontFamily" :color="signaturePlaceholderProps.color" :placeholder-color="signaturePlaceholderProps.color" />
         </div>
         <div class="signature-item">
           <span class="label" :style="getSignatureLabelStyle('reviewerLabel')" v-html="getLabelHtml('reviewerLabel', '审核：')"></span>
           <img v-if="templateSettings.signatures?.reviewer?.dataUrl" :src="templateSettings.signatures.reviewer.dataUrl" class="signature-img" :style="{ maxHeight: (templateSettings.signatures.reviewer.size || 30) + 'px' }" />
-          <EditableField v-else field-id="reviewer" :placeholder="getPlaceholder('reviewer', '审核人姓名')" :value="content.reviewer" @update="$emit('update-field', 'reviewer', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
+          <EditableField v-else field-id="reviewer" :placeholder="getPlaceholder('reviewer', '审核人姓名')" :value="content.reviewer" @update="$emit('update-field', 'reviewer', $event)" :font-size="signaturePlaceholderProps.fontSize" :font-family="signaturePlaceholderProps.fontFamily" :color="signaturePlaceholderProps.color" :placeholder-color="signaturePlaceholderProps.color" />
         </div>
         <div class="signature-item">
           <span class="label" :style="getSignatureLabelStyle('approverLabel')" v-html="getLabelHtml('approverLabel', '核准：')"></span>
           <img v-if="templateSettings.signatures?.approver?.dataUrl" :src="templateSettings.signatures.approver.dataUrl" class="signature-img" :style="{ maxHeight: (templateSettings.signatures.approver.size || 30) + 'px' }" />
-          <EditableField v-else field-id="approver" :placeholder="getPlaceholder('approver', '核准人姓名')" :value="content.approver" @update="$emit('update-field', 'approver', $event)" :font-size="12" font-family="Microsoft YaHei" color="#999" />
+          <EditableField v-else field-id="approver" :placeholder="getPlaceholder('approver', '核准人姓名')" :value="content.approver" @update="$emit('update-field', 'approver', $event)" :font-size="signaturePlaceholderProps.fontSize" :font-family="signaturePlaceholderProps.fontFamily" :color="signaturePlaceholderProps.color" :placeholder-color="signaturePlaceholderProps.color" />
         </div>
       </div>
       <div class="footer-note">
         <div class="footer-note-content">
           <div class="footer-note-item">
             <span :style="getFooterNoteLabelStyle('saveDeptLabel')" v-html="getLabelHtml('saveDeptLabel', '备注：保存部门：')"></span>
-            <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="$emit('update-field', 'saveDept', $event)" style="width: 80px;" :font-size="9" color="#999" />
+            <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="$emit('update-field', 'saveDept', $event)" style="width: 80px;" :font-size="footerNotePlaceholderProps.fontSize" :font-family="footerNotePlaceholderProps.fontFamily" :color="footerNotePlaceholderProps.color" :placeholder-color="footerNotePlaceholderProps.color" />
           </div>
           <div class="footer-note-item center">
             <span :style="getFooterNoteLabelStyle('saveYearsLabel')" v-html="getLabelHtml('saveYearsLabel', '保存年限：')"></span>
-            <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="$emit('update-field', 'saveYears', $event)" style="width: 60px;" :font-size="9" color="#999" />
+            <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="$emit('update-field', 'saveYears', $event)" style="width: 60px;" :font-size="footerNotePlaceholderProps.fontSize" :font-family="footerNotePlaceholderProps.fontFamily" :color="footerNotePlaceholderProps.color" :placeholder-color="footerNotePlaceholderProps.color" />
           </div>
           <div class="footer-note-item security-level-section">
             <span :style="getFooterNoteLabelStyle('securityLevelLabel')" v-html="getLabelHtml('securityLevelLabel', '保密等级：')"></span>
@@ -82,6 +82,7 @@
 import { ref, computed, watch } from 'vue'
 import EditableField from '@/components/report/EditableField.vue'
 import { useReportStore } from '@/stores/report'
+import { GENERAL_SHARED_FIELD_STYLES } from '@/constants/generalTemplateDefaults'
 
 const props = defineProps({
   pageNumber: {
@@ -125,6 +126,25 @@ const templateSettings = computed(() => reportStore.templateSettings)
 
 // Template content data for labels
 const templateContentData = computed(() => reportStore.templateSettings.templateContentData || {})
+const fixedTextColor = computed(() => (
+  templateSettings.value.fixedTextStyles?.color || GENERAL_SHARED_FIELD_STYLES.companyName.color
+))
+const fixedTextFontFamily = computed(() => (
+  templateSettings.value.fixedTextStyles?.fontFamily || GENERAL_SHARED_FIELD_STYLES.recordCode.fontFamily
+))
+const editableTextColor = computed(() => (
+  templateSettings.value.editableTextStyles?.color || GENERAL_SHARED_FIELD_STYLES.signaturePlaceholder.color
+))
+const signaturePlaceholderProps = computed(() => ({
+  fontSize: parseInt(GENERAL_SHARED_FIELD_STYLES.signaturePlaceholder.fontSize, 10),
+  fontFamily: GENERAL_SHARED_FIELD_STYLES.signaturePlaceholder.fontFamily,
+  color: editableTextColor.value
+}))
+const footerNotePlaceholderProps = computed(() => ({
+  fontSize: parseInt(GENERAL_SHARED_FIELD_STYLES.footerNotePlaceholder.fontSize, 10),
+  fontFamily: GENERAL_SHARED_FIELD_STYLES.footerNotePlaceholder.fontFamily,
+  color: editableTextColor.value
+}))
 
 // Logo style
 const logoStyle = computed(() => {
@@ -153,12 +173,12 @@ const sealStyle = computed(() => {
   }
 })
 
-// Get style for a field from fieldFormats
-const getFieldStyle = (fieldId) => {
+const mergeFieldStyle = (fieldId, baseStyle = {}) => {
   const format = reportStore.getFieldFormat(fieldId)
-  if (!format) return {}
+  if (!format) return baseStyle
   
   return {
+    ...baseStyle,
     ...(format.fontFamily && { fontFamily: format.fontFamily }),
     ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
     ...(format.color && { color: format.color }),
@@ -168,50 +188,38 @@ const getFieldStyle = (fieldId) => {
     ...(format.textAlign && { textAlign: format.textAlign })
   }
 }
+
+// Get style for a field from fieldFormats
+const getFieldStyle = (fieldId, baseStyle = {}) => mergeFieldStyle(fieldId, baseStyle)
+
+const getCompanyNameStyle = () => mergeFieldStyle('companyName', {
+  ...GENERAL_SHARED_FIELD_STYLES.companyName,
+  color: fixedTextColor.value
+})
+
+const getReportTitleStyle = () => mergeFieldStyle('reportTitle', {
+  ...GENERAL_SHARED_FIELD_STYLES.reportTitle,
+  color: fixedTextColor.value
+})
+
+const getRecordCodeStyle = () => mergeFieldStyle('recordCode', {
+  ...GENERAL_SHARED_FIELD_STYLES.recordCode,
+  color: fixedTextColor.value,
+  fontFamily: fixedTextFontFamily.value
+})
 
 // Get style for signature labels
-const getSignatureLabelStyle = (fieldId) => {
-  const defaultStyle = {
-    color: '#000000',
-    fontFamily: '"Microsoft YaHei", sans-serif',
-    fontSize: '12px'
-  }
-  const format = reportStore.getFieldFormat(fieldId)
-  if (!format) return defaultStyle
-  
-  return {
-    ...defaultStyle,
-    ...(format.fontFamily && { fontFamily: format.fontFamily }),
-    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
-    ...(format.color && { color: format.color }),
-    ...(format.fontWeight && { fontWeight: format.fontWeight }),
-    ...(format.fontStyle && { fontStyle: format.fontStyle }),
-    ...(format.textDecoration && { textDecoration: format.textDecoration }),
-    ...(format.textAlign && { textAlign: format.textAlign })
-  }
-}
+const getSignatureLabelStyle = (fieldId) => mergeFieldStyle(fieldId, {
+  ...GENERAL_SHARED_FIELD_STYLES.signatureLabel,
+  color: fixedTextColor.value
+})
 
 // Get style for footer note labels
-const getFooterNoteLabelStyle = (fieldId) => {
-  const defaultStyle = {
-    color: '#000000',
-    fontFamily: '"Microsoft YaHei", sans-serif',
-    fontSize: '9px'
-  }
-  const format = reportStore.getFieldFormat(fieldId)
-  if (!format) return defaultStyle
-  
-  return {
-    ...defaultStyle,
-    ...(format.fontFamily && { fontFamily: format.fontFamily }),
-    ...(format.fontSize && { fontSize: `${format.fontSize}px` }),
-    ...(format.color && { color: format.color }),
-    ...(format.fontWeight && { fontWeight: format.fontWeight }),
-    ...(format.fontStyle && { fontStyle: format.fontStyle }),
-    ...(format.textDecoration && { textDecoration: format.textDecoration }),
-    ...(format.textAlign && { textAlign: format.textAlign })
-  }
-}
+const getFooterNoteLabelStyle = (fieldId) => mergeFieldStyle(fieldId, {
+  ...GENERAL_SHARED_FIELD_STYLES.footerNoteLabel,
+  color: fixedTextColor.value,
+  fontFamily: fixedTextFontFamily.value
+})
 
 // Helper to get template label as HTML
 const getLabelHtml = (key, defaultValue) => {
@@ -276,22 +284,11 @@ const getPlaceholder = (key, defaultValue) => {
   margin-bottom: 15px;
   flex-shrink: 0;
   
-  .company-name {
-    font-size: 18px;
-    font-weight: 600;
-    color: #000;
-    font-family: SimSun, serif;
-  }
-  
   .report-title {
-    font-size: 16px;
-    font-weight: 600;
     margin-top: 8px;
   }
   
   .record-code {
-    font-size: 9px;
-    color: #666;
     margin-top: 5px;
   }
 }

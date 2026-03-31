@@ -50,7 +50,8 @@
     "reportTitle": "",
     "recordCode": "",
     "placeholders": {
-      "testProject": "请输入测试项目"
+      "testProject": "请输入测试项目",
+      "reportNumber": "请输入报告编号"
     }
   },
   "securityLevel": "内部公开",
@@ -88,16 +89,15 @@
   },
   "fieldFormats": {
     "testProject": {
+      "color": "#999999",
       "fontFamily": "SimSun",
       "fontSize": 11,
-      "color": "#999999",
-      "fontWeight": "normal",
       "fontStyle": "italic",
-      "textDecoration": "none",
-      "textAlign": "center"
+      "fontWeight": "normal",
+      "textAlign": "center",
+      "textDecoration": "none"
     }
   },
   "createdAt": "2026-03-31T23:17:25.914993",
-  "updatedAt": "2026-03-31T23:18:12.920717",
-  "appliedAt": "2026-03-31T23:18:12.931563"
+  "updatedAt": "2026-03-31T23:19:14.296667"
 }

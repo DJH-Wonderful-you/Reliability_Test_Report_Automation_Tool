@@ -798,9 +798,10 @@ onUnmounted(() => {
 // Input style that fills entire cell
 .cell-input {
   width: 100%;
-  min-height: 20px;
+  min-height: 24px;
   padding: 4px 8px;
-  border: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
   background: transparent;
   font-style: italic;
   text-align: center;
@@ -810,6 +811,7 @@ onUnmounted(() => {
   word-break: break-word;
   outline: none;
   vertical-align: middle;
+  transition: all 0.2s;
   
   &:focus {
     outline: 2px solid #409eff;

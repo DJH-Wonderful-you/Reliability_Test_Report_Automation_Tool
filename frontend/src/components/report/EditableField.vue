@@ -83,6 +83,8 @@ const getDefaultPlaceholderStyle = () => ({
 })
 
 const getDefaultUserFormat = () => ({
+  fontSize: templateFormat.value.fontSize,
+  fontFamily: templateFormat.value.fontFamily,
   color: props.color || '#000000',
   fontWeight: 'normal',
   fontStyle: 'normal',
@@ -119,14 +121,64 @@ const placeholderStyle = computed(() => ({
 
 // Style for actual content - uses template font settings + fixed defaults for other properties
 const fieldStyle = computed(() => ({
-  fontSize: `${templateFormat.value.fontSize}px`,
-  fontFamily: templateFormat.value.fontFamily,
+  fontSize: `${userFormat.value.fontSize}px`,
+  fontFamily: userFormat.value.fontFamily,
   color: userFormat.value.color,
   fontWeight: userFormat.value.fontWeight,
   fontStyle: userFormat.value.fontStyle,
   textDecoration: userFormat.value.textDecoration,
   textAlign: userFormat.value.textAlign
 }))
+
+const syncPlaceholderDomStyle = () => {
+  if (!fieldRef.value) return
+
+  Object.assign(fieldRef.value.style, {
+    fontSize: `${templateFormat.value.fontSize}px`,
+    fontFamily: templateFormat.value.fontFamily,
+    color: placeholderFormat.value.color,
+    fontStyle: placeholderFormat.value.fontStyle,
+    fontWeight: placeholderFormat.value.fontWeight,
+    textDecoration: placeholderFormat.value.textDecoration,
+    textAlign: placeholderFormat.value.textAlign
+  })
+}
+
+const applyTemplateFieldFormat = (savedFormat) => {
+  const defaultTemplateFormat = getDefaultTemplateFormat()
+  const defaultPlaceholderStyle = getDefaultPlaceholderStyle()
+
+  if (savedFormat) {
+    templateFormat.value.fontFamily = savedFormat.fontFamily || defaultTemplateFormat.fontFamily
+    templateFormat.value.fontSize = savedFormat.fontSize || defaultTemplateFormat.fontSize
+    placeholderFormat.value.color = savedFormat.color || defaultPlaceholderStyle.color
+    placeholderFormat.value.fontWeight = savedFormat.fontWeight || defaultPlaceholderStyle.fontWeight
+    placeholderFormat.value.fontStyle = savedFormat.fontStyle || defaultPlaceholderStyle.fontStyle
+    placeholderFormat.value.textDecoration = savedFormat.textDecoration || defaultPlaceholderStyle.textDecoration
+    placeholderFormat.value.textAlign = savedFormat.textAlign || defaultPlaceholderStyle.textAlign
+    return
+  }
+
+  templateFormat.value = defaultTemplateFormat
+  placeholderFormat.value = defaultPlaceholderStyle
+}
+
+const applyUserFieldFormat = (savedFormat) => {
+  const defaultUserFormat = getDefaultUserFormat()
+
+  if (savedFormat) {
+    userFormat.value.fontFamily = savedFormat.fontFamily || defaultUserFormat.fontFamily
+    userFormat.value.fontSize = savedFormat.fontSize || defaultUserFormat.fontSize
+    userFormat.value.color = savedFormat.color || defaultUserFormat.color
+    userFormat.value.fontWeight = savedFormat.fontWeight || defaultUserFormat.fontWeight
+    userFormat.value.fontStyle = savedFormat.fontStyle || defaultUserFormat.fontStyle
+    userFormat.value.textDecoration = savedFormat.textDecoration || defaultUserFormat.textDecoration
+    userFormat.value.textAlign = savedFormat.textAlign || defaultUserFormat.textAlign
+    return
+  }
+
+  userFormat.value = defaultUserFormat
+}
 
 // Convert text with newlines to HTML for display
 const textToHtml = (text) => {
@@ -209,14 +261,7 @@ const handleBlur = () => {
     nextTick(() => {
       if (fieldRef.value && !isFocused.value) {
         fieldRef.value.innerHTML = textToHtml(props.placeholder)
-        // Apply placeholder style from placeholderFormat including textAlign
-        Object.assign(fieldRef.value.style, {
-          color: placeholderFormat.value.color,
-          fontStyle: placeholderFormat.value.fontStyle,
-          fontWeight: placeholderFormat.value.fontWeight,
-          textDecoration: placeholderFormat.value.textDecoration,
-          textAlign: placeholderFormat.value.textAlign
-        })
+        syncPlaceholderDomStyle()
       }
     })
   }
@@ -263,23 +308,24 @@ const handleFormatChange = (e) => {
   if (!isSelected.value) return
   const format = e.detail
   
-  // Update template format (font family and size) - these apply to both placeholder and content
-  if (format.fontFamily !== undefined) templateFormat.value.fontFamily = format.fontFamily
-  if (format.fontSize !== undefined) templateFormat.value.fontSize = format.fontSize
-  
-  // Update user format (other styling properties) - these only apply to actual user input
+  // Report editor formatting applies only to actual user content and is fully autosaved.
+  if (format.fontFamily !== undefined) userFormat.value.fontFamily = format.fontFamily
+  if (format.fontSize !== undefined) userFormat.value.fontSize = format.fontSize
   if (format.color !== undefined) userFormat.value.color = format.color
   if (format.fontWeight !== undefined) userFormat.value.fontWeight = format.fontWeight
   if (format.fontStyle !== undefined) userFormat.value.fontStyle = format.fontStyle
   if (format.textDecoration !== undefined) userFormat.value.textDecoration = format.textDecoration
   if (format.textAlign !== undefined) userFormat.value.textAlign = format.textAlign
   
-  // Save format to store (only for user input styling, not placeholder)
+  // Save the full content style to report autosave state.
   reportStore.updateFieldFormat(props.fieldId, {
-    fontFamily: templateFormat.value.fontFamily,
-    fontSize: templateFormat.value.fontSize,
-    // Note: color, fontWeight, fontStyle, textDecoration, textAlign are for user input only
-    // and are NOT saved to affect placeholder styling
+    fontFamily: userFormat.value.fontFamily,
+    fontSize: userFormat.value.fontSize,
+    color: userFormat.value.color,
+    fontWeight: userFormat.value.fontWeight,
+    fontStyle: userFormat.value.fontStyle,
+    textDecoration: userFormat.value.textDecoration,
+    textAlign: userFormat.value.textAlign
   })
 }
 
@@ -290,14 +336,7 @@ watch(() => props.value, (newValue, oldValue) => {
       setContent(newValue)
     } else {
       setContent(props.placeholder)
-      // Apply placeholder style from placeholderFormat including textAlign
-      Object.assign(fieldRef.value.style, {
-        color: placeholderFormat.value.color,
-        fontStyle: placeholderFormat.value.fontStyle,
-        fontWeight: placeholderFormat.value.fontWeight,
-        textDecoration: placeholderFormat.value.textDecoration,
-        textAlign: placeholderFormat.value.textAlign
-      })
+      syncPlaceholderDomStyle()
     }
   }
 })
@@ -305,25 +344,8 @@ watch(() => props.value, (newValue, oldValue) => {
 onMounted(() => {
   window.addEventListener('format-change', handleFormatChange)
   
-  // Load saved format from store
-  const savedFormat = reportStore.getFieldFormat(props.fieldId)
-  const defaultTemplateFormat = getDefaultTemplateFormat()
-  const defaultPlaceholderStyle = getDefaultPlaceholderStyle()
-  if (savedFormat) {
-    // Apply font family and size from template
-    templateFormat.value.fontFamily = savedFormat.fontFamily || defaultTemplateFormat.fontFamily
-    templateFormat.value.fontSize = savedFormat.fontSize || defaultTemplateFormat.fontSize
-    // Apply placeholder styling from template (for placeholder text display)
-    placeholderFormat.value.color = savedFormat.color || defaultPlaceholderStyle.color
-    placeholderFormat.value.fontWeight = savedFormat.fontWeight || defaultPlaceholderStyle.fontWeight
-    placeholderFormat.value.fontStyle = savedFormat.fontStyle || defaultPlaceholderStyle.fontStyle
-    placeholderFormat.value.textDecoration = savedFormat.textDecoration || defaultPlaceholderStyle.textDecoration
-    // Use saved textAlign or fall back to component's default
-    placeholderFormat.value.textAlign = savedFormat.textAlign || defaultPlaceholderStyle.textAlign
-  } else {
-    templateFormat.value = defaultTemplateFormat
-    placeholderFormat.value = defaultPlaceholderStyle
-  }
+  applyTemplateFieldFormat(reportStore.getTemplateFieldFormat(props.fieldId))
+  applyUserFieldFormat(reportStore.getReportFieldFormat(props.fieldId))
   
   // Set initial content
   if (fieldRef.value) {
@@ -331,51 +353,32 @@ onMounted(() => {
       setContent(props.value)
     } else {
       setContent(props.placeholder)
-      // Apply placeholder style from placeholderFormat
-      Object.assign(fieldRef.value.style, {
-        color: placeholderFormat.value.color,
-        fontStyle: placeholderFormat.value.fontStyle,
-        fontWeight: placeholderFormat.value.fontWeight,
-        textDecoration: placeholderFormat.value.textDecoration
-      })
+      syncPlaceholderDomStyle()
     }
   }
 })
 
-// Watch for fieldFormats changes (e.g., when template is loaded after mount)
+// Watch for template field format changes (e.g., when applied template styles load after mount)
 watch(
-  () => reportStore.getFieldFormat(props.fieldId),
+  () => reportStore.getTemplateFieldFormat(props.fieldId),
   (newFormat) => {
     if (!isFocused.value) {
-      const defaultTemplateFormat = getDefaultTemplateFormat()
-      const defaultPlaceholderStyle = getDefaultPlaceholderStyle()
-      if (newFormat) {
-        // Apply font family and size from template
-        templateFormat.value.fontFamily = newFormat.fontFamily || defaultTemplateFormat.fontFamily
-        templateFormat.value.fontSize = newFormat.fontSize || defaultTemplateFormat.fontSize
-        // Apply placeholder styling from template (for placeholder text display)
-        placeholderFormat.value.color = newFormat.color || defaultPlaceholderStyle.color
-        placeholderFormat.value.fontWeight = newFormat.fontWeight || defaultPlaceholderStyle.fontWeight
-        placeholderFormat.value.fontStyle = newFormat.fontStyle || defaultPlaceholderStyle.fontStyle
-        placeholderFormat.value.textDecoration = newFormat.textDecoration || defaultPlaceholderStyle.textDecoration
-        // Use newFormat textAlign or fall back to component's default
-        placeholderFormat.value.textAlign = newFormat.textAlign || defaultPlaceholderStyle.textAlign
-      } else {
-        // No format found - reset to defaults (template was reset)
-        templateFormat.value = defaultTemplateFormat
-        placeholderFormat.value = defaultPlaceholderStyle
-      }
-      
-      // If showing placeholder, update DOM style
+      applyTemplateFieldFormat(newFormat)
+      applyUserFieldFormat(reportStore.getReportFieldFormat(props.fieldId))
+
       if (!props.value && fieldRef.value) {
-        Object.assign(fieldRef.value.style, {
-          color: placeholderFormat.value.color,
-          fontStyle: placeholderFormat.value.fontStyle,
-          fontWeight: placeholderFormat.value.fontWeight,
-          textDecoration: placeholderFormat.value.textDecoration,
-          textAlign: placeholderFormat.value.textAlign  // Apply textAlign to DOM
-        })
+        syncPlaceholderDomStyle()
       }
+    }
+  },
+  { deep: true }
+)
+
+watch(
+  () => reportStore.getReportFieldFormat(props.fieldId),
+  (newFormat) => {
+    if (!isFocused.value) {
+      applyUserFieldFormat(newFormat)
     }
   },
   { deep: true }
@@ -384,21 +387,15 @@ watch(
 watch(
   () => reportStore.templateSettings.editableTextStyles,
   () => {
-    if (isFocused.value || reportStore.getFieldFormat(props.fieldId)) {
+    if (isFocused.value || reportStore.getTemplateFieldFormat(props.fieldId)) {
       return
     }
 
-    templateFormat.value = getDefaultTemplateFormat()
-    placeholderFormat.value = getDefaultPlaceholderStyle()
+    applyTemplateFieldFormat(null)
+    applyUserFieldFormat(reportStore.getReportFieldFormat(props.fieldId))
 
     if (!props.value && fieldRef.value) {
-      Object.assign(fieldRef.value.style, {
-        color: placeholderFormat.value.color,
-        fontStyle: placeholderFormat.value.fontStyle,
-        fontWeight: placeholderFormat.value.fontWeight,
-        textDecoration: placeholderFormat.value.textDecoration,
-        textAlign: placeholderFormat.value.textAlign
-      })
+      syncPlaceholderDomStyle()
     }
   },
   { deep: true }

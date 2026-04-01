@@ -89,46 +89,77 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48]
 
 const selectedCount = computed(() => reportStore.selectedFields.length)
 
+const DEFAULT_FONT_FAMILY = 'Microsoft YaHei'
+const DEFAULT_FONT_SIZE = 11
+const DEFAULT_FONT_COLOR = '#000000'
+const DEFAULT_TEXT_ALIGN = 'center'
+
+const getPrimaryFontFamily = (fontFamilyValue) => {
+  return fontFamilyValue?.split(',')[0]?.replace(/['"]/g, '').trim() || DEFAULT_FONT_FAMILY
+}
+
+const normalizeColorValue = (colorValue) => {
+  if (!colorValue) return DEFAULT_FONT_COLOR
+  if (colorValue.startsWith('#')) return colorValue
+
+  const channelValues = colorValue.match(/\d+(\.\d+)?/g)
+  if (!channelValues || channelValues.length < 3) {
+    return DEFAULT_FONT_COLOR
+  }
+
+  const toHex = (value) => Math.max(0, Math.min(255, Math.round(Number(value))))
+    .toString(16)
+    .padStart(2, '0')
+
+  return `#${toHex(channelValues[0])}${toHex(channelValues[1])}${toHex(channelValues[2])}`
+}
+
+const getToolbarStateFromField = (fieldId) => {
+  const savedFormat = reportStore.getReportFieldFormat
+    ? reportStore.getReportFieldFormat(fieldId)
+    : reportStore.getFieldFormat(fieldId)
+  const fieldElement = document.querySelector(`[data-field-id="${fieldId}"]`)
+
+  if (!fieldElement) {
+    return {
+      fontFamily: savedFormat?.fontFamily || DEFAULT_FONT_FAMILY,
+      fontSize: savedFormat?.fontSize || DEFAULT_FONT_SIZE,
+      fontColor: DEFAULT_FONT_COLOR,
+      isBold: false,
+      isItalic: false,
+      isUnderline: false,
+      textAlign: savedFormat?.textAlign || DEFAULT_TEXT_ALIGN
+    }
+  }
+
+  const computedStyle = window.getComputedStyle(fieldElement)
+  const isPlaceholder = fieldElement.classList.contains('placeholder')
+
+  return {
+    fontFamily: savedFormat?.fontFamily || getPrimaryFontFamily(computedStyle.fontFamily),
+    fontSize: savedFormat?.fontSize || parseInt(computedStyle.fontSize, 10) || DEFAULT_FONT_SIZE,
+    // Placeholder gray/italic styles come from the template and should not be reused as user text styles.
+    fontColor: isPlaceholder ? DEFAULT_FONT_COLOR : normalizeColorValue(computedStyle.color),
+    isBold: !isPlaceholder && (computedStyle.fontWeight === 'bold' || parseInt(computedStyle.fontWeight, 10) >= 700),
+    isItalic: !isPlaceholder && computedStyle.fontStyle === 'italic',
+    isUnderline: !isPlaceholder && computedStyle.textDecoration?.includes('underline'),
+    textAlign: computedStyle.textAlign || savedFormat?.textAlign || DEFAULT_TEXT_ALIGN
+  }
+}
+
 // Watch for selected fields changes to update toolbar display
 watch(() => reportStore.selectedFields, (newSelection) => {
   if (newSelection.length > 0) {
     nextTick(() => {
       const firstFieldId = newSelection[0]
-      
-      // First try to get saved format from store
-      const savedFormat = reportStore.getFieldFormat(firstFieldId)
-      if (savedFormat) {
-        fontFamily.value = savedFormat.fontFamily || 'Microsoft YaHei'
-        fontSize.value = savedFormat.fontSize || 11
-        fontColor.value = savedFormat.color || '#000000'
-        isBold.value = savedFormat.fontWeight === 'bold'
-        isItalic.value = savedFormat.fontStyle === 'italic'
-        isUnderline.value = savedFormat.textDecoration === 'underline'
-        textAlign.value = savedFormat.textAlign || 'center'
-      } else {
-        // Try to read from DOM element's computed style
-        const fieldElement = document.querySelector(`[data-field-id="${firstFieldId}"]`)
-        if (fieldElement) {
-          const computedStyle = window.getComputedStyle(fieldElement)
-          fontFamily.value = computedStyle.fontFamily?.split(',')[0]?.replace(/['"]/g, '').trim() || 'Microsoft YaHei'
-          fontSize.value = parseInt(computedStyle.fontSize) || 11
-          // Don't read color from placeholder (gray)
-          fontColor.value = '#000000'
-          isBold.value = computedStyle.fontWeight === 'bold' || parseInt(computedStyle.fontWeight) >= 700
-          isItalic.value = computedStyle.fontStyle === 'italic'
-          isUnderline.value = computedStyle.textDecoration?.includes('underline') || false
-          textAlign.value = computedStyle.textAlign || 'center'
-        } else {
-          // Fallback to default values
-          fontFamily.value = 'Microsoft YaHei'
-          fontSize.value = 11
-          fontColor.value = '#000000'
-          isBold.value = false
-          isItalic.value = false
-          isUnderline.value = false
-          textAlign.value = 'center'
-        }
-      }
+      const fieldState = getToolbarStateFromField(firstFieldId)
+      fontFamily.value = fieldState.fontFamily
+      fontSize.value = fieldState.fontSize
+      fontColor.value = fieldState.fontColor
+      isBold.value = fieldState.isBold
+      isItalic.value = fieldState.isItalic
+      isUnderline.value = fieldState.isUnderline
+      textAlign.value = fieldState.textAlign
     })
   }
 }, { deep: true })

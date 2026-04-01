@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.11（内部测试版）</p>
+        <p class="version">版本 V0.12（内部测试版）</p>
       </div>
 
       <el-divider />
@@ -16,7 +16,7 @@
             <div class="instruction-number">1</div>
             <div class="instruction-content">
               <h3>报告编辑</h3>
-              <p>选择合适的模板（通用模板、英文模板或华为模板），在可编辑区域填写测试信息。蓝色文字区域可修改，黑色文字为固定内容。</p>
+              <p>选择合适的模板，在可编辑区域填写测试信息；报告中的正文内容、样式和动态行数据会自动保存。</p>
             </div>
           </div>
 
@@ -24,7 +24,7 @@
             <div class="instruction-number">2</div>
             <div class="instruction-content">
               <h3>动态内容管理</h3>
-              <p>在测试结果和测试图片区域，可以通过侧边栏进行行操作：末尾添加行、指定位置插入行、末尾删除行、指定位置删除行。支持批量操作和精确控制。</p>
+              <p>测试结果和测试图片区支持通过左侧侧边栏进行末尾添加、指定插入、末尾删除和指定位置删除等行操作。</p>
             </div>
           </div>
 
@@ -32,7 +32,7 @@
             <div class="instruction-number">3</div>
             <div class="instruction-content">
               <h3>图片上传</h3>
-              <p>在测试图片区点击方框或拖拽图片进行上传。每个图片区块支持多张图片，系统会自动布局。</p>
+              <p>可在测试图片区点击或拖拽上传图片；每个图片区块支持多图上传，系统会自动排版。</p>
             </div>
           </div>
 
@@ -40,7 +40,7 @@
             <div class="instruction-number">4</div>
             <div class="instruction-content">
               <h3>格式设置</h3>
-              <p>使用顶部工具栏调整文本格式，包括字体、字号、颜色、加粗、斜体等。支持 Ctrl + 点击多选进行批量格式设置。</p>
+              <p>使用顶部工具栏调整字体、字号、颜色、粗体、斜体、下划线和对齐方式；支持 `Ctrl + 点击` 多选后批量设置。</p>
             </div>
           </div>
 
@@ -48,7 +48,7 @@
             <div class="instruction-number">5</div>
             <div class="instruction-content">
               <h3>导出 PDF</h3>
-              <p>编辑完成后，点击“导出 PDF”按钮生成文档。系统优先使用矢量导出，并在异常时自动回退兼容模式，保证清晰度与可用性。</p>
+              <p>编辑完成后点击“导出 PDF”生成文档；系统优先使用矢量导出，异常时自动回退兼容模式。</p>
             </div>
           </div>
 
@@ -56,7 +56,7 @@
             <div class="instruction-number">6</div>
             <div class="instruction-content">
               <h3>模板编辑</h3>
-              <p>在模板编辑页面，可以自定义 Logo、电子签名、部门章等元素，并调整固定文本、占位文本和表格列宽设置，修改后可应用到报告编辑页面。</p>
+              <p>可在模板编辑页面自定义 Logo、电子签名、部门章、固定文本、占位文本和表格列宽，并在确认后应用到报告编辑页面。</p>
             </div>
           </div>
         </div>
@@ -69,15 +69,15 @@
         <div class="info-grid">
           <div class="info-item">
             <span class="info-label">开发人员</span>
-            <span class="info-value">邓景卫</span>
+            <span class="info-value">邓景升</span>
           </div>
           <div class="info-item">
             <span class="info-label">最近更新</span>
-            <span class="info-value">2026年3月31日</span>
+            <span class="info-value">2026年4月1日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.11</span>
+            <span class="info-value">V0.12</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>
@@ -89,12 +89,12 @@
       <el-divider />
 
       <div class="about-section">
-        <h2>V0.11 本版更新</h2>
+        <h2>V0.12 本版更新</h2>
         <div class="latest-update">
-          <div class="update-item">统一通用模板在“模板编辑”与“报告编辑”界面的默认列宽、页眉和页脚样式。</div>
-          <div class="update-item">修复默认模板应用后标题、记录代码、签名区和备注区与模板编辑界面显示不一致的问题。</div>
-          <div class="update-item">修复报告编辑中行增删、插入等操作未正确触发自动保存的缺陷。</div>
-          <div class="update-item">清理重复默认配置、重复加载逻辑和未使用变量，降低后续维护风险。</div>
+          <div class="update-item">修复模板灰色提示文本样式应用到报告编辑后，正文样式被错误继承的问题。</div>
+          <div class="update-item">修复报告编辑中修改文本样式后未正确自动保存、刷新后样式丢失的问题。</div>
+          <div class="update-item">拆分模板占位符样式与报告正文样式存储，避免模板样式覆盖用户编辑结果。</div>
+          <div class="update-item">优化报告编辑工具栏样式读取逻辑，确保选中字段时显示正确的正文样式。</div>
         </div>
       </div>
 

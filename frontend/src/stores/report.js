@@ -50,7 +50,8 @@ export const useReportStore = defineStore('report', () => {
   const templateType = ref('general')
   const reportTitle = ref('')
   const content = ref({})
-  const fieldFormats = ref({}) // Store format settings for each field
+  const fieldFormats = ref({}) // Store user-specific format settings for each field in report editor
+  const templateFieldFormats = ref({}) // Store template-provided field styles separately from report overrides
   const selectedFields = ref([])
   const isDirty = ref(false)
   const isLoading = ref(false)
@@ -127,17 +128,17 @@ export const useReportStore = defineStore('report', () => {
   }
 
   // Apply template field formats (from template editor)
-  // This will completely replace existing formats with template formats
-  const applyTemplateFieldFormats = (templateFieldFormats) => {
+  // Keep template styles separate from report-specific overrides so autosave only stores report edits.
+  const applyTemplateFieldFormats = (templateFormats) => {
     // Create a new object with template formats (or empty if template has no formats)
     const newFormats = {}
-    if (templateFieldFormats && Object.keys(templateFieldFormats).length > 0) {
-      Object.keys(templateFieldFormats).forEach(fieldId => {
-        newFormats[fieldId] = { ...templateFieldFormats[fieldId] }
+    if (templateFormats && Object.keys(templateFormats).length > 0) {
+      Object.keys(templateFormats).forEach(fieldId => {
+        newFormats[fieldId] = { ...templateFormats[fieldId] }
       })
     }
     // Replace the entire object to trigger reactivity (even if empty, to reset to defaults)
-    fieldFormats.value = newFormats
+    templateFieldFormats.value = newFormats
   }
 
   const updateField = (fieldId, value) => {
@@ -150,8 +151,24 @@ export const useReportStore = defineStore('report', () => {
     markDirty()
   }
 
-  const getFieldFormat = (fieldId) => {
+  const getTemplateFieldFormat = (fieldId) => {
+    return templateFieldFormats.value[fieldId] || null
+  }
+
+  const getReportFieldFormat = (fieldId) => {
     return fieldFormats.value[fieldId] || null
+  }
+
+  const getFieldFormat = (fieldId) => {
+    const templateFormat = getTemplateFieldFormat(fieldId)
+    const reportFormat = getReportFieldFormat(fieldId)
+    if (!templateFormat && !reportFormat) {
+      return null
+    }
+    return {
+      ...(templateFormat || {}),
+      ...(reportFormat || {})
+    }
   }
 
   const updateTestResultRow = (rowIndex, field, value) => {
@@ -565,6 +582,7 @@ export const useReportStore = defineStore('report', () => {
     reportTitle,
     content,
     fieldFormats,
+    templateFieldFormats,
     selectedFields,
     isDirty,
     isLoading,
@@ -589,6 +607,8 @@ export const useReportStore = defineStore('report', () => {
     applyTemplateFieldFormats,
     updateField,
     updateFieldFormat,
+    getTemplateFieldFormat,
+    getReportFieldFormat,
     getFieldFormat,
     updateTestResultRow,
     addTestResultRows,

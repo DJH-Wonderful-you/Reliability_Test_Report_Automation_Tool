@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.13（内部测试版）</p>
+        <p class="version">版本 V0.14（内部测试版）</p>
       </div>
 
       <el-divider />
@@ -73,11 +73,11 @@
           </div>
           <div class="info-item">
             <span class="info-label">最近更新</span>
-            <span class="info-value">2026年4月4日</span>
+            <span class="info-value">2026年4月5日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.13</span>
+            <span class="info-value">V0.14</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>
@@ -89,12 +89,12 @@
       <el-divider />
 
       <div class="about-section">
-        <h2>V0.13 本版更新</h2>
+        <h2>V0.14 本版更新</h2>
         <div class="latest-update">
-          <div class="update-item">修复模板编辑界面中选中默认单元格后，工具栏未正确显示当前粗体和对齐样式的问题。</div>
-          <div class="update-item">统一模板编辑与报告编辑界面的测试图片区样式，提升图片上传和 PDF 导出的视觉一致性。</div>
-          <div class="update-item">修复报告编辑界面页脚“备注：保存部门：”和“保存年限：”输入框在实际输入时仍显示灰色的问题。</div>
-          <div class="update-item">抽离并统一文本样式读取逻辑，提升工具栏对字重、颜色和对齐方式的识别准确性。</div>
+          <div class="update-item">修复打开已保存草稿后继续编辑并刷新页面时，界面回退到打开草稿前状态的问题。</div>
+          <div class="update-item">打开草稿后，后续编辑内容现在会作为当前会话独立自动保存，刷新页面后仍可保持当前编辑状态。</div>
+          <div class="update-item">支持基于已打开草稿继续修改后另存为新草稿，原草稿内容保持不变。</div>
+          <div class="update-item">草稿列表中不再显示自动保存记录，避免与用户手动保存的草稿混淆。</div>
         </div>
       </div>
 

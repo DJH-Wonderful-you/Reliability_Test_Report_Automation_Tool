@@ -50,8 +50,8 @@
     "reportTitle": "",
     "recordCode": "",
     "placeholders": {
-      "saveDept": "部门",
-      "judgmentResult": "请输入判定结果...asdf"
+      "judgmentResult": "请输入判定结果...asdf",
+      "saveDept": "部门"
     },
     "saveDeptLabel": "备注：保存部门：",
     "saveYearsLabel": "保存年限："
@@ -90,25 +90,25 @@
     ]
   },
   "fieldFormats": {
-    "saveDeptLabel": {
-      "fontFamily": "Microsoft YaHei",
-      "fontSize": 9,
-      "color": "#000000",
-      "fontWeight": "normal",
-      "fontStyle": "normal",
-      "textDecoration": "underline",
-      "textAlign": "left"
-    },
     "saveDept": {
+      "color": "#999999",
       "fontFamily": "Microsoft YaHei",
       "fontSize": 9,
-      "color": "#999999",
-      "fontWeight": "normal",
       "fontStyle": "italic",
-      "textDecoration": "underline",
-      "textAlign": "left"
+      "fontWeight": "normal",
+      "textAlign": "left",
+      "textDecoration": "underline"
+    },
+    "saveDeptLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 9,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "left",
+      "textDecoration": "underline"
     }
   },
   "createdAt": "2026-04-05T22:24:50.038177",
-  "updatedAt": "2026-04-05T22:33:10.088756"
+  "updatedAt": "2026-04-05T23:19:47.996445"
 }

@@ -19,6 +19,41 @@ const createDefaultSignatures = () => ({
   approver: null
 })
 
+const createDefaultTestResultRows = () => ([
+  { id: 1, appearance: '', function: '', other: '', conclusion: '', note: '' },
+  { id: 2, appearance: '', function: '', other: '', conclusion: '', note: '' },
+  { id: 3, appearance: '', function: '', other: '', conclusion: '', note: '' }
+])
+
+const createDefaultTestImageRows = () => ([
+  { id: 1, before: [], during: [], after: [] },
+  { id: 2, before: [], during: [], after: [] },
+  { id: 3, before: [], during: [], after: [] }
+])
+
+const cloneReportSnapshot = (snapshot = {}) => ({
+  fields: { ...(snapshot.fields || {}) },
+  fieldFormats: Object.fromEntries(
+    Object.entries(snapshot.fieldFormats || {}).map(([fieldId, format]) => [
+      fieldId,
+      { ...format }
+    ])
+  ),
+  testResultRows: Array.isArray(snapshot.testResultRows)
+    ? snapshot.testResultRows.map(row => ({ ...row }))
+    : createDefaultTestResultRows(),
+  testImageRows: Array.isArray(snapshot.testImageRows)
+    ? snapshot.testImageRows.map(row => ({
+      ...row,
+      before: Array.isArray(row.before) ? [...row.before] : [],
+      during: Array.isArray(row.during) ? [...row.during] : [],
+      after: Array.isArray(row.after) ? [...row.after] : []
+    }))
+    : createDefaultTestImageRows()
+})
+
+const getAutoSaveId = (type = 'general') => `autosave_${type}`
+
 const normalizeTemplateSettings = (type = 'general', data = {}) => {
   const defaultTemplateContentData = createDefaultTemplateContentData()
 
@@ -64,17 +99,9 @@ export const useReportStore = defineStore('report', () => {
   const templateSettings = ref(normalizeTemplateSettings('general'))
 
   // Dynamic rows for test results and images
-  const testResultRows = ref([
-    { id: 1, appearance: '', function: '', other: '', conclusion: '', note: '' },
-    { id: 2, appearance: '', function: '', other: '', conclusion: '', note: '' },
-    { id: 3, appearance: '', function: '', other: '', conclusion: '', note: '' }
-  ])
+  const testResultRows = ref(createDefaultTestResultRows())
   
-  const testImageRows = ref([
-    { id: 1, before: [], during: [], after: [] },
-    { id: 2, before: [], during: [], after: [] },
-    { id: 3, before: [], during: [], after: [] }
-  ])
+  const testImageRows = ref(createDefaultTestImageRows())
 
   // Pagination state
   const currentPage = ref(1)
@@ -326,6 +353,14 @@ export const useReportStore = defineStore('report', () => {
     }, 500) // Auto-save after 0.5 second of inactivity
   }
 
+  const applySnapshotToState = (snapshot = {}) => {
+    const normalizedSnapshot = cloneReportSnapshot(snapshot)
+    content.value = normalizedSnapshot.fields
+    fieldFormats.value = normalizedSnapshot.fieldFormats
+    testResultRows.value = normalizedSnapshot.testResultRows
+    testImageRows.value = normalizedSnapshot.testImageRows
+  }
+
   const autoSave = async () => {
     if (!isDirty.value) return
     
@@ -334,7 +369,7 @@ export const useReportStore = defineStore('report', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: currentDraftId.value,
+          id: getAutoSaveId(templateType.value),
           title: reportTitle.value || 'Auto-saved Report',
           templateType: templateType.value,
           content: {
@@ -348,9 +383,7 @@ export const useReportStore = defineStore('report', () => {
       
       if (response.ok) {
         const result = await response.json()
-        if (!currentDraftId.value) {
-          currentDraftId.value = result.id
-        }
+        currentDraftId.value = result.id
         isDirty.value = false
       }
     } catch (error) {
@@ -365,19 +398,10 @@ export const useReportStore = defineStore('report', () => {
         const result = await response.json()
         if (result.exists && result.draft) {
           const draft = result.draft
-          currentDraftId.value = draft.id
+          currentDraftId.value = getAutoSaveId(draft.templateType || type)
           reportTitle.value = draft.title || ''
-          
-          if (draft.content) {
-            content.value = draft.content.fields || {}
-            fieldFormats.value = draft.content.fieldFormats || {}
-            if (draft.content.testResultRows) {
-              testResultRows.value = draft.content.testResultRows
-            }
-            if (draft.content.testImageRows) {
-              testImageRows.value = draft.content.testImageRows
-            }
-          }
+          templateType.value = draft.templateType || type
+          applySnapshotToState(draft.content)
           return true
         }
       }
@@ -409,16 +433,8 @@ export const useReportStore = defineStore('report', () => {
     reportTitle.value = ''
     content.value = {}
     fieldFormats.value = {}
-    testResultRows.value = [
-      { id: 1, appearance: '', function: '', other: '', conclusion: '', note: '' },
-      { id: 2, appearance: '', function: '', other: '', conclusion: '', note: '' },
-      { id: 3, appearance: '', function: '', other: '', conclusion: '', note: '' }
-    ]
-    testImageRows.value = [
-      { id: 1, before: [], during: [], after: [] },
-      { id: 2, before: [], during: [], after: [] },
-      { id: 3, before: [], during: [], after: [] }
-    ]
+    testResultRows.value = createDefaultTestResultRows()
+    testImageRows.value = createDefaultTestImageRows()
     selectedFields.value = []
     isDirty.value = false
     
@@ -508,24 +524,16 @@ export const useReportStore = defineStore('report', () => {
       if (response.ok) {
         const draft = await response.json()
         
-        // Load draft content
-        if (draft.content) {
-          content.value = draft.content.fields || {}
-          fieldFormats.value = draft.content.fieldFormats || {}
-          if (draft.content.testResultRows) {
-            testResultRows.value = draft.content.testResultRows
-          }
-          if (draft.content.testImageRows) {
-            testImageRows.value = draft.content.testImageRows
-          }
-        }
+        // Load the saved draft as a new editing session.
+        applySnapshotToState(draft.content)
         
         // Update draft metadata
-        currentDraftId.value = draft.id
         reportTitle.value = draft.title || ''
         templateType.value = draft.templateType || 'general'
         
-        isDirty.value = false
+        currentDraftId.value = getAutoSaveId(templateType.value)
+        isDirty.value = true
+        await autoSave()
         ElMessage.success(`草稿 "${draft.title}" 加载成功`)
         return draft
       } else {

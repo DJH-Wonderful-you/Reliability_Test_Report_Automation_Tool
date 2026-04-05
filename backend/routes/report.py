@@ -28,8 +28,11 @@ def list_drafts():
                 try:
                     with open(filepath, 'r', encoding='utf-8') as f:
                         draft = json.load(f)
+                        draft_id = draft.get('id', '')
+                        if draft.get('isAutosave') or str(draft_id).startswith('autosave_'):
+                            continue
                         drafts.append({
-                            'id': draft.get('id'),
+                            'id': draft_id,
                             'title': draft.get('title', 'Untitled'),
                             'templateType': draft.get('templateType', 'general'),
                             'updatedAt': draft.get('updatedAt'),

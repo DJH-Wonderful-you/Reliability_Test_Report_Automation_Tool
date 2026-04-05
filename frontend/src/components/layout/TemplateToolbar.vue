@@ -68,8 +68,17 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useTemplateStore } from '@/stores/template'
+import {
+  DEFAULT_FONT_COLOR,
+  DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_SIZE,
+  getPrimaryFontFamily,
+  isBoldLikeFontWeight,
+  normalizeColorValue,
+  normalizeTextAlign
+} from '@/utils/textFormat'
 
 // Icons (simplified names for template)
 const AlignLeft = { template: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 3h18v2H3V3zm0 8h12v2H3v-2zm0 8h18v2H3v-2zm0-4h12v2H3v-2z"/></svg>' }
@@ -100,35 +109,27 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48]
 
 const selectedCount = computed(() => props.selectedElements.length)
 
+const syncToolbarFromElement = (element) => {
+  if (!element) return
+
+  const computedStyle = window.getComputedStyle(element)
+  fontFamily.value = getPrimaryFontFamily(computedStyle.fontFamily)
+  fontSize.value = parseInt(computedStyle.fontSize, 10) || DEFAULT_FONT_SIZE
+  fontColor.value = normalizeColorValue(computedStyle.color)
+  isBold.value = isBoldLikeFontWeight(computedStyle.fontWeight)
+  isItalic.value = computedStyle.fontStyle === 'italic'
+  isUnderline.value = computedStyle.textDecoration?.includes('underline')
+  textAlign.value = normalizeTextAlign(computedStyle.textAlign, 'left')
+}
+
 // Watch for selected elements changes to update toolbar display
 watch(() => props.selectedElements, (newSelection) => {
   if (newSelection.length > 0) {
-    // Get format info from first selected element and update toolbar
-    const firstEl = newSelection[0]
-    if (firstEl && firstEl.style) {
-      // Update toolbar to reflect selected element's style
-      const computedStyle = window.getComputedStyle(firstEl)
-      fontFamily.value = computedStyle.fontFamily.split(',')[0].replace(/['"]/g, '').trim() || 'Microsoft YaHei'
-      fontSize.value = parseInt(computedStyle.fontSize) || 11
-      fontColor.value = rgbToHex(computedStyle.color) || '#000000'
-      isBold.value = computedStyle.fontWeight === 'bold' || parseInt(computedStyle.fontWeight) >= 700
-      isItalic.value = computedStyle.fontStyle === 'italic'
-      isUnderline.value = computedStyle.textDecoration.includes('underline')
-      textAlign.value = computedStyle.textAlign || 'left'
-    }
+    nextTick(() => {
+      syncToolbarFromElement(newSelection[0])
+    })
   }
 }, { deep: true })
-
-// Helper function to convert rgb to hex
-const rgbToHex = (rgb) => {
-  if (!rgb || rgb.startsWith('#')) return rgb
-  const result = rgb.match(/\d+/g)
-  if (!result || result.length < 3) return '#000000'
-  return '#' + result.slice(0, 3).map(x => {
-    const hex = parseInt(x).toString(16)
-    return hex.length === 1 ? '0' + hex : hex
-  }).join('')
-}
 
 const applyFormat = () => {
   // Only apply format if there are selected elements
@@ -172,9 +173,9 @@ const setAlign = (align) => {
 
 // Initialize with template store values
 onMounted(() => {
-  fontFamily.value = templateStore.fixedTextStyles.fontFamily
-  fontSize.value = templateStore.fixedTextStyles.fontSize
-  fontColor.value = templateStore.fixedTextStyles.color
+  fontFamily.value = templateStore.fixedTextStyles.fontFamily || DEFAULT_FONT_FAMILY
+  fontSize.value = templateStore.fixedTextStyles.fontSize || DEFAULT_FONT_SIZE
+  fontColor.value = templateStore.fixedTextStyles.color || DEFAULT_FONT_COLOR
 })
 </script>
 

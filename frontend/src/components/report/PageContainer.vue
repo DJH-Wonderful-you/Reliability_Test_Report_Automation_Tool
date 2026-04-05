@@ -52,11 +52,11 @@
         <div class="footer-note-content">
           <div class="footer-note-item">
             <span :style="getFooterNoteLabelStyle('saveDeptLabel')" v-html="getLabelHtml('saveDeptLabel', '备注：保存部门：')"></span>
-            <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="$emit('update-field', 'saveDept', $event)" style="width: 80px;" :font-size="footerNotePlaceholderProps.fontSize" :font-family="footerNotePlaceholderProps.fontFamily" :color="footerNotePlaceholderProps.color" :placeholder-color="footerNotePlaceholderProps.color" />
+            <EditableField field-id="saveDept" :placeholder="getPlaceholder('saveDept', '部门')" :value="content.saveDept" @update="$emit('update-field', 'saveDept', $event)" style="width: 80px;" :font-size="footerNotePlaceholderProps.fontSize" :font-family="footerNotePlaceholderProps.fontFamily" :placeholder-color="footerNotePlaceholderProps.color" />
           </div>
           <div class="footer-note-item center">
             <span :style="getFooterNoteLabelStyle('saveYearsLabel')" v-html="getLabelHtml('saveYearsLabel', '保存年限：')"></span>
-            <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="$emit('update-field', 'saveYears', $event)" style="width: 60px;" :font-size="footerNotePlaceholderProps.fontSize" :font-family="footerNotePlaceholderProps.fontFamily" :color="footerNotePlaceholderProps.color" :placeholder-color="footerNotePlaceholderProps.color" />
+            <EditableField field-id="saveYears" :placeholder="getPlaceholder('saveYears', '年限')" :value="content.saveYears" @update="$emit('update-field', 'saveYears', $event)" style="width: 60px;" :font-size="footerNotePlaceholderProps.fontSize" :font-family="footerNotePlaceholderProps.fontFamily" :placeholder-color="footerNotePlaceholderProps.color" />
           </div>
           <div class="footer-note-item security-level-section">
             <span :style="getFooterNoteLabelStyle('securityLevelLabel')" v-html="getLabelHtml('securityLevelLabel', '保密等级：')"></span>

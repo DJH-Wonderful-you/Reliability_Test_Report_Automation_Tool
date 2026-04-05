@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.12（内部测试版）</p>
+        <p class="version">版本 V0.13（内部测试版）</p>
       </div>
 
       <el-divider />
@@ -69,15 +69,15 @@
         <div class="info-grid">
           <div class="info-item">
             <span class="info-label">开发人员</span>
-            <span class="info-value">邓景升</span>
+            <span class="info-value">邓景华</span>
           </div>
           <div class="info-item">
             <span class="info-label">最近更新</span>
-            <span class="info-value">2026年4月1日</span>
+            <span class="info-value">2026年4月4日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.12</span>
+            <span class="info-value">V0.13</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>
@@ -89,12 +89,12 @@
       <el-divider />
 
       <div class="about-section">
-        <h2>V0.12 本版更新</h2>
+        <h2>V0.13 本版更新</h2>
         <div class="latest-update">
-          <div class="update-item">修复模板灰色提示文本样式应用到报告编辑后，正文样式被错误继承的问题。</div>
-          <div class="update-item">修复报告编辑中修改文本样式后未正确自动保存、刷新后样式丢失的问题。</div>
-          <div class="update-item">拆分模板占位符样式与报告正文样式存储，避免模板样式覆盖用户编辑结果。</div>
-          <div class="update-item">优化报告编辑工具栏样式读取逻辑，确保选中字段时显示正确的正文样式。</div>
+          <div class="update-item">修复模板编辑界面中选中默认单元格后，工具栏未正确显示当前粗体和对齐样式的问题。</div>
+          <div class="update-item">统一模板编辑与报告编辑界面的测试图片区样式，提升图片上传和 PDF 导出的视觉一致性。</div>
+          <div class="update-item">修复报告编辑界面页脚“备注：保存部门：”和“保存年限：”输入框在实际输入时仍显示灰色的问题。</div>
+          <div class="update-item">抽离并统一文本样式读取逻辑，提升工具栏对字重、颜色和对齐方式的识别准确性。</div>
         </div>
       </div>
 
@@ -103,7 +103,7 @@
       <div class="about-section">
         <h2>技术支持</h2>
         <p class="support-text">
-          如有使用问题或改进建议，请联系开发人员或 IT 部门。
+          如有使用问题或改进建议，请通过企微联系开发人员。
         </p>
       </div>
     </div>

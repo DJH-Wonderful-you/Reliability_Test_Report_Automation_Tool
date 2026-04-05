@@ -191,19 +191,21 @@
         
         <!-- Sample image row -->
         <div class="image-row">
-          <div class="image-cell">
+          <div class="image-row-content">
+            <div class="image-cell">
             <div class="image-placeholder" :style="getFieldStyle('imagePlaceholder1', editableTextStyle)">
               <span>图片占位</span>
             </div>
-          </div>
-          <div class="image-cell">
+            </div>
+            <div class="image-cell">
             <div class="image-placeholder" :style="getFieldStyle('imagePlaceholder2', editableTextStyle)">
               <span>图片占位</span>
             </div>
-          </div>
-          <div class="image-cell">
+            </div>
+            <div class="image-cell">
             <div class="image-placeholder" :style="getFieldStyle('imagePlaceholder3', editableTextStyle)">
               <span>图片占位</span>
+            </div>
             </div>
           </div>
         </div>
@@ -927,55 +929,54 @@ onUnmounted(() => {
 
 .image-headers {
   display: flex;
-  border: 1px solid #000;
-  border-bottom: none;
+  gap: 10px;
+  margin-bottom: 10px;
   
   .image-header {
     flex: 1;
-    padding: 8px;
     text-align: center;
-    font-weight: 600;
-    background-color: #f5f5f5;
-    border-right: 1px solid #000;
-    
-    &:last-child {
-      border-right: none;
-    }
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
 }
 
 .image-row {
   display: flex;
-  border: 1px solid #000;
-  border-top: none;
-  
-  &:first-of-type {
-    border-top: 1px solid #000;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+
+  .image-row-content {
+    flex: 1;
+    display: flex;
+    gap: 10px;
   }
   
   .image-cell {
     flex: 1;
-    padding: 8px;
-    border-right: 1px solid #000;
-    min-height: 80px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    &:last-child {
-      border-right: none;
-    }
     
     .image-placeholder {
       width: 100%;
-      height: 60px;
-      border: 1px dashed #ccc;
+      aspect-ratio: 1;
+      border: 2px dashed #dcdfe6;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #999;
+      gap: 6px;
+      padding: 16px;
+      box-sizing: border-box;
+      background: #fafafa;
+      color: #909399;
       font-size: 12px;
       font-style: italic;
+      text-align: center;
+      line-height: 1.4;
       border-radius: 4px;
     }
   }

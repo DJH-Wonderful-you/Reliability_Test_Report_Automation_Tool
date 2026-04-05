@@ -68,6 +68,15 @@
 <script setup>
 import { ref, computed, watch, nextTick } from 'vue'
 import { useReportStore } from '@/stores/report'
+import {
+  DEFAULT_FONT_COLOR,
+  DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_SIZE,
+  getPrimaryFontFamily,
+  isBoldLikeFontWeight,
+  normalizeColorValue,
+  normalizeTextAlign
+} from '@/utils/textFormat'
 
 // Icons (simplified names for template)
 const AlignLeft = { template: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 3h18v2H3V3zm0 8h12v2H3v-2zm0 8h18v2H3v-2zm0-4h12v2H3v-2z"/></svg>' }
@@ -89,30 +98,7 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48]
 
 const selectedCount = computed(() => reportStore.selectedFields.length)
 
-const DEFAULT_FONT_FAMILY = 'Microsoft YaHei'
-const DEFAULT_FONT_SIZE = 11
-const DEFAULT_FONT_COLOR = '#000000'
 const DEFAULT_TEXT_ALIGN = 'center'
-
-const getPrimaryFontFamily = (fontFamilyValue) => {
-  return fontFamilyValue?.split(',')[0]?.replace(/['"]/g, '').trim() || DEFAULT_FONT_FAMILY
-}
-
-const normalizeColorValue = (colorValue) => {
-  if (!colorValue) return DEFAULT_FONT_COLOR
-  if (colorValue.startsWith('#')) return colorValue
-
-  const channelValues = colorValue.match(/\d+(\.\d+)?/g)
-  if (!channelValues || channelValues.length < 3) {
-    return DEFAULT_FONT_COLOR
-  }
-
-  const toHex = (value) => Math.max(0, Math.min(255, Math.round(Number(value))))
-    .toString(16)
-    .padStart(2, '0')
-
-  return `#${toHex(channelValues[0])}${toHex(channelValues[1])}${toHex(channelValues[2])}`
-}
 
 const getToolbarStateFromField = (fieldId) => {
   const savedFormat = reportStore.getReportFieldFormat
@@ -140,10 +126,10 @@ const getToolbarStateFromField = (fieldId) => {
     fontSize: savedFormat?.fontSize || parseInt(computedStyle.fontSize, 10) || DEFAULT_FONT_SIZE,
     // Placeholder gray/italic styles come from the template and should not be reused as user text styles.
     fontColor: isPlaceholder ? DEFAULT_FONT_COLOR : normalizeColorValue(computedStyle.color),
-    isBold: !isPlaceholder && (computedStyle.fontWeight === 'bold' || parseInt(computedStyle.fontWeight, 10) >= 700),
+    isBold: !isPlaceholder && isBoldLikeFontWeight(computedStyle.fontWeight),
     isItalic: !isPlaceholder && computedStyle.fontStyle === 'italic',
     isUnderline: !isPlaceholder && computedStyle.textDecoration?.includes('underline'),
-    textAlign: computedStyle.textAlign || savedFormat?.textAlign || DEFAULT_TEXT_ALIGN
+    textAlign: normalizeTextAlign(computedStyle.textAlign, savedFormat?.textAlign || DEFAULT_TEXT_ALIGN)
   }
 }
 

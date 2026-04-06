@@ -1,10 +1,8 @@
 <template>
   <div class="template-general">
     <div class="a4-page template-page" ref="pageRef">
-      <!-- Main Content Area -->
-      <div class="page-content">
-        <!-- Header -->
-        <div class="page-header">
+      <!-- Page Header -->
+      <div class="page-header">
         <div 
           v-if="templateStore.logo.dataUrl" 
           class="logo-area"
@@ -18,8 +16,10 @@
         <div class="record-code editable-text" :style="getFieldStyle('recordCode', { ...GENERAL_SHARED_FIELD_STYLES.recordCode, color: templateStore.fixedTextStyles.color, fontFamily: templateStore.fixedTextStyles.fontFamily || GENERAL_SHARED_FIELD_STYLES.recordCode.fontFamily })" contenteditable="true" data-field-id="recordCode" @blur="updateFixedText('recordCode', $event)">{{ templateData.recordCode || '记录代码：F-SUN1-XV-15.11.1.1/A0' }}</div>
       </div>
       
-      <!-- Report Number -->
-      <div class="report-info-row">
+      <!-- Main Content Area -->
+      <div class="page-content">
+        <!-- Report Number -->
+        <div class="report-info-row">
         <span class="label editable-text" :style="getFieldStyle('reportNumberLabel', fixedTextStyle)" contenteditable="true" data-field-id="reportNumberLabel" @blur="updateFixedText('reportNumberLabel', $event)" @keydown="handleKeydown($event, false)">{{ templateData.reportNumberLabel || '报告编号：' }}</span>
         <span class="placeholder-text editable-text" :style="getFieldStyle('reportNumber', editableTextStyle)" contenteditable="true" data-field-id="reportNumber" @blur="updatePlaceholder('reportNumber', $event)" @keydown="handleKeydown($event, true)">{{ templateData.placeholders?.reportNumber || '请输入报告编号' }}</span>
       </div>
@@ -210,6 +210,7 @@
           </div>
         </div>
       </div>
+      </div>
       
       <!-- Department Seal -->
       <div 
@@ -220,11 +221,10 @@
       >
         <img :src="templateStore.departmentSeal.dataUrl" alt="Seal" draggable="false" />
       </div>
-    </div>
-    
-    <!-- Footer (sticky to bottom) -->
-    <div class="page-footer">
-      <div class="signature-row">
+      
+      <!-- Footer (sticky to bottom) -->
+      <div class="page-footer">
+        <div class="signature-row">
         <div class="signature-item">
           <span class="label editable-text" :style="getFieldStyle('testerLabel', signatureLabelStyle)" contenteditable="true" data-field-id="testerLabel" @blur="updateFixedText('testerLabel', $event)">{{ templateData.testerLabel || '测试员：' }}</span>
           <img v-if="templateStore.signatures.tester.dataUrl" :src="templateStore.signatures.tester.dataUrl" class="signature-img" :style="signatureStyle('tester')" />
@@ -492,23 +492,9 @@ const handleDrag = (e) => {
   const elementWidth = dragElementSize.value.width
   const elementHeight = dragElementSize.value.height
   
-  // Get computed padding from the page element
-  // The page has padding: 10mm 15mm 15mm 15mm (top right bottom left)
-  const computedStyle = window.getComputedStyle(pageRef.value)
-  const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0
-  const paddingTop = parseFloat(computedStyle.paddingTop) || 0
-  const paddingRight = parseFloat(computedStyle.paddingRight) || 0
-  const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0
-  
-  // Calculate the content area (excluding padding)
-  const contentWidth = pageRect.width - paddingLeft - paddingRight
-  const contentHeight = pageRect.height - paddingTop - paddingBottom
-  
-  // Constrain to content bounds
-  // maxX ensures the element's right edge doesn't exceed the content area
-  // maxY ensures the element's bottom edge doesn't exceed the content area
-  const maxX = contentWidth - elementWidth
-  const maxY = contentHeight - elementHeight
+  // Constrain to the full A4 page so images can be placed in blank areas too.
+  const maxX = pageRect.width - elementWidth
+  const maxY = pageRect.height - elementHeight
   
   const constrainedX = Math.max(0, Math.min(newX, maxX))
   const constrainedY = Math.max(0, Math.min(newY, maxY))

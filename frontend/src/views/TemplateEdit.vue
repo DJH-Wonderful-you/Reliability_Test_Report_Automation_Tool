@@ -49,7 +49,7 @@
               <el-input-number 
                 v-model="templateStore.logo.position.x" 
                 :min="0" 
-                :max="600" 
+                :max="A4_PAGE_WIDTH_PX" 
                 size="small"
                 controls-position="right"
                 @change="handleLogoPositionChange"
@@ -59,7 +59,7 @@
               <el-input-number 
                 v-model="templateStore.logo.position.y" 
                 :min="0" 
-                :max="1000" 
+                :max="A4_PAGE_HEIGHT_PX" 
                 size="small"
                 controls-position="right"
                 @change="handleLogoPositionChange"
@@ -190,7 +190,7 @@
               <el-input-number 
                 v-model="templateStore.departmentSeal.position.x" 
                 :min="0" 
-                :max="600" 
+                :max="A4_PAGE_WIDTH_PX" 
                 size="small"
                 controls-position="right"
                 @change="handleSealPositionChange"
@@ -200,7 +200,7 @@
               <el-input-number 
                 v-model="templateStore.departmentSeal.position.y" 
                 :min="0" 
-                :max="1000" 
+                :max="A4_PAGE_HEIGHT_PX" 
                 size="small"
                 controls-position="right"
                 @change="handleSealPositionChange"
@@ -268,6 +268,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 const templateStore = useTemplateStore()
 const containerRef = ref(null)
 const previewRef = ref(null)
+const A4_PAGE_WIDTH_PX = 794
+const A4_PAGE_HEIGHT_PX = 1123
 
 // Auto-save state (no UI display, silent save like report edit)
 let autoSaveTimer = null

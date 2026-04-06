@@ -168,7 +168,7 @@ const sealStyle = computed(() => {
     left: `${seal.position?.x || 400}px`,
     top: `${seal.position?.y || 650}px`,
     width: `${seal.size || 120}px`,
-    opacity: 1,
+    opacity: seal.opacity ?? 0.3,
     zIndex: 5
   }
 })

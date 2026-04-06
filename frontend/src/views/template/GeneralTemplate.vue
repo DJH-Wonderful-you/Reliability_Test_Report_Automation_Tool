@@ -406,7 +406,7 @@ const sealStyle = computed(() => ({
   left: `${templateStore.departmentSeal.position.x}px`,
   top: `${templateStore.departmentSeal.position.y}px`,
   width: `${templateStore.departmentSeal.size}px`,
-  opacity: templateStore.departmentSeal.opacity,
+  opacity: 1,
   cursor: 'move',
   zIndex: isDragging.value && dragTarget.value === 'seal' ? 1000 : 5
 }))

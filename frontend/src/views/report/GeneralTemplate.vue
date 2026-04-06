@@ -846,14 +846,47 @@ const createVectorExportHtml = () => {
         padding: 0;
         background: #ffffff;
       }
+      .export-document {
+        width: 210mm;
+        margin: 0 auto;
+      }
       * {
         box-sizing: border-box;
       }
       .export-document .a4-page {
+        width: auto !important;
+        min-height: 297mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        display: flex !important;
+        flex-direction: column !important;
+        position: relative !important;
         break-after: page;
         page-break-after: always;
         margin: 0 !important;
         box-shadow: none !important;
+      }
+      .export-document .page-header,
+      .export-document .page-content,
+      .export-document .page-footer {
+        width: 180mm !important;
+        max-width: 180mm !important;
+        align-self: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      .export-document .page-content {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+      }
+      .export-document .page-footer {
+        position: absolute !important;
+        left: 15mm !important;
+        right: 15mm !important;
+        bottom: 15mm !important;
+        width: auto !important;
+        max-width: none !important;
+        margin: 0 !important;
       }
       .export-document .a4-page:last-child {
         break-after: auto;

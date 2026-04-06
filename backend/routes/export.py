@@ -122,10 +122,43 @@ def export_pdf():
                 size: A4;
                 margin: 0;
             }
+            html, body {
+                margin: 0;
+                padding: 0;
+                background: #ffffff;
+            }
             body {
                 font-family: "Microsoft YaHei", "SimSun", sans-serif;
                 margin: 0;
                 padding: 0;
+            }
+            .export-document {
+                width: 210mm;
+                margin: 0 auto;
+            }
+            .export-document .a4-page {
+                width: 210mm;
+                min-height: 297mm;
+                height: 297mm;
+                max-height: 297mm;
+                box-sizing: border-box;
+                position: relative;
+                overflow: hidden;
+            }
+            .export-document .page-header,
+            .export-document .page-content {
+                width: 180mm;
+                max-width: 180mm;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .export-document .page-footer {
+                position: absolute;
+                left: 15mm;
+                right: 15mm;
+                bottom: 15mm;
+                width: auto;
+                margin: 0;
             }
             .page {
                 page-break-after: always;
@@ -190,10 +223,43 @@ def preview_pdf():
                 size: A4;
                 margin: 0;
             }
+            html, body {
+                margin: 0;
+                padding: 0;
+                background: #ffffff;
+            }
             body {
                 font-family: "Microsoft YaHei", "SimSun", sans-serif;
                 margin: 0;
                 padding: 0;
+            }
+            .export-document {
+                width: 210mm;
+                margin: 0 auto;
+            }
+            .export-document .a4-page {
+                width: 210mm;
+                min-height: 297mm;
+                height: 297mm;
+                max-height: 297mm;
+                box-sizing: border-box;
+                position: relative;
+                overflow: hidden;
+            }
+            .export-document .page-header,
+            .export-document .page-content {
+                width: 180mm;
+                max-width: 180mm;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .export-document .page-footer {
+                position: absolute;
+                left: 15mm;
+                right: 15mm;
+                bottom: 15mm;
+                width: auto;
+                margin: 0;
             }
         ''')
 

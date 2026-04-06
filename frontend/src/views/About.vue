@@ -91,10 +91,10 @@
       <div class="about-section">
         <h2>V0.14 本版更新</h2>
         <div class="latest-update">
-          <div class="update-item">修复打开已保存草稿后继续编辑并刷新页面时，界面回退到打开草稿前状态的问题。</div>
-          <div class="update-item">打开草稿后，后续编辑内容现在会作为当前会话独立自动保存，刷新页面后仍可保持当前编辑状态。</div>
-          <div class="update-item">支持基于已打开草稿继续修改后另存为新草稿，原草稿内容保持不变。</div>
-          <div class="update-item">草稿列表中不再显示自动保存记录，避免与用户手动保存的草稿混淆。</div>
+          <div class="update-item">修复草稿继续编辑时的会话恢复与原草稿误覆盖问题，自动保存与手动草稿保存彻底分离。</div>
+          <div class="update-item">修复 Logo、部门章在模板编辑与报告编辑之间的位置偏差，并将可移动范围扩展到整张 A4 页面。</div>
+          <div class="update-item">调整部门章在模板编辑与报告编辑中的透明显示策略，模板预览为不透明，报告编辑中为半透明。</div>
+          <div class="update-item">修复 PDF 导出时的整体右偏、版心不居中，以及正文不足一页时页脚不贴底的问题。</div>
         </div>
       </div>
 

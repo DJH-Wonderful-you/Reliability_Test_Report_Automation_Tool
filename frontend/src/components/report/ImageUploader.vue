@@ -1,56 +1,84 @@
 <template>
-  <div 
+  <div
     class="image-uploader"
-    :class="{ 'has-images': images.length > 0 }"
-    @click="triggerUpload"
+    :class="{ 'has-images': imageCount > 0 }"
+    @click="handleContainerClick"
     @dragover.prevent="handleDragOver"
     @dragleave="handleDragLeave"
     @drop.prevent="handleDrop"
     :style="{ borderColor: isDragging ? '#409eff' : undefined }"
   >
-    <template v-if="images.length === 0">
+    <template v-if="imageCount === 0">
       <div class="upload-placeholder">
         <el-icon :size="32"><Picture /></el-icon>
         <p>点击或拖拽上传图片</p>
       </div>
     </template>
-    
+
     <template v-else>
-      <div class="images-container" :class="layoutClass">
-        <div 
-          v-for="(img, index) in images" 
-          :key="index"
-          class="image-item"
-          @click.stop
-          draggable="true"
-          @dragstart="handleImageDragStart(index, $event)"
-          @dragover.prevent
-          @drop.prevent="handleImageDrop(index, $event)"
-        >
-          <img :src="img.dataUrl" :alt="`Image ${index + 1}`" />
-          <div class="image-actions">
-            <el-button 
-              type="danger" 
-              size="small" 
-              circle 
-              @click.stop="removeImage(index)"
+      <div class="images-shell">
+        <div v-if="showToolbar" class="image-toolbar" @click.stop>
+          <div v-if="layoutOptions.length > 1" class="layout-controls">
+            <button
+              v-for="option in layoutOptions"
+              :key="option.value"
+              type="button"
+              class="layout-button"
+              :class="{ active: resolvedLayout === option.value }"
+              @click.stop="handleLayoutChange(option.value)"
             >
-              <el-icon><Close /></el-icon>
-            </el-button>
+              {{ option.label }}
+            </button>
           </div>
+
+          <button
+            v-if="canAddMore"
+            type="button"
+            class="add-more-button"
+            @click.stop="triggerUpload"
+          >
+            <el-icon :size="14"><Plus /></el-icon>
+            <span>添加</span>
+          </button>
         </div>
-        
-        <div 
-          v-if="images.length < 9"
-          class="add-more"
-          @click.stop="triggerUpload"
+
+        <div
+          class="images-container"
+          :class="containerClasses"
+          :style="layoutStyle"
         >
-          <el-icon :size="24"><Plus /></el-icon>
+          <div
+            v-for="(img, index) in imageList"
+            :key="getImageKey(img)"
+            class="image-item"
+            :class="{
+              'is-drag-source': draggedImageIndex === index,
+              'is-drag-target': dragOverImageIndex === index
+            }"
+            @click.stop
+            draggable="true"
+            @dragstart="handleImageDragStart(index, $event)"
+            @dragend="handleImageDragEnd"
+            @dragover.prevent.stop="handleImageDragOver(index, $event)"
+            @drop.prevent.stop="handleImageDrop(index, $event)"
+          >
+            <img :src="img.dataUrl" :alt="`Image ${index + 1}`" draggable="false" />
+            <div class="image-actions">
+              <el-button
+                type="danger"
+                size="small"
+                circle
+                @click.stop="removeImage(index)"
+              >
+                <el-icon><Close /></el-icon>
+              </el-button>
+            </div>
+          </div>
         </div>
       </div>
     </template>
-    
-    <input 
+
+    <input
       ref="fileInput"
       type="file"
       accept="image/*"
@@ -65,10 +93,17 @@
 import { ref, computed } from 'vue'
 import { Picture, Close, Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import {
+  getImageLayoutOptions,
+  normalizeImageCell,
+  resolveImageLayout,
+  updateImageCellImages,
+  updateImageCellLayout
+} from '@/stores/report'
 
 const props = defineProps({
   images: {
-    type: Array,
+    type: [Array, Object],
     default: () => []
   },
   position: {
@@ -86,76 +121,165 @@ const emit = defineEmits(['update'])
 const fileInput = ref(null)
 const isDragging = ref(false)
 const draggedImageIndex = ref(null)
+const dragOverImageIndex = ref(null)
+const INTERNAL_IMAGE_DRAG_TYPE = 'application/x-report-image-index'
+const imageKeyMap = new WeakMap()
+let imageKeySeed = 0
 
-// Determine layout class based on image count
-const layoutClass = computed(() => {
-  const count = props.images.length
-  if (count === 1) return 'layout-1'
-  if (count === 2) return 'layout-2'
-  if (count <= 4) return 'layout-4'
-  return 'layout-9'
+const imageCell = computed(() => normalizeImageCell(props.images))
+const imageList = computed(() => imageCell.value.images)
+const imageCount = computed(() => imageList.value.length)
+const resolvedLayout = computed(() => resolveImageLayout(imageCell.value))
+const layoutOptions = computed(() => getImageLayoutOptions(imageCount.value))
+const canAddMore = computed(() => imageCount.value < props.maxImages)
+const showToolbar = computed(() => layoutOptions.value.length > 1 || canAddMore.value)
+const containerClasses = computed(() => [
+  `layout-${resolvedLayout.value}`,
+  `count-${Math.min(imageCount.value, 9)}`
+])
+
+const layoutStyle = computed(() => {
+  const count = imageCount.value
+
+  if (count <= 1) {
+    return {
+      gridTemplateColumns: 'minmax(0, 1fr)',
+      gridTemplateRows: 'minmax(0, 1fr)'
+    }
+  }
+
+  if (resolvedLayout.value === 'horizontal') {
+    return {
+      gridTemplateColumns: `repeat(${count}, minmax(0, 1fr))`,
+      gridTemplateRows: 'minmax(0, 1fr)'
+    }
+  }
+
+  if (resolvedLayout.value === 'vertical') {
+    return {
+      gridTemplateColumns: 'minmax(0, 1fr)',
+      gridTemplateRows: `repeat(${count}, minmax(0, 1fr))`
+    }
+  }
+
+  const size = count <= 4 ? 2 : 3
+  return {
+    gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
+    gridTemplateRows: `repeat(${size}, minmax(0, 1fr))`
+  }
 })
+
+const getImageKey = (image) => {
+  if (!image || typeof image !== 'object') {
+    return `image-${String(image)}`
+  }
+
+  if (!imageKeyMap.has(image)) {
+    imageKeyMap.set(image, `image-${imageKeySeed++}`)
+  }
+
+  return imageKeyMap.get(image)
+}
+
+const emitUpdatedCell = (nextCell) => {
+  emit('update', normalizeImageCell(nextCell))
+}
+
+const emitUpdatedImages = (nextImages) => {
+  emitUpdatedCell(updateImageCellImages(imageCell.value, nextImages))
+}
+
+const handleContainerClick = () => {
+  if (imageCount.value === 0) {
+    triggerUpload()
+  }
+}
 
 const triggerUpload = () => {
   fileInput.value?.click()
 }
 
+const handleLayoutChange = (layout) => {
+  emitUpdatedCell(updateImageCellLayout(imageCell.value, layout))
+}
+
 const handleFileSelect = async (e) => {
   const files = Array.from(e.target.files || [])
   await processFiles(files)
-  // Reset input to allow selecting same file again
   if (fileInput.value) {
     fileInput.value.value = ''
   }
 }
 
 const handleDragOver = (e) => {
+  if (draggedImageIndex.value !== null || isInternalImageDrag(e)) {
+    return
+  }
   isDragging.value = true
 }
 
 const handleDragLeave = () => {
+  if (draggedImageIndex.value !== null) {
+    return
+  }
   isDragging.value = false
 }
 
 const handleDrop = async (e) => {
   isDragging.value = false
-  
-  const files = []
-  const items = e.dataTransfer?.items
-  
-  if (items) {
-    for (const item of items) {
-      if (item.kind === 'file') {
-        const file = item.getAsFile()
-        if (file && file.type.startsWith('image/')) {
-          files.push(file)
-        }
-      }
-    }
+
+  if (isInternalImageDrag(e)) {
+    handleImageDragEnd()
+    return
   }
-  
+
+  const files = extractImageFiles(e)
   if (files.length > 0) {
     await processFiles(files)
   }
 }
 
+const extractImageFiles = (e) => {
+  const files = []
+  const items = e.dataTransfer?.items
+
+  if (items?.length) {
+    for (const item of items) {
+      if (item.kind !== 'file') {
+        continue
+      }
+
+      const file = item.getAsFile()
+      if (file && file.type.startsWith('image/')) {
+        files.push(file)
+      }
+    }
+  }
+
+  if (!files.length) {
+    return Array.from(e.dataTransfer?.files || []).filter(file => file.type.startsWith('image/'))
+  }
+
+  return files
+}
+
 const processFiles = async (files) => {
   const validFiles = files.filter(file => file.type.startsWith('image/'))
-  
+
   if (validFiles.length === 0) {
     ElMessage.warning('请选择有效的图片文件')
     return
   }
-  
-  const remainingSlots = props.maxImages - props.images.length
+
+  const remainingSlots = props.maxImages - imageCount.value
   const filesToProcess = validFiles.slice(0, remainingSlots)
-  
+
   if (validFiles.length > remainingSlots) {
     ElMessage.warning(`最多只能上传 ${props.maxImages} 张图片`)
   }
-  
+
   const newImages = []
-  
+
   for (const file of filesToProcess) {
     try {
       const dataUrl = await readFileAsDataUrl(file)
@@ -167,9 +291,9 @@ const processFiles = async (files) => {
       console.error('Error reading file:', error)
     }
   }
-  
+
   if (newImages.length > 0) {
-    emit('update', [...props.images, ...newImages])
+    emitUpdatedImages([...imageList.value, ...newImages])
   }
 }
 
@@ -183,28 +307,66 @@ const readFileAsDataUrl = (file) => {
 }
 
 const removeImage = (index) => {
-  const newImages = [...props.images]
+  const newImages = [...imageList.value]
   newImages.splice(index, 1)
-  emit('update', newImages)
+  emitUpdatedImages(newImages)
 }
 
-// Image reordering via drag and drop
+const isInternalImageDrag = (e) => Array.from(e.dataTransfer?.types || []).includes(INTERNAL_IMAGE_DRAG_TYPE)
+
+const getDraggedImageIndex = (e) => {
+  const rawIndex = e.dataTransfer?.getData(INTERNAL_IMAGE_DRAG_TYPE)
+  const parsedIndex = Number.parseInt(rawIndex, 10)
+  return Number.isInteger(parsedIndex) ? parsedIndex : draggedImageIndex.value
+}
+
 const handleImageDragStart = (index, e) => {
   draggedImageIndex.value = index
+  dragOverImageIndex.value = index
+  isDragging.value = false
   e.dataTransfer.effectAllowed = 'move'
+  e.dataTransfer.dropEffect = 'move'
+  e.dataTransfer.setData(INTERNAL_IMAGE_DRAG_TYPE, String(index))
+  e.dataTransfer.setData('text/plain', String(index))
 }
 
-const handleImageDrop = (targetIndex, e) => {
-  if (draggedImageIndex.value === null || draggedImageIndex.value === targetIndex) {
+const handleImageDragOver = (index, e) => {
+  if (!isInternalImageDrag(e) && draggedImageIndex.value === null) {
     return
   }
-  
-  const newImages = [...props.images]
-  const [draggedImage] = newImages.splice(draggedImageIndex.value, 1)
-  newImages.splice(targetIndex, 0, draggedImage)
-  
-  emit('update', newImages)
+
+  dragOverImageIndex.value = index
+  e.dataTransfer.dropEffect = 'move'
+}
+
+const handleImageDragEnd = () => {
   draggedImageIndex.value = null
+  dragOverImageIndex.value = null
+  isDragging.value = false
+}
+
+const handleImageDrop = async (targetIndex, e) => {
+  if (!isInternalImageDrag(e) && draggedImageIndex.value === null) {
+    await handleDrop(e)
+    return
+  }
+
+  const sourceIndex = getDraggedImageIndex(e)
+  if (sourceIndex === null || sourceIndex === targetIndex) {
+    handleImageDragEnd()
+    return
+  }
+
+  const newImages = [...imageList.value]
+  const [draggedImage] = newImages.splice(sourceIndex, 1)
+  if (!draggedImage) {
+    handleImageDragEnd()
+    return
+  }
+
+  newImages.splice(targetIndex, 0, draggedImage)
+  emitUpdatedImages(newImages)
+  handleImageDragEnd()
 }
 </script>
 
@@ -223,51 +385,95 @@ const handleImageDrop = (targetIndex, e) => {
   background-color: #fafafa;
   overflow: hidden;
   position: relative;
-  
+
   &:hover {
     border-color: #409eff;
     background-color: rgba(64, 158, 255, 0.02);
   }
-  
+
   &.has-images {
     border-style: solid;
     cursor: default;
+    align-items: stretch;
+    justify-content: stretch;
   }
 }
 
 .upload-placeholder {
   text-align: center;
   color: #909399;
-  
+
   p {
     font-size: 12px;
     margin-top: 8px;
   }
 }
 
-.images-container {
+.images-shell {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.image-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 4px 0;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.layout-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.layout-button,
+.add-more-button {
+  border: 1px solid #dcdfe6;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #606266;
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.layout-button:hover,
+.add-more-button:hover {
+  border-color: #409eff;
+  color: #409eff;
+}
+
+.layout-button.active {
+  border-color: #409eff;
+  background: #ecf5ff;
+  color: #409eff;
+}
+
+.images-container {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   display: grid;
   gap: 4px;
   padding: 4px;
-  
-  &.layout-1 {
-    grid-template-columns: 1fr;
-  }
-  
-  &.layout-2 {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  &.layout-4 {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-  }
-  
-  &.layout-9 {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.images-container.layout-grid.count-3 {
+  .image-item:last-child:nth-child(3) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -277,13 +483,31 @@ const handleImageDrop = (targetIndex, e) => {
   border-radius: 4px;
   background: #f0f0f0;
   cursor: move;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  transition: box-shadow 0.2s ease, opacity 0.2s ease;
+
+  &.is-drag-source {
+    opacity: 0.6;
   }
-  
+
+  &.is-drag-target {
+    box-shadow: inset 0 0 0 2px #409eff;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+
   .image-actions {
     position: absolute;
     top: 2px;
@@ -291,25 +515,9 @@ const handleImageDrop = (targetIndex, e) => {
     opacity: 0;
     transition: opacity 0.2s;
   }
-  
+
   &:hover .image-actions {
     opacity: 1;
-  }
-}
-
-.add-more {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f7fa;
-  border: 1px dashed #dcdfe6;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #909399;
-  
-  &:hover {
-    border-color: #409eff;
-    color: #409eff;
   }
 }
 </style>

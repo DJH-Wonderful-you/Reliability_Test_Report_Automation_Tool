@@ -6,6 +6,131 @@ import {
   normalizeTableColumnWidths
 } from '@/constants/generalTemplateDefaults'
 
+export const DEFAULT_IMAGE_LAYOUT = 'auto'
+
+const VALID_IMAGE_LAYOUTS = new Set([
+  DEFAULT_IMAGE_LAYOUT,
+  'horizontal',
+  'vertical',
+  'grid'
+])
+
+export const createEmptyImageCell = () => ({
+  images: [],
+  layout: DEFAULT_IMAGE_LAYOUT
+})
+
+export const normalizeImageLayout = (layout) => (
+  VALID_IMAGE_LAYOUTS.has(layout) ? layout : DEFAULT_IMAGE_LAYOUT
+)
+
+export const normalizeImageCell = (cell) => {
+  if (Array.isArray(cell)) {
+    return {
+      images: [...cell],
+      layout: DEFAULT_IMAGE_LAYOUT
+    }
+  }
+
+  if (cell && typeof cell === 'object') {
+    return {
+      images: Array.isArray(cell.images) ? [...cell.images] : [],
+      layout: normalizeImageLayout(cell.layout)
+    }
+  }
+
+  return createEmptyImageCell()
+}
+
+export const getImageCellImages = (cell) => normalizeImageCell(cell).images
+
+export const getAvailableImageLayouts = (count) => {
+  if (count < 2) {
+    return []
+  }
+
+  if (count === 2) {
+    return ['horizontal', 'vertical']
+  }
+
+  if (count <= 4) {
+    return ['grid', 'horizontal', 'vertical']
+  }
+
+  return ['grid']
+}
+
+export const getDefaultResolvedImageLayout = (count) => {
+  if (count <= 1) {
+    return 'single'
+  }
+
+  if (count === 2) {
+    return 'horizontal'
+  }
+
+  return 'grid'
+}
+
+export const sanitizeImageLayout = (layout, count) => {
+  const normalizedLayout = normalizeImageLayout(layout)
+  const availableLayouts = getAvailableImageLayouts(count)
+
+  if (!availableLayouts.length || normalizedLayout === DEFAULT_IMAGE_LAYOUT) {
+    return DEFAULT_IMAGE_LAYOUT
+  }
+
+  return availableLayouts.includes(normalizedLayout)
+    ? normalizedLayout
+    : DEFAULT_IMAGE_LAYOUT
+}
+
+export const resolveImageLayout = (cell) => {
+  const normalizedCell = normalizeImageCell(cell)
+  const count = normalizedCell.images.length
+  const storedLayout = sanitizeImageLayout(normalizedCell.layout, count)
+
+  if (count <= 1) {
+    return 'single'
+  }
+
+  return storedLayout === DEFAULT_IMAGE_LAYOUT
+    ? getDefaultResolvedImageLayout(count)
+    : storedLayout
+}
+
+export const updateImageCellImages = (cell, images) => {
+  const normalizedCell = normalizeImageCell(cell)
+  const nextImages = Array.isArray(images) ? [...images] : []
+
+  return {
+    images: nextImages,
+    layout: sanitizeImageLayout(normalizedCell.layout, nextImages.length)
+  }
+}
+
+export const updateImageCellLayout = (cell, layout) => {
+  const normalizedCell = normalizeImageCell(cell)
+
+  return {
+    images: [...normalizedCell.images],
+    layout: sanitizeImageLayout(layout, normalizedCell.images.length)
+  }
+}
+
+export const getImageLayoutOptions = (count) => {
+  const labels = {
+    horizontal: '左右',
+    vertical: '上下',
+    grid: '网格'
+  }
+
+  return getAvailableImageLayouts(count).map((layout) => ({
+    value: layout,
+    label: labels[layout] || layout
+  }))
+}
+
 const createDefaultTemplateContentData = () => ({
   companyName: '',
   reportTitle: '',
@@ -26,9 +151,9 @@ const createDefaultTestResultRows = () => ([
 ])
 
 const createDefaultTestImageRows = () => ([
-  { id: 1, before: [], during: [], after: [] },
-  { id: 2, before: [], during: [], after: [] },
-  { id: 3, before: [], during: [], after: [] }
+  { id: 1, before: createEmptyImageCell(), during: createEmptyImageCell(), after: createEmptyImageCell() },
+  { id: 2, before: createEmptyImageCell(), during: createEmptyImageCell(), after: createEmptyImageCell() },
+  { id: 3, before: createEmptyImageCell(), during: createEmptyImageCell(), after: createEmptyImageCell() }
 ])
 
 const cloneReportSnapshot = (snapshot = {}) => ({
@@ -45,9 +170,9 @@ const cloneReportSnapshot = (snapshot = {}) => ({
   testImageRows: Array.isArray(snapshot.testImageRows)
     ? snapshot.testImageRows.map(row => ({
       ...row,
-      before: Array.isArray(row.before) ? [...row.before] : [],
-      during: Array.isArray(row.during) ? [...row.during] : [],
-      after: Array.isArray(row.after) ? [...row.after] : []
+      before: normalizeImageCell(row.before),
+      during: normalizeImageCell(row.during),
+      after: normalizeImageCell(row.after)
     }))
     : createDefaultTestImageRows()
 })
@@ -269,9 +394,9 @@ export const useReportStore = defineStore('report', () => {
     for (let i = 0; i < count; i++) {
       testImageRows.value.push({
         id: lastId + i + 1,
-        before: [],
-        during: [],
-        after: []
+        before: createEmptyImageCell(),
+        during: createEmptyImageCell(),
+        after: createEmptyImageCell()
       })
     }
     markDirty()
@@ -317,7 +442,8 @@ export const useReportStore = defineStore('report', () => {
 
   const updateTestImage = (rowIndex, position, images) => {
     if (testImageRows.value[rowIndex]) {
-      testImageRows.value[rowIndex][position] = images
+      const normalizedCell = normalizeImageCell(images)
+      testImageRows.value[rowIndex][position] = normalizedCell
       markDirty()
     }
   }

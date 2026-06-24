@@ -155,7 +155,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Toolbar from '@/components/layout/Toolbar.vue'
-import { useReportStore } from '@/stores/report'
+import { createEmptyImageCell, useReportStore } from '@/stores/report'
 import { Download, Plus, DocumentAdd, FolderOpened, Delete, CirclePlus, Remove } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -503,9 +503,9 @@ const openInsertImageDialog = async () => {
     for (let i = 0; i < count; i++) {
       newRows.push({
         id: lastId + i + 1,
-        before: [],
-        during: [],
-        after: []
+        before: createEmptyImageCell(),
+        during: createEmptyImageCell(),
+        after: createEmptyImageCell()
       })
     }
     

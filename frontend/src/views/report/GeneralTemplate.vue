@@ -381,6 +381,7 @@ const batchAddCount = ref(1)
 const batchImageAddCount = ref(1)
 const securityLevel = ref('内部公开')
 const isExportMode = ref(false)
+const isExportingPdf = ref(false)
 
 // Refs for DOM measurement
 const measureContainerRef = ref(null)
@@ -402,8 +403,6 @@ const content = computed(() => reportStore.content)
 
 // Template content data
 const templateContentData = computed(() => reportStore.templateSettings.templateContentData || {})
-const imagePositions = ['before', 'during', 'after']
-
 // Height constants for splittable sections
 const SECTION_HEADER_HEIGHT = 28
 const TABLE_HEADER_HEIGHT = 32
@@ -515,15 +514,13 @@ const contentRegions = computed(() => {
   
   // Test Images section (splittable)
   const imageRows = getImageRowsForCurrentMode()
-  if (imageRows.length > 0 || !isExportMode.value) {
-    const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT)
-    regions.push(createRegion(
-      RegionType.TEST_IMAGES, 
-      imagesSectionHeight, 
-      { rows: imageRows, rowHeight: IMAGE_ROW_HEIGHT },
-      true // splittable
-    ))
-  }
+  const imagesSectionHeight = SECTION_HEADER_HEIGHT + 50 + (imageRows.length * IMAGE_ROW_HEIGHT)
+  regions.push(createRegion(
+    RegionType.TEST_IMAGES, 
+    imagesSectionHeight, 
+    { rows: imageRows, rowHeight: IMAGE_ROW_HEIGHT },
+    true // splittable
+  ))
   
   return regions
 })
@@ -546,36 +543,8 @@ const getResultRowsForRegion = (region) => {
   return reportStore.testResultRows.slice(startIdx, endIdx)
 }
 
-const rowHasAnyImage = (row) => {
-  if (!row) return false
-
-  return imagePositions.some((position) => {
-    const images = row[position]
-    if (!Array.isArray(images)) return false
-
-    return images.some((img) => {
-      if (!img) return false
-      if (typeof img === 'string') {
-        return img.trim().length > 0
-      }
-      return typeof img.dataUrl === 'string' && img.dataUrl.trim().length > 0
-    })
-  })
-}
-
 const getImageRowsForCurrentMode = () => {
-  const allRows = reportStore.testImageRows || []
-  if (!isExportMode.value) {
-    return allRows
-  }
-
-  // Export ignores trailing empty rows, which otherwise create blank PDF pages.
-  const lastFilledIndex = allRows.map(rowHasAnyImage).lastIndexOf(true)
-  if (lastFilledIndex === -1) {
-    return []
-  }
-
-  return allRows.slice(0, lastFilledIndex + 1)
+  return reportStore.testImageRows || []
 }
 
 // Get image rows for a specific region
@@ -752,8 +721,8 @@ const VECTOR_EXPORT_REMOVE_SELECTORS = [
   '.page-break-indicator',
   '.page-number',
   '.el-button--danger',
+  '.image-toolbar',
   '.image-actions',
-  '.add-more',
   'input[type="file"]'
 ].join(',')
 
@@ -767,7 +736,109 @@ const getExportFileInfo = () => {
   }
 }
 
-const prepareCloneForVectorExport = (node) => {
+const loadImageForPdfExport = (src) => new Promise((resolve, reject) => {
+  const img = new Image()
+  img.onload = () => resolve(img)
+  img.onerror = reject
+  img.src = src
+})
+
+const normalizeImageDataUrlForPdf = async (src) => {
+  if (!src || !src.startsWith('data:image/')) {
+    return src
+  }
+
+  try {
+    const img = await loadImageForPdfExport(src)
+    const maxSide = 1600
+    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height))
+    const width = Math.max(1, Math.round((img.naturalWidth || img.width) * scale))
+    const height = Math.max(1, Math.round((img.naturalHeight || img.height) * scale))
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, width, height)
+    ctx.drawImage(img, 0, 0, width, height)
+    return canvas.toDataURL('image/jpeg', 0.92)
+  } catch (error) {
+    console.warn('Failed to normalize image for PDF export:', error)
+    return src
+  }
+}
+
+const getPdfImageTableShape = (container, count) => {
+  if (container?.classList.contains('layout-vertical')) {
+    return { columns: 1, rows: count }
+  }
+
+  if (container?.classList.contains('layout-horizontal')) {
+    return { columns: count, rows: 1 }
+  }
+
+  if (count <= 1) {
+    return { columns: 1, rows: 1 }
+  }
+
+  const columns = count <= 4 ? 2 : 3
+  return {
+    columns,
+    rows: Math.ceil(count / columns)
+  }
+}
+
+const rebuildUploaderForPdfExport = async (uploader) => {
+  const sourceImages = Array.from(uploader.querySelectorAll('.image-item img[src]'))
+
+  if (!sourceImages.length) {
+    return
+  }
+
+  const imageSources = await Promise.all(
+    sourceImages.map((img) => normalizeImageDataUrlForPdf(img.getAttribute('src')))
+  )
+  const container = uploader.querySelector('.images-container')
+  const { columns, rows } = getPdfImageTableShape(container, imageSources.length)
+  const cellHeight = Math.max(1, Math.floor(232 / rows))
+  const table = document.createElement('table')
+  table.className = 'pdf-image-table'
+  table.setAttribute('cellpadding', '0')
+  table.setAttribute('cellspacing', '4')
+
+  let imageIndex = 0
+  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+    const tableRow = document.createElement('tr')
+
+    for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
+      const cell = document.createElement('td')
+      cell.setAttribute('align', 'center')
+      cell.setAttribute('valign', 'middle')
+      cell.style.height = `${cellHeight}px`
+
+      if (imageIndex < imageSources.length) {
+        const img = document.createElement('img')
+        img.src = imageSources[imageIndex]
+        img.alt = `Image ${imageIndex + 1}`
+        img.style.maxWidth = '100%'
+        img.style.maxHeight = `${cellHeight}px`
+        img.style.width = 'auto'
+        img.style.height = 'auto'
+        img.style.display = 'inline-block'
+        cell.appendChild(img)
+      }
+
+      tableRow.appendChild(cell)
+      imageIndex++
+    }
+
+    table.appendChild(tableRow)
+  }
+
+  uploader.replaceChildren(table)
+}
+
+const prepareCloneForVectorExport = async (node) => {
   if (node.classList?.contains('pdf-export-mode')) {
     node.classList.remove('pdf-export-mode')
   }
@@ -779,19 +850,13 @@ const prepareCloneForVectorExport = (node) => {
     el.removeAttribute('contenteditable')
   })
 
-  // Remove image rows with no uploaded pictures to avoid blank export pages.
-  node.querySelectorAll('[data-section="testImages"] .image-row').forEach((row) => {
-    if (!row.querySelector('.image-item img[src]')) {
-      row.remove()
-    }
+  // Keep empty image boxes in the exported report, but remove edit-only upload hints.
+  node.querySelectorAll('.upload-placeholder').forEach((placeholder) => {
+    placeholder.replaceChildren()
   })
 
-  // Drop test image section if all its rows were removed.
-  node.querySelectorAll('[data-section="testImages"]').forEach((section) => {
-    if (!section.querySelector('.image-row')) {
-      section.remove()
-    }
-  })
+  const uploaders = Array.from(node.querySelectorAll('.image-uploader.has-images'))
+  await Promise.all(uploaders.map((uploader) => rebuildUploaderForPdfExport(uploader)))
 }
 
 const getDocumentCssText = () => {
@@ -810,7 +875,7 @@ const getDocumentCssText = () => {
   return chunks.join('\n')
 }
 
-const createVectorExportHtml = () => {
+const createVectorExportHtml = async () => {
   if (!templateRef.value) {
     throw new Error('未找到可导出的报告区域')
   }
@@ -823,11 +888,11 @@ const createVectorExportHtml = () => {
   const exportRoot = document.createElement('div')
   exportRoot.className = 'export-document'
 
-  pages.forEach((page) => {
+  for (const page of pages) {
     const clone = page.cloneNode(true)
-    prepareCloneForVectorExport(clone)
+    await prepareCloneForVectorExport(clone)
     exportRoot.appendChild(clone)
-  })
+  }
 
   const stylesheetText = getDocumentCssText()
 
@@ -897,7 +962,6 @@ const createVectorExportHtml = () => {
       .image-row-actions,
       .el-button--danger,
       .image-actions,
-      .add-more,
       .page-number {
         display: none !important;
       }
@@ -939,39 +1003,109 @@ const createVectorExportHtml = () => {
         max-height: 240px !important;
         aspect-ratio: auto !important;
       }
-      .export-document .images-container {
+      .export-document .images-shell {
         height: 100% !important;
         display: flex !important;
-        flex-wrap: wrap !important;
-        align-content: stretch !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+      }
+      .export-document .images-container {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        display: flex !important;
         gap: 4px !important;
         padding: 4px !important;
+        box-sizing: border-box !important;
       }
-      .export-document .images-container.layout-1 .image-item {
+      .export-document .images-container.layout-single {
+        flex-wrap: nowrap !important;
+      }
+      .export-document .images-container.layout-single .image-item {
         width: 100% !important;
-        height: calc(100% - 8px) !important;
+        height: 100% !important;
       }
-      .export-document .images-container.layout-2 .image-item {
-        width: calc(50% - 2px) !important;
-        height: calc(100% - 8px) !important;
+      .export-document .images-container.layout-horizontal {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
       }
-      .export-document .images-container.layout-4 .image-item {
+      .export-document .images-container.layout-horizontal .image-item {
+        flex: 1 1 0 !important;
+        height: 100% !important;
+      }
+      .export-document .images-container.layout-vertical {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+      }
+      .export-document .images-container.layout-vertical .image-item {
+        flex: 1 1 0 !important;
+        width: 100% !important;
+      }
+      .export-document .images-container.layout-grid {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-content: stretch !important;
+      }
+      .export-document .images-container.layout-grid.count-3 .image-item,
+      .export-document .images-container.layout-grid.count-4 .image-item {
         width: calc(50% - 2px) !important;
         height: calc(50% - 2px) !important;
       }
-      .export-document .images-container.layout-9 .image-item {
+      .export-document .images-container.layout-grid.count-3 .image-item:nth-child(3) {
+        width: 100% !important;
+      }
+      .export-document .images-container.layout-grid.count-5 .image-item,
+      .export-document .images-container.layout-grid.count-6 .image-item,
+      .export-document .images-container.layout-grid.count-7 .image-item,
+      .export-document .images-container.layout-grid.count-8 .image-item,
+      .export-document .images-container.layout-grid.count-9 .image-item {
         width: calc(33.333% - 3px) !important;
         height: calc(33.333% - 3px) !important;
       }
       .export-document .image-item {
+        position: relative !important;
         min-height: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
       }
       .export-document .image-item img {
         display: block !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        object-position: center center !important;
       }
       .export-document .upload-placeholder {
         width: 100% !important;
         height: 100% !important;
+        display: block !important;
+      }
+      .export-document .pdf-image-table {
+        width: 100% !important;
+        height: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: separate !important;
+        border-spacing: 4px !important;
+      }
+      .export-document .pdf-image-table td {
+        background: #f0f0f0 !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        overflow: hidden !important;
+      }
+      .export-document .pdf-image-table img {
+        display: inline-block !important;
+        max-width: 100% !important;
+        width: auto !important;
+        height: auto !important;
       }
     </style>
   </head>
@@ -987,11 +1121,13 @@ const triggerPdfDownload = (blob, filename) => {
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  window.URL.revokeObjectURL(url)
+  window.setTimeout(() => {
+    window.URL.revokeObjectURL(url)
+  }, 1000)
 }
 
 const exportPdfByServer = async () => {
-  const html = createVectorExportHtml()
+  const html = await createVectorExportHtml()
   const { title, filename } = getExportFileInfo()
   const htmlBytes = new Blob([html]).size
   if (htmlBytes > 60 * 1024 * 1024) {
@@ -1022,7 +1158,7 @@ const exportPdfByServer = async () => {
   if (contentType.includes('application/pdf')) {
     const blob = await response.blob()
     triggerPdfDownload(blob, filename)
-    return
+    return true
   }
 
   const result = await response.json()
@@ -1037,6 +1173,12 @@ const exportPdfByServer = async () => {
 }
 
 const handleExportPdf = async () => {
+  if (isExportingPdf.value) {
+    return
+  }
+
+  isExportingPdf.value = true
+
   try {
     ElMessage.info('正在生成PDF，请稍候...')
     isExportMode.value = true
@@ -1051,6 +1193,9 @@ const handleExportPdf = async () => {
     isExportMode.value = false
     ElMessage.warning('矢量导出失败，正在使用兼容模式导出...')
     await exportPdfAsRasterFallback()
+  } finally {
+    isExportMode.value = false
+    isExportingPdf.value = false
   }
 }
 
@@ -1340,6 +1485,10 @@ onUnmounted(() => {
     display: none !important;
   }
   
+  .image-toolbar {
+    display: none !important;
+  }
+
   .el-button--danger {
     display: none !important;
   }

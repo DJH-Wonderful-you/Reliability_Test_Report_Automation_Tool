@@ -768,24 +768,49 @@ const normalizeImageDataUrlForPdf = async (src) => {
   }
 }
 
-const getPdfImageTableShape = (container, count) => {
+const getPdfImageTableRows = (container, count) => {
   if (container?.classList.contains('layout-vertical')) {
-    return { columns: 1, rows: count }
+    return Array.from({ length: count }, (_, index) => [{ index }])
   }
 
   if (container?.classList.contains('layout-horizontal')) {
-    return { columns: count, rows: 1 }
+    return [Array.from({ length: count }, (_, index) => ({ index }))]
   }
 
   if (count <= 1) {
-    return { columns: 1, rows: 1 }
+    return [[{ index: 0 }]]
+  }
+
+  if (count === 3) {
+    if (container?.classList.contains('layout-grid-top-wide')) {
+      return [
+        [{ index: 0, colspan: 2 }],
+        [{ index: 1 }, { index: 2 }]
+      ]
+    }
+
+    if (container?.classList.contains('layout-grid-2x2')) {
+      return [
+        [{ index: 0 }, { index: 1 }],
+        [{ index: 2 }, null]
+      ]
+    }
+
+    return [
+      [{ index: 0 }, { index: 1 }],
+      [{ index: 2, colspan: 2 }]
+    ]
   }
 
   const columns = count <= 4 ? 2 : 3
-  return {
-    columns,
-    rows: Math.ceil(count / columns)
+  const rows = []
+  for (let index = 0; index < count; index += columns) {
+    rows.push(Array.from({ length: columns }, (_, offset) => {
+      const imageIndex = index + offset
+      return imageIndex < count ? { index: imageIndex } : null
+    }))
   }
+  return rows
 }
 
 const rebuildUploaderForPdfExport = async (uploader) => {
@@ -799,27 +824,30 @@ const rebuildUploaderForPdfExport = async (uploader) => {
     sourceImages.map((img) => normalizeImageDataUrlForPdf(img.getAttribute('src')))
   )
   const container = uploader.querySelector('.images-container')
-  const { columns, rows } = getPdfImageTableShape(container, imageSources.length)
-  const cellHeight = Math.max(1, Math.floor(232 / rows))
+  const tableRows = getPdfImageTableRows(container, imageSources.length)
+  const cellHeight = Math.max(1, Math.floor(232 / tableRows.length))
   const table = document.createElement('table')
   table.className = 'pdf-image-table'
   table.setAttribute('cellpadding', '0')
   table.setAttribute('cellspacing', '4')
 
-  let imageIndex = 0
-  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+  for (const row of tableRows) {
     const tableRow = document.createElement('tr')
 
-    for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
+    for (const item of row) {
       const cell = document.createElement('td')
       cell.setAttribute('align', 'center')
       cell.setAttribute('valign', 'middle')
       cell.style.height = `${cellHeight}px`
 
-      if (imageIndex < imageSources.length) {
+      if (item?.colspan) {
+        cell.setAttribute('colspan', String(item.colspan))
+      }
+
+      if (item && item.index < imageSources.length) {
         const img = document.createElement('img')
-        img.src = imageSources[imageIndex]
-        img.alt = `Image ${imageIndex + 1}`
+        img.src = imageSources[item.index]
+        img.alt = `Image ${item.index + 1}`
         img.style.maxWidth = '100%'
         img.style.maxHeight = `${cellHeight}px`
         img.style.width = 'auto'
@@ -829,7 +857,6 @@ const rebuildUploaderForPdfExport = async (uploader) => {
       }
 
       tableRow.appendChild(cell)
-      imageIndex++
     }
 
     table.appendChild(tableRow)

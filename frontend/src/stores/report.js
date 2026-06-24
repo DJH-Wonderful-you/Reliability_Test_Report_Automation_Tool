@@ -12,7 +12,10 @@ const VALID_IMAGE_LAYOUTS = new Set([
   DEFAULT_IMAGE_LAYOUT,
   'horizontal',
   'vertical',
-  'grid'
+  'grid',
+  'grid-bottom-wide',
+  'grid-top-wide',
+  'grid-2x2'
 ])
 
 export const createEmptyImageCell = () => ({
@@ -53,6 +56,10 @@ export const getAvailableImageLayouts = (count) => {
     return ['horizontal', 'vertical']
   }
 
+  if (count === 3) {
+    return ['grid-bottom-wide', 'grid-top-wide', 'grid-2x2', 'horizontal', 'vertical']
+  }
+
   if (count <= 4) {
     return ['grid', 'horizontal', 'vertical']
   }
@@ -67,6 +74,10 @@ export const getDefaultResolvedImageLayout = (count) => {
 
   if (count === 2) {
     return 'horizontal'
+  }
+
+  if (count === 3) {
+    return 'grid-bottom-wide'
   }
 
   return 'grid'
@@ -122,7 +133,10 @@ export const getImageLayoutOptions = (count) => {
   const labels = {
     horizontal: '左右',
     vertical: '上下',
-    grid: '网格'
+    grid: '网格',
+    'grid-bottom-wide': '下方通栏',
+    'grid-top-wide': '上方通栏',
+    'grid-2x2': '四宫格'
   }
 
   return getAvailableImageLayouts(count).map((layout) => ({

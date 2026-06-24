@@ -19,16 +19,31 @@
       <div class="images-shell">
         <div v-if="showToolbar" class="image-toolbar" @click.stop>
           <div v-if="layoutOptions.length > 1" class="layout-controls">
-            <button
-              v-for="option in layoutOptions"
-              :key="option.value"
-              type="button"
-              class="layout-button"
-              :class="{ active: resolvedLayout === option.value }"
-              @click.stop="handleLayoutChange(option.value)"
+            <el-popover
+              trigger="click"
+              placement="bottom-start"
+              width="220"
+              popper-class="image-layout-popover"
             >
-              {{ option.label }}
-            </button>
+              <template #reference>
+                <button type="button" class="layout-button" @click.stop>
+                  布局：{{ currentLayoutLabel }}
+                </button>
+              </template>
+
+              <div class="image-layout-menu" @click.stop>
+                <button
+                  v-for="option in layoutOptions"
+                  :key="option.value"
+                  type="button"
+                  class="image-layout-option"
+                  :class="{ active: resolvedLayout === option.value }"
+                  @click.stop="handleLayoutChange(option.value)"
+                >
+                  {{ option.label }}
+                </button>
+              </div>
+            </el-popover>
           </div>
 
           <button
@@ -131,6 +146,9 @@ const imageList = computed(() => imageCell.value.images)
 const imageCount = computed(() => imageList.value.length)
 const resolvedLayout = computed(() => resolveImageLayout(imageCell.value))
 const layoutOptions = computed(() => getImageLayoutOptions(imageCount.value))
+const currentLayoutLabel = computed(() => {
+  return layoutOptions.value.find(option => option.value === resolvedLayout.value)?.label || '自动'
+})
 const canAddMore = computed(() => imageCount.value < props.maxImages)
 const showToolbar = computed(() => layoutOptions.value.length > 1 || canAddMore.value)
 const containerClasses = computed(() => [
@@ -462,6 +480,31 @@ const handleImageDrop = async (targetIndex, e) => {
   color: #409eff;
 }
 
+:global(.image-layout-popover .image-layout-menu) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+:global(.image-layout-popover .image-layout-option) {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #606266;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 6px 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+:global(.image-layout-popover .image-layout-option:hover),
+:global(.image-layout-popover .image-layout-option.active) {
+  border-color: #409eff;
+  background: #ecf5ff;
+  color: #409eff;
+}
+
 .images-container {
   width: 100%;
   flex: 1 1 auto;
@@ -474,6 +517,24 @@ const handleImageDrop = async (targetIndex, e) => {
 .images-container.layout-grid.count-3 {
   .image-item:last-child:nth-child(3) {
     grid-column: 1 / -1;
+  }
+}
+
+.images-container.layout-grid-bottom-wide.count-3 {
+  .image-item:last-child:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+.images-container.layout-grid-top-wide.count-3 {
+  .image-item:first-child:nth-child(1) {
+    grid-column: 1 / -1;
+  }
+}
+
+.images-container.layout-grid-2x2.count-3 {
+  .image-item {
+    grid-column: auto;
   }
 }
 

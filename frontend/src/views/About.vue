@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.15（内部测试版）</p>
+        <p class="version">版本 V1.0（正式发行版）</p>
       </div>
 
       <el-divider />
@@ -73,15 +73,19 @@
           </div>
           <div class="info-item">
             <span class="info-label">最近更新</span>
-            <span class="info-value">2026年6月24日</span>
+            <span class="info-value">2026年7月6日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.15</span>
+            <span class="info-value">V1.0</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>
             <span class="info-value">深圳市欣威智能有限公司</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">所属部门</span>
+            <span class="info-value">新产品质量与测试部</span>
           </div>
         </div>
       </div>
@@ -89,12 +93,12 @@
       <el-divider />
 
       <div class="about-section">
-        <h2>V0.15 本版更新</h2>
+        <h2>V1.0 本版更新</h2>
         <div class="latest-update">
-          <div class="update-item">修复点击一次导出 PDF 却重复导出的问题，导出流程增加并发保护。</div>
-          <div class="update-item">修复测试图片区为空、跨页或包含上传图片时，PDF 导出内容缺失或图片无法正常显示的问题。</div>
-          <div class="update-item">导出 PDF 时保留测试图片整体框架，并移除仅用于编辑页的“点击或拖拽上传图片”提示。</div>
-          <div class="update-item">新增测试图片多图布局菜单，3 张图片支持下方通栏、上方通栏和四宫格等固定排列，并同步到 PDF 导出。</div>
+          <div class="update-item">正式发布可靠性测试报告编辑工具 V1.0。</div>
+          <div class="update-item">支持通用模板、通用英文模板和华为模板的报告编辑与模板编辑。</div>
+          <div class="update-item">支持可编辑字段、格式工具栏、动态行管理、图片上传与多图布局。</div>
+          <div class="update-item">支持自动保存、草稿管理、模板导入导出和 PDF 导出。</div>
         </div>
       </div>
 
@@ -103,7 +107,7 @@
       <div class="about-section">
         <h2>技术支持</h2>
         <p class="support-text">
-          如有使用问题或改进建议，请通过企微联系开发人员。
+          如有使用问题或改进建议，请通过企微联系开发人员邓景华。
         </p>
       </div>
     </div>

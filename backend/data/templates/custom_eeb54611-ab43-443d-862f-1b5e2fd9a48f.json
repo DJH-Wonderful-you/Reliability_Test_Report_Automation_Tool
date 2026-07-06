@@ -1,5 +1,5 @@
 {
-  "id": "beeb4077-57eb-4713-a81f-268700d21ff4",
+  "id": "eeb54611-ab43-443d-862f-1b5e2fd9a48f",
   "name": "自定义模板",
   "baseType": "general",
   "settings": {
@@ -107,8 +107,7 @@
       "textDecoration": "none"
     }
   },
-  "createdAt": "2026-07-06T22:45:38.916409",
-  "updatedAt": "2026-07-06T22:45:45.326998",
-  "importedFrom": "eeb54611-ab43-443d-862f-1b5e2fd9a48f",
-  "appliedAt": "2026-07-06T22:45:45.343630"
+  "createdAt": "2026-07-06T22:16:47.661541",
+  "updatedAt": "2026-07-06T22:45:26.606358",
+  "importedFrom": "b8abbb0d-577b-40c9-a56c-30627bcb89f0"
 }

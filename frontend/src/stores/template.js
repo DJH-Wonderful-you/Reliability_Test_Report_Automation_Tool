@@ -101,6 +101,79 @@ const normalizeTemplateState = (type = 'general', data = {}) => {
   }
 }
 
+const sanitizeTemplateFileName = (name) => {
+  const safeName = String(name || 'template')
+    .replace(/[\\/:*?"<>|]/g, '_')
+    .trim()
+
+  return safeName || 'template'
+}
+
+const ensureJsonFileName = (name) => {
+  const safeName = sanitizeTemplateFileName(name)
+  return safeName.toLowerCase().endsWith('.json') ? safeName : `${safeName}.json`
+}
+
+const downloadBlob = (blob, filename) => {
+  const url = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.setTimeout(() => {
+    window.URL.revokeObjectURL(url)
+  }, 1000)
+}
+
+const saveBlobWithPicker = async (blob, filename) => {
+  if (!window.showSaveFilePicker) {
+    downloadBlob(blob, filename)
+    return 'download'
+  }
+
+  const fileHandle = await window.showSaveFilePicker({
+    suggestedName: filename,
+    types: [
+      {
+        description: 'JSON template file',
+        accept: {
+          'application/json': ['.json']
+        }
+      }
+    ]
+  })
+  const writable = await fileHandle.createWritable()
+  await writable.write(blob)
+  await writable.close()
+  return 'picker'
+}
+
+const createJsonSaveFileHandle = async (filename) => {
+  if (!window.showSaveFilePicker) {
+    return null
+  }
+
+  return window.showSaveFilePicker({
+    suggestedName: filename,
+    types: [
+      {
+        description: 'JSON template file',
+        accept: {
+          'application/json': ['.json']
+        }
+      }
+    ]
+  })
+}
+
+const writeBlobToFileHandle = async (fileHandle, blob) => {
+  const writable = await fileHandle.createWritable()
+  await writable.write(blob)
+  await writable.close()
+}
+
 export const useTemplateStore = defineStore('template', () => {
   // State
   const currentTemplateId = ref(null)
@@ -381,14 +454,34 @@ export const useTemplateStore = defineStore('template', () => {
 
   // 专门用于应用到报告编辑的保存方法
   const exportTemplate = async () => {
-    if (!currentTemplateId.value) {
-      await saveTemplate()
-    }
-    
     try {
-      window.open(`/api/template/export/${currentTemplateId.value}`, '_blank')
+      const defaultFileName = ensureJsonFileName(
+        templateName.value || (currentTemplateId.value ? `template_${currentTemplateId.value}` : 'custom_template')
+      )
+      const fileHandle = await createJsonSaveFileHandle(defaultFileName)
+
+      await saveTemplate(true)
+      if (!currentTemplateId.value) {
+        throw new Error('Template save failed')
+      }
+
+      const response = await fetch(`/api/template/export/${currentTemplateId.value}`)
+      if (!response.ok) {
+        throw new Error('Template export failed')
+      }
+
+      const blob = await response.blob()
+      if (fileHandle) {
+        await writeBlobToFileHandle(fileHandle, blob)
+      } else {
+        await saveBlobWithPicker(blob, defaultFileName)
+      }
+
       ElMessage.success('模板导出成功')
     } catch (error) {
+      if (error?.name === 'AbortError') {
+        return
+      }
       console.error('Template export failed:', error)
       ElMessage.error('模板导出失败')
     }

@@ -98,15 +98,15 @@
       "textDecoration": "underline"
     },
     "testStandard": {
+      "color": "#999999",
       "fontFamily": "SimHei",
       "fontSize": 11,
-      "color": "#999999",
-      "fontWeight": "bold",
       "fontStyle": "italic",
-      "textDecoration": "none",
-      "textAlign": "left"
+      "fontWeight": "bold",
+      "textAlign": "left",
+      "textDecoration": "none"
     }
   },
   "createdAt": "2026-07-06T20:14:45.173489",
-  "updatedAt": "2026-07-06T21:53:03.083234"
+  "updatedAt": "2026-07-06T22:11:47.568001"
 }

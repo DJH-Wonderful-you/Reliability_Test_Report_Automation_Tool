@@ -359,7 +359,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, onActivated, onDeactivated, watch, nextTick } from 'vue'
 import { useReportStore } from '@/stores/report'
 import { usePagination, RegionType, createRegion } from '@/composables/usePagination'
 import PageContainer from '@/components/report/PageContainer.vue'
@@ -382,6 +382,9 @@ const batchImageAddCount = ref(1)
 const securityLevel = ref('内部公开')
 const isExportMode = ref(false)
 const isExportingPdf = ref(false)
+let exportPdfListenerRegistered = false
+const EXPORT_PDF_HANDLER_KEY = '__reliabilityGeneralReportExportPdfHandler'
+const EXPORT_PDF_LOCK_KEY = '__reliabilityGeneralReportExporting'
 
 // Refs for DOM measurement
 const measureContainerRef = ref(null)
@@ -1209,11 +1212,16 @@ const exportPdfByServer = async () => {
 }
 
 const handleExportPdf = async () => {
-  if (isExportingPdf.value) {
+  if (route.name !== 'ReportGeneral') {
+    return
+  }
+
+  if (isExportingPdf.value || window[EXPORT_PDF_LOCK_KEY]) {
     return
   }
 
   isExportingPdf.value = true
+  window[EXPORT_PDF_LOCK_KEY] = true
 
   try {
     ElMessage.info('正在生成PDF，请稍候...')
@@ -1232,7 +1240,38 @@ const handleExportPdf = async () => {
   } finally {
     isExportMode.value = false
     isExportingPdf.value = false
+    window[EXPORT_PDF_LOCK_KEY] = false
   }
+}
+
+const registerExportPdfListener = () => {
+  if (window[EXPORT_PDF_HANDLER_KEY] === handleExportPdf && exportPdfListenerRegistered) {
+    return
+  }
+
+  if (window[EXPORT_PDF_HANDLER_KEY] && window[EXPORT_PDF_HANDLER_KEY] !== handleExportPdf) {
+    window.removeEventListener('export-pdf', window[EXPORT_PDF_HANDLER_KEY])
+  }
+
+  if (exportPdfListenerRegistered) {
+    window.removeEventListener('export-pdf', handleExportPdf)
+  }
+
+  window.addEventListener('export-pdf', handleExportPdf)
+  window[EXPORT_PDF_HANDLER_KEY] = handleExportPdf
+  exportPdfListenerRegistered = true
+}
+
+const unregisterExportPdfListener = () => {
+  if (!exportPdfListenerRegistered) {
+    return
+  }
+
+  window.removeEventListener('export-pdf', handleExportPdf)
+  if (window[EXPORT_PDF_HANDLER_KEY] === handleExportPdf) {
+    delete window[EXPORT_PDF_HANDLER_KEY]
+  }
+  exportPdfListenerRegistered = false
 }
 
 // Initialize
@@ -1249,7 +1288,15 @@ onMounted(async () => {
     measureSectionHeights()
   }, 100)
   
-  window.addEventListener('export-pdf', handleExportPdf)
+  registerExportPdfListener()
+})
+
+onActivated(() => {
+  registerExportPdfListener()
+})
+
+onDeactivated(() => {
+  unregisterExportPdfListener()
 })
 
 // Watch route changes
@@ -1263,7 +1310,7 @@ watch(
 )
 
 onUnmounted(() => {
-  window.removeEventListener('export-pdf', handleExportPdf)
+  unregisterExportPdfListener()
 })
 </script>
 

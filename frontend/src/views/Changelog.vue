@@ -44,6 +44,20 @@ const router = useRouter()
 
 const versions = ref([
   {
+    id: 'v0.15',
+    version: 'V0.15',
+    title: '测试图片 PDF 导出与多图布局优化',
+    date: '2026年6月24日',
+    type: 'warning',
+    tag: '内部测试版',
+    highlights: [
+      '修复点击一次导出 PDF 触发重复导出的问题',
+      '修复测试图片区为空或跨页时 PDF 内容被忽略的问题',
+      '修复测试图片上传后在 PDF 中无法正常显示的问题',
+      '新增 3 张图片的固定网格布局选择，并同步到 PDF 导出'
+    ]
+  },
+  {
     id: 'v0.14',
     version: 'V0.14',
     title: '草稿会话、模板图片与 PDF 导出修复',

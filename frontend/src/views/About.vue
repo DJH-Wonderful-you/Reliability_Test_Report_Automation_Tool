@@ -4,7 +4,7 @@
       <div class="about-header">
         <el-icon :size="64" color="#409eff"><Document /></el-icon>
         <h1>可靠性测试报告编辑工具</h1>
-        <p class="version">版本 V0.14（内部测试版）</p>
+        <p class="version">版本 V0.15（内部测试版）</p>
       </div>
 
       <el-divider />
@@ -32,7 +32,7 @@
             <div class="instruction-number">3</div>
             <div class="instruction-content">
               <h3>图片上传</h3>
-              <p>可在测试图片区点击或拖拽上传图片；每个图片区块支持多图上传，系统会自动排版。</p>
+              <p>可在测试图片区点击或拖拽上传图片；每个图片区块支持多图上传，并可通过布局菜单选择多图排列方式。</p>
             </div>
           </div>
 
@@ -73,11 +73,11 @@
           </div>
           <div class="info-item">
             <span class="info-label">最近更新</span>
-            <span class="info-value">2026年4月5日</span>
+            <span class="info-value">2026年6月24日</span>
           </div>
           <div class="info-item">
             <span class="info-label">当前版本</span>
-            <span class="info-value">V0.14</span>
+            <span class="info-value">V0.15</span>
           </div>
           <div class="info-item">
             <span class="info-label">所属公司</span>
@@ -89,12 +89,12 @@
       <el-divider />
 
       <div class="about-section">
-        <h2>V0.14 本版更新</h2>
+        <h2>V0.15 本版更新</h2>
         <div class="latest-update">
-          <div class="update-item">修复草稿继续编辑时的会话恢复与原草稿误覆盖问题，自动保存与手动草稿保存彻底分离。</div>
-          <div class="update-item">修复 Logo、部门章在模板编辑与报告编辑之间的位置偏差，并将可移动范围扩展到整张 A4 页面。</div>
-          <div class="update-item">调整部门章在模板编辑与报告编辑中的透明显示策略，模板预览为不透明，报告编辑中为半透明。</div>
-          <div class="update-item">修复 PDF 导出时的整体右偏、版心不居中，以及正文不足一页时页脚不贴底的问题。</div>
+          <div class="update-item">修复点击一次导出 PDF 却重复导出的问题，导出流程增加并发保护。</div>
+          <div class="update-item">修复测试图片区为空、跨页或包含上传图片时，PDF 导出内容缺失或图片无法正常显示的问题。</div>
+          <div class="update-item">导出 PDF 时保留测试图片整体框架，并移除仅用于编辑页的“点击或拖拽上传图片”提示。</div>
+          <div class="update-item">新增测试图片多图布局菜单，3 张图片支持下方通栏、上方通栏和四宫格等固定排列，并同步到 PDF 导出。</div>
         </div>
       </div>
 

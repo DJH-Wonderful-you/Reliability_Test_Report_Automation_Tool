@@ -7,6 +7,7 @@ Handles PDF generation from report content.
 """
 
 import os
+import sys
 import tempfile
 from datetime import datetime
 from flask import Blueprint, request, jsonify, send_file, current_app
@@ -25,6 +26,14 @@ def _has_weasyprint_runtime(directory):
     )
 
 
+def _bundled_weasyprint_runtime():
+    if not getattr(sys, 'frozen', False):
+        return None
+    base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
+    candidate = os.path.join(base_dir, 'weasyprint-runtime')
+    return candidate if os.path.isdir(candidate) else None
+
+
 def _prepare_weasyprint_windows_dlls():
     """
     On Windows + Python 3.8+, ctypes doesn't reliably search PATH for DLLs.
@@ -40,6 +49,7 @@ def _prepare_weasyprint_windows_dlls():
 
     configured = os.environ.get('WEASYPRINT_DLL_DIRECTORIES', '')
     configured_dirs = [p.strip() for p in configured.split(';') if p.strip()]
+    bundled_dir = _bundled_weasyprint_runtime()
     default_dirs = [
         r'C:\msys64\ucrt64\bin',
         r'C:\msys64\mingw64\bin',
@@ -47,7 +57,10 @@ def _prepare_weasyprint_windows_dlls():
         r'C:\Program Files\GTK3-Runtime Win64\bin',
         r'C:\Program Files\GTK3-Runtime\bin',
     ]
-    candidate_dirs = configured_dirs if configured_dirs else default_dirs
+    candidate_dirs = []
+    if bundled_dir:
+        candidate_dirs.append(bundled_dir)
+    candidate_dirs.extend(configured_dirs if configured_dirs else default_dirs)
 
     # Use exactly one runtime directory to avoid mixing different GTK toolchains.
     selected = None

@@ -9,6 +9,7 @@ Handles template CRUD operations, logo/signature management, and template import
 import base64
 import json
 import os
+import sys
 import uuid
 from datetime import datetime
 from flask import Blueprint, request, jsonify, current_app, send_file
@@ -17,6 +18,16 @@ from werkzeug.utils import secure_filename
 template_bp = Blueprint('template', __name__)
 
 ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+
+def _project_root():
+    if getattr(sys, 'frozen', False):
+        return getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
+    return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
+
+def _resource_path(*parts):
+    return os.path.join(_project_root(), *parts)
 
 
 def allowed_file(filename):
@@ -39,10 +50,7 @@ def get_default_template(template_type):
         return jsonify({'error': 'Invalid template type'}), 400
     
     # First check in src/templates directory
-    src_template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'src', 'templates', template_files[template_type]
-    )
+    src_template_path = _resource_path('src', 'templates', template_files[template_type])
     
     if os.path.exists(src_template_path):
         try:

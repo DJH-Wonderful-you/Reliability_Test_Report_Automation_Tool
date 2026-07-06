@@ -1,0 +1,72 @@
+{
+  "id": "80efa3f2-cc07-4eb5-9c03-65fc748728a4",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "judgmentResultLabel": "判定结果",
+    "placeholders": {
+      "customer": "请输入客户名称",
+      "reportNumber": "请输入报告编号",
+      "testEquipment": "请入测试设备",
+      "testProject": "请输入测试项目"
+    },
+    "recordCode": "",
+    "reportTitle": "",
+    "sampleInfoHeader": "样品信息",
+    "testConditionsHeader": "测\n\n件",
+    "testStandardLabel": "测试标准"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "createdAt": "2026-01-26T15:29:52.990982",
+  "updatedAt": "2026-01-26T15:34:22.645197"
+}

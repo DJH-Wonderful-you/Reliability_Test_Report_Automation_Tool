@@ -1,0 +1,76 @@
+{
+  "id": "fd6c7811-7668-4313-b687-05aadf278225",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "placeholders": {
+      "testProject": "请输水电费是的入测试项目"
+    },
+    "recordCode": "",
+    "reportTitle": ""
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "fieldFormats": {
+    "testProject": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "italic",
+      "fontWeight": "normal",
+      "textAlign": "left",
+      "textDecoration": "none"
+    }
+  },
+  "createdAt": "2026-02-02T17:10:03.491178",
+  "updatedAt": "2026-02-02T17:11:44.815036"
+}

@@ -1,0 +1,140 @@
+{
+  "id": "240f1b02-9a73-488d-8f57-d871e5608e92",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "beforeTestLabel": "测试前",
+    "companyName": "",
+    "equipmentInfoHeader": "设备信息",
+    "placeholders": {},
+    "recordCode": "",
+    "reportNumberLabel": "报告编号：",
+    "reportTitle": "",
+    "resultIdHeader": "编号",
+    "saveDeptLabel": "备注：保存部门：",
+    "testProjectLabel": "测试项目",
+    "testerLabel": "测试员："
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [
+      226,
+      114,
+      170,
+      170
+    ],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "fieldFormats": {
+    "beforeTestLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
+    "equipmentInfoHeader": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "start",
+      "textDecoration": "none"
+    },
+    "reportNumberLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "start",
+      "textDecoration": "none"
+    },
+    "resultIdHeader": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
+    "saveDeptLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "start",
+      "textDecoration": "none"
+    },
+    "testProjectLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 14,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "center",
+      "textDecoration": "none"
+    },
+    "testerLabel": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 16,
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "textAlign": "start",
+      "textDecoration": "none"
+    }
+  },
+  "createdAt": "2026-01-29T16:55:54.448124",
+  "updatedAt": "2026-01-29T17:21:12.126564"
+}

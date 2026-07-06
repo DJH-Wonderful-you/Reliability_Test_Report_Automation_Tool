@@ -1,0 +1,88 @@
+{
+  "id": "88898510-683c-4df8-a16f-32387a20ed3a",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "placeholders": {
+      "testStandard": "请输入测试标准...",
+      "customer": "请输入客户名称"
+    },
+    "recordCode": "",
+    "reportNumberLabel": "报告编号：",
+    "reportTitle": "",
+    "testStandardLabel": "测试标准"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "fieldFormats": {
+    "testStandard": {
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11,
+      "color": "#999999",
+      "fontWeight": "bold",
+      "fontStyle": "italic",
+      "textDecoration": "none",
+      "textAlign": "start"
+    },
+    "customer": {
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11,
+      "color": "#999999",
+      "fontWeight": "normal",
+      "fontStyle": "italic",
+      "textDecoration": "underline",
+      "textAlign": "center"
+    }
+  },
+  "createdAt": "2026-02-10T16:19:55.098095",
+  "updatedAt": "2026-02-10T17:02:58.314121"
+}

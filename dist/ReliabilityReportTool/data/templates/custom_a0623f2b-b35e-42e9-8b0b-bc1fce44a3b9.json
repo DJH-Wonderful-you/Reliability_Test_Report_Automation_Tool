@@ -1,0 +1,76 @@
+{
+  "id": "a0623f2b-b35e-42e9-8b0b-bc1fce44a3b9",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "placeholders": {
+      "testProject": "请输入测试项目"
+    },
+    "recordCode": "",
+    "reportTitle": ""
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "fieldFormats": {
+    "testProject": {
+      "fontFamily": "KaiTi",
+      "fontSize": 16,
+      "color": "#f50808",
+      "fontWeight": "bold",
+      "fontStyle": "italic",
+      "textDecoration": "none",
+      "textAlign": "left"
+    }
+  },
+  "createdAt": "2026-02-02T19:17:14.836108",
+  "updatedAt": "2026-02-02T19:26:32.847423"
+}

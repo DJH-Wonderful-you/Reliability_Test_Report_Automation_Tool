@@ -1,0 +1,90 @@
+{
+  "id": "b3916b2b-6cc2-49cb-8757-948dc9322530",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "customerLabel": "客户",
+    "placeholders": {
+      "approver": "核准人姓名",
+      "customer": "请输入客户名称",
+      "department": "请输入委水电费是的托部门",
+      "productName": "请输入产品名称",
+      "projectName": "请输入项目名称",
+      "reportNumber": "请输入报告编号",
+      "requester": "请输入委托人员",
+      "reviewer": "审核人姓名",
+      "sampleStage": "请输入样品阶段",
+      "saveDept": "部门",
+      "saveYears": "年限",
+      "testConclusion": "请输入测试结论",
+      "testEquipment": "请输入测试设备",
+      "testProject": "请输入测试项目",
+      "testStandard": "请输入测试标准...",
+      "tester": "测试员姓名",
+      "testPurpose": "请输入测试目的"
+    },
+    "projectNameLabel": "项目名称",
+    "recordCode": "",
+    "reportNumberLabel": "报告编号：",
+    "reportTitle": "",
+    "saveDeptLabel": "备注：保存部门：",
+    "saveYearsLabel": "保存年限：",
+    "testConclusionLabel": "测试结论",
+    "testProjectLabel": "测试项目",
+    "testerLabel": "测试员：",
+    "sampleInfoHeader": "样品信息"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "createdAt": "2026-01-27T16:52:41.952633",
+  "updatedAt": "2026-01-27T17:50:34.209706"
+}

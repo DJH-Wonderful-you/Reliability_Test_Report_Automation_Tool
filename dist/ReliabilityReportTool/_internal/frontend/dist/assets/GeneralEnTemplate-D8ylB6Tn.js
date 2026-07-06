@@ -1,0 +1,1 @@
+import{_ as t,c as o,o as a,b as n,r as s}from"./index-Bm3r0u4s.js";const c={class:"general-en-template"},l={__name:"GeneralEnTemplate",setup(r){return(_,p)=>{const e=s("el-alert");return a(),o("div",c,[n(e,{title:"英文模板开发中",type:"info",description:"通用（英文）模板正在开发中，敬请期待。",closable:!1,"show-icon":""})])}}},i=t(l,[["__scopeId","data-v-4ff95bd0"]]);export{i as default};

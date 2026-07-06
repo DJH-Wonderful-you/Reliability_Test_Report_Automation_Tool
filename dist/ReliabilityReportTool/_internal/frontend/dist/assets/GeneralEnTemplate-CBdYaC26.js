@@ -1,0 +1,1 @@
+import{_ as o,c as t,o as c,b as a,r as s}from"./index-Bm3r0u4s.js";const n={},l={class:"template-placeholder"};function r(_,p){const e=s("el-alert");return c(),t("div",l,[a(e,{title:"英文模板编辑器开发中",type:"info",description:"通用（英文）模板编辑器正在开发中，敬请期待。",closable:!1,"show-icon":""})])}const i=o(n,[["render",r],["__scopeId","data-v-acc9894e"]]);export{i as default};

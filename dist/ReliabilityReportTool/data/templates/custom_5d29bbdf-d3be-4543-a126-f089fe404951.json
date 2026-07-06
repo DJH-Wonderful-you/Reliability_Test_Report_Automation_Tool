@@ -1,0 +1,66 @@
+{
+  "id": "5d29bbdf-d3be-4543-a126-f089fe404951",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "size": 100,
+    "position": {
+      "x": 20,
+      "y": 10
+    }
+  },
+  "signatures": {
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "size": 120,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "opacity": 0.3
+  },
+  "templateContentData": {
+    "companyName": "",
+    "reportTitle": "",
+    "recordCode": "",
+    "placeholders": {
+      "testProject": "请输入测水电费是的试项目"
+    }
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "infoTable": [],
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
+  },
+  "fieldFormats": {},
+  "createdAt": "2026-02-02T17:13:59.211367",
+  "updatedAt": "2026-02-02T17:14:17.635853"
+}

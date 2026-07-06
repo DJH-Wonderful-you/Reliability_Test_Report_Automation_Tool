@@ -1,0 +1,71 @@
+{
+  "id": "9110f956-a32a-4fd3-919f-f4bf2864297c",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "size": 100,
+    "position": {
+      "x": 20,
+      "y": 10
+    }
+  },
+  "signatures": {
+    "tester": {
+      "dataUrl": null,
+      "size": 80
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 80
+    },
+    "approver": {
+      "dataUrl": null,
+      "size": 80
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "size": 120,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "opacity": 0.3
+  },
+  "templateContentData": {
+    "companyName": "",
+    "reportTitle": "",
+    "recordCode": "",
+    "placeholders": {
+      "testProject": "请输入测试项目",
+      "customer": "请输入客户名称"
+    }
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "infoTable": [
+      170,
+      282,
+      113,
+      115
+    ],
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
+  },
+  "createdAt": "2026-01-23T14:48:52.518700",
+  "updatedAt": "2026-01-23T14:48:52.518700"
+}

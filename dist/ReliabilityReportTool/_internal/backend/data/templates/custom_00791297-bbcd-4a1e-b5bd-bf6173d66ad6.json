@@ -1,0 +1,71 @@
+{
+  "id": "00791297-bbcd-4a1e-b5bd-bf6173d66ad6",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "size": 100,
+    "position": {
+      "x": 20,
+      "y": 10
+    }
+  },
+  "signatures": {
+    "tester": {
+      "dataUrl": null,
+      "size": 80
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 80
+    },
+    "approver": {
+      "dataUrl": null,
+      "size": 80
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "size": 120,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "opacity": 0.3
+  },
+  "templateContentData": {
+    "companyName": "深圳市欣威智能有限公司",
+    "reportTitle": "可靠性实验报告",
+    "recordCode": "记录代码：F-SUN1-XV-15.11.1.1/A0",
+    "placeholders": {
+      "reportNumber": "请输入报告编号"
+    },
+    "testerLabel": "测试员：",
+    "reviewerLabel": "审核：",
+    "approverLabel": "核准：",
+    "beforeTestLabel": "测试前",
+    "duringTestLabel": "测试中",
+    "afterTestLabel": "测试后"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "infoTable": [],
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
+  },
+  "createdAt": "2026-01-23T20:33:37.455942",
+  "updatedAt": "2026-01-23T20:36:59.224684"
+}

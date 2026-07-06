@@ -1,0 +1,78 @@
+{
+  "id": "3aa7e1f4-fdb2-4faf-a9c4-4116e03166e8",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "customerLabel": "客户",
+    "placeholders": {
+      "appearance": "外观检查结果",
+      "conclusion": "结论",
+      "customer": "请输入客户名称",
+      "function": "功能检查结果",
+      "judgmentResult": "请输入判定结果...",
+      "note": "备注",
+      "other": "其它性能",
+      "testProject": "请输入\n测\n",
+      "reportNumber": "请输入\n报告编号",
+      "projectName": "请输入\n项目名称"
+    },
+    "recordCode": "",
+    "reportTitle": "",
+    "resultIdHeader": "编号",
+    "testProjectLabel": "测试项\n目",
+    "projectNameLabel": "项目\n名称"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "createdAt": "2026-01-26T15:43:24.406498",
+  "updatedAt": "2026-01-26T15:48:53.296900"
+}

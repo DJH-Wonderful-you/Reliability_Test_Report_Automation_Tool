@@ -1,0 +1,77 @@
+{
+  "id": "9deeba1f-49f9-4173-be19-6fe454860b4e",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "position": {
+      "x": 20,
+      "y": 10
+    },
+    "size": 100
+  },
+  "signatures": {
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "opacity": 0.3,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "size": 120
+  },
+  "templateContentData": {
+    "companyName": "",
+    "placeholders": {
+      "testProject": "请输入测试项目"
+    },
+    "recordCode": "",
+    "reportTitle": "可靠性实验报告",
+    "testProjectLabel": "测试项目"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "equipmentTable": [],
+    "infoTable": [],
+    "resultTable": [],
+    "sampleTable": []
+  },
+  "fieldFormats": {
+    "testProjectLabel": {
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 14,
+      "color": "#000000",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "textDecoration": "underline",
+      "textAlign": "center"
+    }
+  },
+  "createdAt": "2026-02-02T17:13:14.239862",
+  "updatedAt": "2026-02-02T17:13:52.011157"
+}

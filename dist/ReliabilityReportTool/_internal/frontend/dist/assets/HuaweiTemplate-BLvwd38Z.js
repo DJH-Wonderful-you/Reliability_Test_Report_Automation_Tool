@@ -1,0 +1,1 @@
+import{_ as o,c as t,o as a,b as c,r as s}from"./index-Bm3r0u4s.js";const n={},l={class:"template-placeholder"};function r(_,p){const e=s("el-alert");return a(),t("div",l,[c(e,{title:"华为模板编辑器开发中",type:"info",description:"华为模板编辑器正在开发中，敬请期待。",closable:!1,"show-icon":""})])}const d=o(n,[["render",r],["__scopeId","data-v-b80a2f74"]]);export{d as default};

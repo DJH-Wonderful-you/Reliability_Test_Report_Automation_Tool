@@ -1,0 +1,77 @@
+{
+  "id": "a393edb0-759d-4cce-9406-c4af3e73226f",
+  "name": "自定义模板",
+  "baseType": "general",
+  "settings": {
+    "fixedTextStyles": {
+      "color": "#000000",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    },
+    "editableTextStyles": {
+      "color": "#999999",
+      "fontFamily": "Microsoft YaHei",
+      "fontSize": 11
+    }
+  },
+  "logo": {
+    "dataUrl": null,
+    "size": 100,
+    "position": {
+      "x": 20,
+      "y": 10
+    }
+  },
+  "signatures": {
+    "tester": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "reviewer": {
+      "dataUrl": null,
+      "size": 15
+    },
+    "approver": {
+      "dataUrl": null,
+      "size": 15
+    }
+  },
+  "departmentSeal": {
+    "dataUrl": null,
+    "size": 120,
+    "position": {
+      "x": 400,
+      "y": 650
+    },
+    "opacity": 0.3
+  },
+  "templateContentData": {
+    "companyName": "",
+    "reportTitle": "",
+    "recordCode": "",
+    "placeholders": {
+      "testProject": "请输入测试项目"
+    },
+    "sampleInfoHeader": "样品信息"
+  },
+  "securityLevel": "内部公开",
+  "tableColumnWidths": {
+    "infoTable": [],
+    "sampleTable": [],
+    "equipmentTable": [],
+    "resultTable": []
+  },
+  "fieldFormats": {
+    "testProject": {
+      "fontFamily": "KaiTi",
+      "fontSize": 16,
+      "color": "#f00b0b",
+      "fontWeight": "bold",
+      "fontStyle": "italic",
+      "textDecoration": "underline",
+      "textAlign": "center"
+    }
+  },
+  "createdAt": "2026-02-02T19:16:34.991543",
+  "updatedAt": "2026-02-02T19:17:08.250261"
+}

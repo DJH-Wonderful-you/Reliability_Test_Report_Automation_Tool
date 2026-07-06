@@ -41,9 +41,11 @@ const HEADER_HEIGHT_PX = GENERAL_PAGE_HEADER_HEIGHT_PX
 // .signature-row(~35px) + margin(10px) + .footer-note(~25px) + .page-number(~25px with margins) ≈ 95px
 const FOOTER_HEIGHT_PX = GENERAL_PAGE_FOOTER_HEIGHT_PX
 
-// Usable content height per page - uniform for all pages
-// Total A4 height minus padding, header, footer, and a balanced safety buffer
-const USABLE_CONTENT_HEIGHT = A4_HEIGHT_PX - PADDING_TOP_PX - PADDING_BOTTOM_PX - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX - 25
+// Usable content height per page - uniform for all pages.
+// Keep a conservative buffer because browser DOM measurement and PDF layout
+// can differ slightly in table row height, especially around the page footer.
+const PAGE_BOTTOM_SAFETY_BUFFER_PX = 35
+const USABLE_CONTENT_HEIGHT = A4_HEIGHT_PX - PADDING_TOP_PX - PADDING_BOTTOM_PX - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX - PAGE_BOTTOM_SAFETY_BUFFER_PX
 
 // Section header height (for repeated headers on continuation pages)
 const SECTION_HEADER_HEIGHT = 28

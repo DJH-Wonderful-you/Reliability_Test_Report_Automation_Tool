@@ -953,10 +953,12 @@ const createVectorExportHtml = async () => {
         display: flex !important;
         flex-direction: column !important;
         position: relative !important;
+        padding: 10mm 15mm 15mm 15mm !important;
         break-after: page;
         page-break-after: always;
         margin: 0 !important;
         box-shadow: none !important;
+        overflow: hidden !important;
       }
       .export-document .page-header,
       .export-document .page-content,
@@ -967,9 +969,16 @@ const createVectorExportHtml = async () => {
         margin-left: auto !important;
         margin-right: auto !important;
       }
+      .export-document .page-header,
+      .export-document .page-footer {
+        flex: 0 0 auto !important;
+      }
       .export-document .page-content {
-        flex: 1 1 auto !important;
+        flex: 0 0 auto !important;
+        height: 231mm !important;
+        max-height: 231mm !important;
         min-height: 0 !important;
+        overflow: hidden !important;
       }
       .export-document .page-footer {
         position: absolute !important;

@@ -143,14 +143,29 @@ def export_pdf():
                 max-height: 297mm;
                 box-sizing: border-box;
                 position: relative;
+                display: flex;
+                flex-direction: column;
+                padding: 10mm 15mm 15mm 15mm;
                 overflow: hidden;
             }
             .export-document .page-header,
-            .export-document .page-content {
+            .export-document .page-content,
+            .export-document .page-footer {
                 width: 180mm;
                 max-width: 180mm;
                 margin-left: auto;
                 margin-right: auto;
+            }
+            .export-document .page-header,
+            .export-document .page-footer {
+                flex: 0 0 auto;
+            }
+            .export-document .page-content {
+                flex: 0 0 auto;
+                height: 231mm;
+                max-height: 231mm;
+                min-height: 0;
+                overflow: hidden;
             }
             .export-document .page-footer {
                 position: absolute;
@@ -158,6 +173,7 @@ def export_pdf():
                 right: 15mm;
                 bottom: 15mm;
                 width: auto;
+                max-width: none;
                 margin: 0;
             }
             .page {
@@ -244,14 +260,29 @@ def preview_pdf():
                 max-height: 297mm;
                 box-sizing: border-box;
                 position: relative;
+                display: flex;
+                flex-direction: column;
+                padding: 10mm 15mm 15mm 15mm;
                 overflow: hidden;
             }
             .export-document .page-header,
-            .export-document .page-content {
+            .export-document .page-content,
+            .export-document .page-footer {
                 width: 180mm;
                 max-width: 180mm;
                 margin-left: auto;
                 margin-right: auto;
+            }
+            .export-document .page-header,
+            .export-document .page-footer {
+                flex: 0 0 auto;
+            }
+            .export-document .page-content {
+                flex: 0 0 auto;
+                height: 231mm;
+                max-height: 231mm;
+                min-height: 0;
+                overflow: hidden;
             }
             .export-document .page-footer {
                 position: absolute;
@@ -259,6 +290,7 @@ def preview_pdf():
                 right: 15mm;
                 bottom: 15mm;
                 width: auto;
+                max-width: none;
                 margin: 0;
             }
         ''')

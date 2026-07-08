@@ -656,6 +656,36 @@ const updateImages = (rowIndex, position, images) => {
   reportStore.updateTestImage(rowIndex, position, images)
 }
 
+const clearTransientPdfExportState = async () => {
+  const previousSelectedFields = [...reportStore.selectedFields]
+  const activeElement = document.activeElement
+
+  if (activeElement instanceof HTMLElement && templateRef.value?.contains(activeElement)) {
+    activeElement.blur()
+  }
+
+  window.getSelection?.()?.removeAllRanges()
+
+  if (previousSelectedFields.length) {
+    reportStore.clearSelection()
+  }
+
+  await nextTick()
+  return previousSelectedFields
+}
+
+const restoreTransientPdfExportState = async (fieldIds) => {
+  if (!fieldIds?.length) {
+    return
+  }
+
+  reportStore.clearSelection()
+  fieldIds.forEach((fieldId, index) => {
+    reportStore.selectField(fieldId, index > 0)
+  })
+  await nextTick()
+}
+
 // Load template settings
 const loadTemplateSettings = async () => {
   await reportStore.loadAppliedTemplateSettings()
@@ -879,6 +909,9 @@ const prepareCloneForVectorExport = async (node) => {
   node.querySelectorAll('[contenteditable]').forEach((el) => {
     el.removeAttribute('contenteditable')
   })
+  node.querySelectorAll('.editable-field.selected').forEach((el) => {
+    el.classList.remove('selected')
+  })
 
   // Keep empty image boxes in the exported report, but remove edit-only upload hints.
   node.querySelectorAll('.upload-placeholder').forEach((placeholder) => {
@@ -1005,7 +1038,16 @@ const createVectorExportHtml = async () => {
         display: none !important;
       }
       .editable-field {
+        background-color: transparent !important;
+        border-color: transparent !important;
         box-shadow: none !important;
+      }
+      .editable-field.selected,
+      .editable-field:focus {
+        background-color: transparent !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
       }
       .export-document .result-table th:last-child,
       .export-document .result-table td:last-child {
@@ -1222,8 +1264,10 @@ const handleExportPdf = async () => {
 
   isExportingPdf.value = true
   window[EXPORT_PDF_LOCK_KEY] = true
+  let previousSelectedFields = []
 
   try {
+    previousSelectedFields = await clearTransientPdfExportState()
     ElMessage.info('正在生成PDF，请稍候...')
     isExportMode.value = true
     await nextTick()
@@ -1239,6 +1283,7 @@ const handleExportPdf = async () => {
     await exportPdfAsRasterFallback()
   } finally {
     isExportMode.value = false
+    await restoreTransientPdfExportState(previousSelectedFields)
     isExportingPdf.value = false
     window[EXPORT_PDF_LOCK_KEY] = false
   }

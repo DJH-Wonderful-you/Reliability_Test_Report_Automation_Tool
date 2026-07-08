@@ -1,1 +1,0 @@
-import{_ as t,c as o,o as a,b as s,r as c}from"./index-Bm3r0u4s.js";const _={class:"huawei-template"},l={__name:"HuaweiTemplate",setup(n){return(r,p)=>{const e=c("el-alert");return a(),o("div",_,[s(e,{title:"华为模板开发中",type:"info",description:"华为模板正在开发中，敬请期待。",closable:!1,"show-icon":""})])}}},m=t(l,[["__scopeId","data-v-4341b37c"]]);export{m as default};

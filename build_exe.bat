@@ -4,10 +4,11 @@ chcp 65001 >nul
 
 set "PROJECT_ROOT=%~dp0"
 set "PYTHON=%PROJECT_ROOT%.venv\Scripts\python.exe"
+set "APP_NAME=ReliabilityReportEditor"
 
 echo.
 echo ==========================================
-echo Reliability Report Tool - EXE Builder
+echo %APP_NAME% - EXE Builder
 echo ==========================================
 echo.
 
@@ -78,10 +79,10 @@ echo.
 echo ==========================================
 echo Build completed.
 echo Output:
-echo %PROJECT_ROOT%dist\ReliabilityReportTool\ReliabilityReportTool.exe
+echo %PROJECT_ROOT%dist\%APP_NAME%\%APP_NAME%.exe
 echo.
 echo User data will be stored beside the executable in:
-echo %PROJECT_ROOT%dist\ReliabilityReportTool\data
+echo %PROJECT_ROOT%dist\%APP_NAME%\data
 echo ==========================================
 echo.
 pause

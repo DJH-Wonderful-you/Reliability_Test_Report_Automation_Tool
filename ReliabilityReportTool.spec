@@ -87,7 +87,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='ReliabilityReportTool',
+    name='Reliability_Report_Editor_Tool',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -106,5 +106,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='ReliabilityReportTool',
+    name='Reliability_Report_Editor_Tool',
 )
